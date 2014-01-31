@@ -1,4 +1,4 @@
-cursus-php
+Eindwerk cursus PHP
 ==========
 
-Eindwerk cursus PHP
+
