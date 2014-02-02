@@ -12,3 +12,12 @@ Project leden:
 - David Andrianne
 - Esli Heyvaert
 - Silke Horsten
+
+Onderwerpen:
+
+- OO
+- MVC
+- Frameworks
+- Testing
+- Debugging
+- Toledo integratie
