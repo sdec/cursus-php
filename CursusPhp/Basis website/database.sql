@@ -1,0 +1,51 @@
+DROP TABLE IF EXISTS appointments;
+DROP TABLE IF EXISTS classes;
+DROP TABLE IF EXISTS courses;
+DROP TABLE IF EXISTS lecturers;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    userid INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    username VARCHAR(32) NOT NULL,
+    firstname VARCHAR(32) NOT NULL,
+    lastname VARCHAR(32) NOT NULL,
+    password VARCHAR(129) NOT NULL,
+    email VARCHAR(128) NOT NULL,
+    PRIMARY KEY(userid)
+
+) ENGINE=InnoDB;
+
+CREATE TABLE lecturers (
+    lecturerid INTEGER UNSIGNED NOT NULL,
+    userid INTEGER UNSIGNED NOT NULL,
+    PRIMARY KEY(lecturerid),
+    FOREIGN KEY(userid) REFERENCES users(userid) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE courses (
+    courseid INTEGER UNSIGNED NOT NULL,
+    name VARCHAR(32) NOT NULL,
+    PRIMARY KEY(courseid)
+);
+
+CREATE TABLE classes (
+    classid INTEGER UNSIGNED NOT NULL,
+    number VARCHAR(4) NOT NULL,
+    PRIMARY KEY(classid)
+);
+
+CREATE TABLE appointments (
+    appointmentid INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    userid INTEGER UNSIGNED NOT NULL,
+    lecturerid INTEGER UNSIGNED NOT NULL,
+    courseid INTEGER UNSIGNED NOT NULL,
+    classid INTEGER UNSIGNED NOT NULL,
+    description VARCHAR(256) NOT NULL,
+    due_date DATETIME NOT NULL,
+
+    PRIMARY KEY(appointmentid),
+    FOREIGN KEY(userid) REFERENCES users(userid) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(lecturerid) REFERENCES lecturers(lecturerid) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(courseid) REFERENCES courses(courseid) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(classid) REFERENCES classes(classid) ON DELETE CASCADE ON UPDATE CASCADE
+);
