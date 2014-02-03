@@ -84,15 +84,19 @@
                         <td>Steegmans, Elke</td>
                         <td>Dynamische Websites</td>
                         <td>319</td>
-                        <td><a href="">Bekijk details</a></td>
+                        <td><a href="../appointments/appointmentdetail.php?appointmentid=1">Bekijk details</a></td>
                     </tr>
                 </tbody>
             </table>
             <div class="pull-right">
-                <a class="btn btn-primary" href="../appointments/createappointment.php">Nieuwe afspraak</a>
+                <a class="btn btn-primary" href="../appointments/createappointment.php"><span class="glyphicon glyphicon-plus-sign"></span> Nieuwe afspraak</a>
             </div>
         </div>
-
+                
+        <div class="container">
+            <hr />
+            <span class="text-muted">Pagina gegenereerd in 125ms</span>
+        </div>
         <!-- Javascript files staan op het einde voor snellere laadtijden -->
         <script src="../assets/js/jquery-1.11.0.min.js"></script>
         <script src="../assets/bootstrap/js/bootstrap.min.js"></script>

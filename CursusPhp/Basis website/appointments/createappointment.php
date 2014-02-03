@@ -103,14 +103,20 @@
                         </div>
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2">
-                                <button type="submit" class="btn btn-primary">Maak afspraak</button> 
+                                <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span> Maak afspraak</button> 
+                                <a href="../appointments/viewappointments.php" class="btn btn-default">Cancel</a>
                             </div>
                         </div>
                     </fieldset>
                 </form>
             </div>
         </div>
-
+                
+        <div class="container">
+            <hr />
+            <span class="text-muted">Pagina gegenereerd in 125ms</span>
+        </div>
+        
         <!-- Javascript files staan op het einde voor snellere laadtijden -->
         <script src="../assets/js/jquery-1.11.0.min.js"></script>
         <script src="../assets/bootstrap/js/bootstrap.min.js"></script>

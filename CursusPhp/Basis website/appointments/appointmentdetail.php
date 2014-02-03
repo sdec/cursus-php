@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Log in - Cursus PHP Basiswebsite</title>
+        <title>Afspraak bekijken - Cursus PHP Basiswebsite</title>
 
         <!-- Stylesheets: bootstrap, bootstrap theme & eigen stijlblad -->
         <link rel="stylesheet" type="text/css" href="../assets/bootstrap/css/bootstrap.min.css" />
@@ -27,7 +27,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="../index.php">Home</a></li>
                         <li class="dropdown">
-
+                            
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Afspraken <span class="caret"></span></a>
@@ -47,9 +47,9 @@
                             <ul class="dropdown-menu" aria-labelledby="themes">
                                 <li><a href="#"><strong>Niet ingelogd</strong></a></li>
                                 <li class="nav-divider"></li>
-                                <li><a tabindex="-1" href="register.php">Registreer</a></li>
-                                <li><a tabindex="-1" href="login.php">Log in</a></li>
-                                <li><a tabindex="-1" href="logout.php">Log uit</a></li>
+                                <li><a tabindex="-1" href="../profile/register.php">Registreer</a></li>
+                                <li><a tabindex="-1" href="../profile/login.php">Log in</a></li>
+                                <li><a tabindex="-1" href="../profile/logout.php">Log uit</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -59,29 +59,41 @@
         <div class="spacer"></div>
 
         <div class="container">
-            <h1>Log in</h1>
-            <div class="well">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <div class="form-group">
-                            <label for="inputUsername" class="col-lg-2 control-label">Gebruikersnaam</label>
-                            <div class="col-lg-10">
-                                <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="Gebruikersnaam" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputPassword" class="col-lg-2 control-label">Paswoord</label>
-                            <div class="col-lg-10">
-                                <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Paswoord" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-10 col-lg-offset-2">
-                                <button type="submit" class="btn btn-primary">Log in</button> 
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
+            <h1>Afspraakdetails</h1>
+            
+                <table class="table table-striped table-vertical">
+                    <tr>
+                        <td>Afspraaknummer</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>Beschrijving</td>
+                        <td>Afspraak omtrend mijn examenresultaten</td>
+                    </tr>
+                    <tr>
+                        <td>Datum en tijd</td>
+                        <td>5 Feb 2014, 08:30</td>
+                    </tr>
+                    <tr>
+                        <td>Lector</td>
+                        <td>Elke Steegmans (Elste)</td>
+                    </tr>
+                    <tr>
+                        <td>Vak</td>
+                        <td>Dynamische Websites</td>
+                    </tr>
+                    <tr>
+                        <td>Lokaal</td>
+                        <td>319</td>
+                    </tr>
+                </table>
+            
+            <div class="pull-left">
+                <a class="btn btn-primary" href="../appointments/editappointment.php?appointmentid=1"><span class="glyphicon glyphicon-edit"></span> Wijzig afspraak</a> 
+                <a class="btn btn-primary" href="../appointments/deleteappointment.php?appointmentid=1"><span class="glyphicon glyphicon-remove"></span> Verwijder afspraak</a>
+            </div>
+            <div class="pull-right">
+                <a href="../appointments/viewappointments.php" class="btn btn-default">Sluit</a>
             </div>
         </div>
                 

@@ -2,13 +2,16 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Log in - Cursus PHP Basiswebsite</title>
+        <title>Afspraak wijzigen - Cursus PHP Basiswebsite</title>
 
         <!-- Stylesheets: bootstrap, bootstrap theme & eigen stijlblad -->
         <link rel="stylesheet" type="text/css" href="../assets/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="../assets/bootstrap/css/bootstrap.spacelab.min.css" />
         <link rel="stylesheet" type="text/css" href="../assets/css/eigenstijl.css" />
-
+        
+        <!-- jQuery datum & tijd picker -->
+        <link rel="stylesheet" type="text/css" href="../assets/css/jquery.datetimepicker.css" />
+        
     </head>
     <body>
 
@@ -47,9 +50,9 @@
                             <ul class="dropdown-menu" aria-labelledby="themes">
                                 <li><a href="#"><strong>Niet ingelogd</strong></a></li>
                                 <li class="nav-divider"></li>
-                                <li><a tabindex="-1" href="register.php">Registreer</a></li>
-                                <li><a tabindex="-1" href="login.php">Log in</a></li>
-                                <li><a tabindex="-1" href="logout.php">Log uit</a></li>
+                                <li><a tabindex="-1" href="../profile/register.php">Registreer</a></li>
+                                <li><a tabindex="-1" href="../profile/login.php">Log in</a></li>
+                                <li><a tabindex="-1" href="../profile/logout.php">Log uit</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -59,25 +62,49 @@
         <div class="spacer"></div>
 
         <div class="container">
-            <h1>Log in</h1>
+            <h1>Afspraak wijzigen</h1>
+            <p>Verander onderstaande gegevens om een afspraak te wijzigen.</p>
+
             <div class="well">
                 <form class="form-horizontal">
                     <fieldset>
                         <div class="form-group">
-                            <label for="inputUsername" class="col-lg-2 control-label">Gebruikersnaam</label>
+                            <label for="inputDescription" class="col-lg-2 control-label">Beschrijving</label>
                             <div class="col-lg-10">
-                                <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="Gebruikersnaam" required>
+                                <textarea maxlength="256" name="inputDescription" id="inputDescription" placeholder="Beschrijf hier de reden voor de afspraak (max 256 karakters)" required>Afspraak omtrend mijn examenresultaten</textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputPassword" class="col-lg-2 control-label">Paswoord</label>
+                            <label for="inputCourse" class="col-lg-2 control-label">Vak</label>
                             <div class="col-lg-10">
-                                <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Paswoord" required>
+                                <select name="inputCourse" id="inputCourse">
+                                    <option value="1" selected="selected">Dynamische Websites</option>
+                                    <option value="2">Web Design</option>
+                                    <option value="3">OO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputLecturer" class="col-lg-2 control-label">Lector</label>
+                            <div class="col-lg-10">
+                                <select name="inputLecturer" id="inputLecturer">
+                                    <option value="1" selected="selected">Steegmans, Elke</option>
+                                    <option value="2">Fox, Patrick</option>
+                                    <option value="3">Barrezeele, Griet</option>
+                                    <option value="4">Van Hee, Jan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDateTime" class="col-lg-2 control-label">Datum & tijd</label>
+                            <div class="col-lg-10">
+                                <input name="inputDateTime" id="inputDateTime" type="text" value="05/02/2014 08:30" required/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2">
-                                <button type="submit" class="btn btn-primary">Log in</button> 
+                                <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Wijzig afspraak</button> 
+                                <a href="../appointments/appointmentdetail.php?appointmentid=1" class="btn btn-default">Cancel</a>
                             </div>
                         </div>
                     </fieldset>
@@ -89,9 +116,25 @@
             <hr />
             <span class="text-muted">Pagina gegenereerd in 125ms</span>
         </div>
+        
         <!-- Javascript files staan op het einde voor snellere laadtijden -->
         <script src="../assets/js/jquery-1.11.0.min.js"></script>
         <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
-
+        
+        <!-- Configuratie van de datetimepicker -->
+        <script src="../assets/js/jquery.datetimepicker.js"></script>
+        <script type="text/javascript">
+            var allowedTimes = [];
+            for(var i = 8; i <= 17; i++) {
+                for(var j = 0; j <= 50; j += 10) {
+                    allowedTimes.push(('0' + i).slice(-2) + ':' + ('0' + j).slice(-2));
+                }
+            }
+            $('#inputDateTime').datetimepicker({
+                lang: 'nl',
+                allowTimes: allowedTimes,
+                format: 'd/m/Y H:i'
+            });
+        </script>
     </body>
 </html>

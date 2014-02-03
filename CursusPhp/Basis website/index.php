@@ -65,14 +65,18 @@
                     De afsprakenplanner laat u toe om afspraken te plannen bij lectoren voor een bepaald vak. 
                     Na dat de afspraak gepland is zal de lector een lokaal toewijzen aan de afspraak.
                 </p>
-                
                 <p>
-                    <a href="appointments/viewappointments.php" class="btn btn-primary">Mijn afspraken</a> 
-                    <a href="appointments/createappointment.php" class="btn btn-primary">Maak een afspraak</a>
+                    <a href="appointments/viewappointments.php" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> Mijn afspraken</a> 
+                    <a href="appointments/createappointment.php" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span> Maak een afspraak</a>
                 </p>
             </div>
         </div>
-
+                
+        <div class="container">
+            <hr />
+            <span class="text-muted">Pagina gegenereerd in 125ms</span>
+        </div>
+        
         <!-- Javascript files staan op het einde voor snellere laadtijden -->
         <script src="assets/js/jquery-1.11.0.min.js"></script>
         <script src="assets/bootstrap/js/bootstrap.min.js"></script>

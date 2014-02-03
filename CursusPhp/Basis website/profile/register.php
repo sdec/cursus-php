@@ -96,7 +96,11 @@
                 </form>
             </div>
         </div>
-
+                
+        <div class="container">
+            <hr />
+            <span class="text-muted">Pagina gegenereerd in 125ms</span>
+        </div>
         <!-- Javascript files staan op het einde voor snellere laadtijden -->
         <script src="../assets/js/jquery-1.11.0.min.js"></script>
         <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
