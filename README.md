@@ -22,7 +22,7 @@ Onderwerpen:
 - Debugging
 - Toledo integratie
 
-=== Basis website ===
+Basis website:
 
 Deze website vormt de rode draad doorheen het project en is beschikbaar op /PhpCursus/Basis website/
 
