@@ -1,3 +1,7 @@
+<?php
+//page config settings
+$projectdir = "./";
+?>
 <!DOCTYPE html>
 <html>
     <head>
