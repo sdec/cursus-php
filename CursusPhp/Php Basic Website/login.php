@@ -1,4 +1,7 @@
 <?php
+//page config settings
+$projectdir = "./";
+
 
 if(isset($_SESSION['user']['username'])){
     $title = "Logout";
