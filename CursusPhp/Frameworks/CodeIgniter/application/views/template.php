@@ -21,22 +21,10 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Afsprakenplanner</a>
+                    <a class="navbar-brand" href="<?= base_url() ?>">Afsprakenplanner</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="<?= base_url() ?>home">Home</a></li>
-                        <li class="dropdown">
-                            
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="<?= base_url() ?>home" id="themes">Afspraken <span class="caret"></span></a>
-                            <ul class="dropdown-menu" aria-labelledby="themes">
-                                <li><a tabindex="-1" href="<?= base_url() ?>appointments/view">Mijn afspraken</a></li>
-                                <li><a tabindex="-1" href="<?= base_url() ?>appointments/create">Afspraak maken</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="<?= base_url() ?>availability">Beschikbaarheid</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
