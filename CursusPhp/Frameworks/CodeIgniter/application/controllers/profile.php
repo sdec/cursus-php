@@ -138,7 +138,7 @@ class Profile extends CI_Controller {
 
         // Check if user is already logged out
         if (!$this->session->userdata('user'))
-            redirect(base_url());
+            redirect(base_url() . 'profile/login');
 
         // Unset user session data
         $this->session->unset_userdata('user');
@@ -148,4 +148,24 @@ class Profile extends CI_Controller {
         $this->template->render();
     }
 
+    public function view() {
+        
+        if (!$this->session->userdata('user'))
+            redirect(base_url() . 'profile/login');
+        
+        $user = $this->session->userdata('user');
+        
+        $data['username'] = $user->username;
+        $data['firstname'] = $user->firstname;
+        $data['lastname'] = $user->lastname;
+        $data['email'] = $user->email;
+        $data['lastActivity'] = date('M d H:i:s', $this->session->userdata('last_activity'));
+        $data['accessLevelName'] = $this->UserModel->accessLevelname($user->accesslevel);
+        
+        $this->template->write('title', 'Mijn profiel');
+        $this->template->write_view('content', 'profile/view', $data);
+        $this->template->render();
+        
+    }
+    
 }
