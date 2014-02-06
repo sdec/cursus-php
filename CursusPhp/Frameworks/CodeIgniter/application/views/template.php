@@ -60,6 +60,14 @@
         
         <div class="container">
             <?= $content ?>
+            
+            <?php if(strlen($message) > 0) { ?>
+            <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <?= $message ?>
+            </div>
+            <?php } ?>
+            
         </div>
         
         <!-- Javascript files staan op het einde voor snellere laadtijden -->

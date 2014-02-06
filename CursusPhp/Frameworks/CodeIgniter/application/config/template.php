@@ -61,6 +61,7 @@ $template['default']['regions'] = array(
    'title',
    'header',
    'content',
+   'message',
    'footer',
 );
 $template['default']['parser'] = 'parser';
