@@ -19,7 +19,7 @@
                     <td><?= $appointment->end ?></td>
                     <td><?= $appointment->description ?></td>
                     <td><?= $appointment->location ?></td>
-                    <td><a href="<?= base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>"><span class="glyphicon glyphicon-open"></span></a></td>
+                    <td><a href="<?= base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                 </tr>
             <?php } ?>
         <?php } else { ?>

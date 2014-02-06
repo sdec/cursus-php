@@ -1,7 +1,6 @@
 <h1>Log in</h1>
 <div class="well">
     <form method="POST" action="<?= base_url() ?>profile/login" role="form" class="form-horizontal">
-        <fieldset>
             <div class="form-group">
                 <label for="username" class="col-lg-2 control-label">Gebruikersnaam</label>
                 <div class="col-lg-4">
@@ -27,6 +26,5 @@
                     <button type="submit" class="btn btn-primary">Log in</button> 
                 </div>
             </div>
-        </fieldset>
     </form>
 </div>
