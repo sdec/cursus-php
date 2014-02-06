@@ -1,16 +1,15 @@
-<?php 
-//page config settings
-$projectdir = "../";
+<?php
+    include_once('../system/path_helper.php');
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<?php include_once(partials_url() . 'header.php'); ?>
         <title>Afspraak maken - Cursus PHP Basiswebsite</title>
         
         <!-- jQuery datum & tijd picker -->
-        <link rel="stylesheet" type="text/css" href="../assets/css/jquery.datetimepicker.css" />
-        <?php include_once('../../Php Basic Website/partials/navbar.php'); ?>
+        <link rel="stylesheet" type="text/css" href="<?= assets_url(); ?>css/jquery.datetimepicker.css" />
+    </head>
+    <body>
+        <?php include_once(partials_url() . 'navbar.php'); ?>
+        <div class="container"> <!-- page main-content -->
             <h1>Afspraak aanmaken</h1>
             <p>Vul onderstaande gegevens in om een afspraakmoment te voorzien.</p>
 
@@ -47,15 +46,15 @@ $projectdir = "../";
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2">
                                 <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span> Maak afspraak</button> 
-                                <a href="../appointments/viewappointments.php" class="btn btn-default">Cancel</a>
+                                <a href="<?= base_url(); ?>appointments/viewappointments.php" class="btn btn-default">Cancel</a>
                             </div>
                         </div>
                     </fieldset>
                 </form>
             </div>
-        <?php include_once('../../Php Basic Website/partials/footer.php'); ?>
+        <?php include_once(partials_url() .'footer.php'); ?>
         <!-- Configuratie van de datetimepicker -->
-        <script src="../assets/js/jquery.datetimepicker.js"></script>
+        <script src="<?= assets_url(); ?>js/jquery.datetimepicker.js"></script>
         <script type="text/javascript">
             var allowedTimes = [];
             for(var i = 8; i <= 17; i++) {

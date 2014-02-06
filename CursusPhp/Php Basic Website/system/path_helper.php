@@ -1,17 +1,17 @@
 <?php
 
-//define('APP_PATH', '/cursus-php/CursusPhp/Php Basic Website/');
+define('APP_PATH', '/cursus-php/CursusPhp/Php Basic Website/');
 
 function base_url() {
-    //return 'http://' . $_SERVER['HTTP_HOST'] . APP_PATH;
-    if (isset($_SERVER['HTTP_HOST'])) {
+    return 'http://' . $_SERVER['HTTP_HOST'] . APP_PATH;
+    /*if (isset($_SERVER['HTTP_HOST'])) {
         $base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
         $base_url .= '://' . $_SERVER['HTTP_HOST'];
         $base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
     } else {
         $base_url = 'http://localhost/';
     }
-    return $base_url;
+    return $base_url;*/
 }
 
 function local_url(){
