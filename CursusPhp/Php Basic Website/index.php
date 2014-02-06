@@ -20,4 +20,4 @@
         </div> <!-- end page main-content -->
         <?php include_once(partials_url().'footer.php'); ?>
     </body>
-</html>
+</html> 
