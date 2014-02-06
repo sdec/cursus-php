@@ -1,4 +1,5 @@
 <h1>Bekijk afspraak</h1>
+
 <p>Algemene informatie</p>
 <table class="table table-hover table-striped table-vertical">
     <tr>
@@ -23,6 +24,7 @@
     </tr>
 </table>
 
+<hr />
 <p>Beschikbare lectoren & studieadviseurs voor deze afspraak</p>
 <table class="table table-hover table-striped">
     <thead>
@@ -37,7 +39,17 @@
     <tbody>
         <?php if (count($lecturers) > 0) { ?>
             <?php foreach ($lecturers as $lecturer) { ?>
-
+                <tr>
+                    <td><?= $lecturer->firstname ?> <?= $lecturer->lastname ?></td>
+                    <td><?= $lecturer->start ?></td>
+                    <td><?= $lecturer->end ?></td>
+                    <td><?= $lecturer->interval ?></td>
+                    <td>
+                        <a href="<?= base_url() ?>appointments/subscribe/<?= $appointment->appointmentid ?>/<?= $lecturer->lecturerid ?>">
+                            <span class="glyphicon glyphicon-edit"></span> Inschrijven
+                        </a>
+                    </td>
+                </tr>
             <?php } ?>
         <?php } else { ?>
             <tr>
