@@ -3,7 +3,7 @@
 class UserModel extends CI_Model {
     
     private $accessLevels = array(
-        'Gebruiker',
+        'Student',
         'Lector',
         'Studieadviseur',
         'Beheerder'
