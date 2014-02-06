@@ -1,6 +1,5 @@
 <?php
     include_once('system/path_helper.php');
-    var_dump($_SERVER);
 ?>
         <?php include_once(partials_url() . 'header.php'); ?>
         <title>Basic Phpsite - Home</title>
