@@ -47,7 +47,7 @@
                     <td>
                         <a href="<?= base_url() ?>appointments/subscribe/<?= $appointment->appointmentid ?>/<?= $lecturer->lecturerid ?>">
                             <span class="glyphicon glyphicon-edit"></span> Inschrijven
-                        </a>
+                        </a> 
                     </td>
                 </tr>
             <?php } ?>
