@@ -1,13 +1,12 @@
 <?php
-//page config settings
-$projectdir = "./";
+    include_once('system/path_helper.php');
+    var_dump($_SERVER);
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <?php include_once(partials_url() . 'header.php'); ?>
         <title>Basic Phpsite - Home</title>
-        <?php include_once('../Php Basic Website/partials/navbar.php'); ?>
+    </head>
+    <body>
+        <?php include_once(partials_url() . 'navbar.php'); ?>
             <div class="jumbotron">
                 <h1>Afsprakenplanner - BASIC</h1>
                 <p class="lead">

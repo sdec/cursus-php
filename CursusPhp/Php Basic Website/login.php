@@ -75,20 +75,20 @@ if(isset($_SESSION['user']['username'])){
         <?php else: ?>
             <h1>Log in</h1>
             <div class="well">
-                <form class="form-horizontal" onsubmit="return testAlert()" method="POST">
+                <form class="form-horizontal" method="POST">
                     <fieldset>
-                        <div class="form-group <?php echo $messages['username']['status']; ?>">
+                        <div class="form-group <?= $messages['username']['status']; ?>">
                             <label for="inputUsername" class="col-lg-2 control-label">Gebruikersnaam</label>
                             <div class="col-lg-10">
                                 <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="Gebruikersnaam" value="<?php if(isset($_POST['inputUsername'])){ echo $_POST['inputUsername'];} ?>" required>
-                                <label for="inputUsername" class="control-label"><?php echo $messages["username"]["message"]; ?></label>
+                                <label for="inputUsername" class="control-label"><?= $messages["username"]["message"]; ?></label>
                             </div>
                         </div>
-                        <div class="form-group <?php echo $messages['password']['status']; ?>">
+                        <div class="form-group <?= $messages['password']['status']; ?>">
                             <label for="inputPassword" class="col-lg-2 control-label">Paswoord</label>
                             <div class="col-lg-10">
                                 <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Paswoord" required>
-                                <label for="inputPassword" class="control-label"><?php echo $messages["password"]["message"]; ?></label>
+                                <label for="inputPassword" class="control-label"><?= $messages["password"]["message"]; ?></label>
                             </div>
                         </div>
                         <div class="form-group">

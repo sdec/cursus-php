@@ -1,3 +1,7 @@
+<?php 
+//page config settings
+$projectdir = "../";
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,17 +12,11 @@
         <link rel="stylesheet" type="text/css" href="../assets/css/jquery.datetimepicker.css" />
         <?php include_once('../../Php Basic Website/partials/navbar.php'); ?>
             <h1>Afspraak aanmaken</h1>
-            <p>Vul onderstaande gegevens in om een afspraak te maken.</p>
+            <p>Vul onderstaande gegevens in om een afspraakmoment te voorzien.</p>
 
             <div class="well">
                 <form class="form-horizontal">
                     <fieldset>
-                        <div class="form-group">
-                            <label for="inputDescription" class="col-lg-2 control-label">Beschrijving</label>
-                            <div class="col-lg-10">
-                                <textarea maxlength="256" name="inputDescription" id="inputDescription" placeholder="Beschrijf hier de reden voor de afspraak (max 256 karakters)" required></textarea>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label for="inputCourse" class="col-lg-2 control-label">Vak</label>
                             <div class="col-lg-10">
