@@ -2,6 +2,13 @@
 
 class UserModel extends CI_Model {
     
+    private $accessLevels = array(
+        'Gebruiker',
+        'Lector',
+        'Studieadviseur',
+        'Beheerder'
+    );
+    
     // We need an empty construct, this way CI can autoload this class
     public function __construct() {}
     
@@ -43,6 +50,12 @@ class UserModel extends CI_Model {
         $this->db->where(array('username' => $username));
         $query = $this->db->get('users');
         return $query->num_rows() > 0 ? $query->result()[0] : FALSE;
+    }
+    
+    public function accessLevelName($accessLevel) {
+        return isset($this->accessLevels[$accessLevel])
+            ? $this->accessLevels[$accessLevel]
+            : $this->accessLevels[0];
     }
     
 }
