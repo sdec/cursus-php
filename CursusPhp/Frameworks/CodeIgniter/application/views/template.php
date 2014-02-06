@@ -40,17 +40,25 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
-                                <span class="glyphicon glyphicon-user"></span> 
-                                Profiel <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="themes">
-                                <li><a href="#"><strong>Niet ingelogd</strong></a></li>
-                                <li class="nav-divider"></li>
-                                <li><a tabindex="-1" href="<?= base_url() ?>profile/register">Registreer</a></li>
-                                <li><a tabindex="-1" href="<?= base_url() ?>profile/login">Log in</a></li>
-                                <li><a tabindex="-1" href="<?= base_url() ?>profile/logout">Log uit</a></li>
-                            </ul>
+                            <?php if($this->session->userdata('user')) { ?>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
+                                    <span class="glyphicon glyphicon-user"></span> 
+                                    <?= $this->session->userdata('user')->username ?> <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="themes">
+                                    <li><a tabindex="-1" href="<?= base_url() ?>profile/view">Mijn profiel</a></li>
+                                    <li><a tabindex="-1" href="<?= base_url() ?>profile/logout">Log uit</a></li>
+                                </ul>
+                            <?php } else { ?>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
+                                    <span class="glyphicon glyphicon-user"></span> 
+                                    Profiel <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="themes">
+                                    <li><a tabindex="-1" href="<?= base_url() ?>profile/register">Registreren</a></li>
+                                    <li><a tabindex="-1" href="<?= base_url() ?>profile/login">Log in</a></li>
+                                </ul>
+                            <?php } ?>
                         </li>
                     </ul>
                 </div>
