@@ -1,9 +1,13 @@
+<?php
+//page config settings
+$projectdir = "./";
+?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Basic Phpsite - Home</title>
-        <?php include_once('navbar.php'); ?>
+        <?php include_once('../Php Basic Website/partials/navbar.php'); ?>
             <div class="jumbotron">
                 <h1>Afsprakenplanner - BASIC</h1>
                 <p class="lead">
@@ -14,4 +18,4 @@
                     <a href="appointments/createappointment.php" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span> Maak een afspraak</a>
                 </p>
             </div>
-        <?php include_once('footer.php'); ?>
+        <?php include_once('../Php Basic Website/partials/footer.php'); ?>

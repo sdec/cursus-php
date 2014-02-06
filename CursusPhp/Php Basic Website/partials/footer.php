@@ -13,8 +13,8 @@
         </div>
         
         <!-- Javascript files staan op het einde voor snellere laadtijden -->
-        <script src="assets/js/jquery-1.11.0.min.js"></script>
-        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="<?php echo $projectdir; ?>assets/js/jquery-1.11.0.min.js"></script>
+        <script src="<?php echo $projectdir; ?>assets/bootstrap/js/bootstrap.min.js"></script>
 
     </body>
 </html>
