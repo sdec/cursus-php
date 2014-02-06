@@ -7,8 +7,11 @@ class Appointments extends CI_Controller {
         if(!$this->session->userdata('user'))
             redirect('profile/login');
         
+        $appointments = $this->AppointmentModel->loadall();
+        $data['appointments'] = $appointments == FALSE ? array() : $appointments;
+        
         $this->template->write('title', 'Afsprakenplanner');
-        $this->template->write_view('content', 'appointments/view');
+        $this->template->write_view('content', 'appointments/view', $data);
         $this->template->render();
     }
     
