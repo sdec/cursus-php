@@ -67,8 +67,8 @@ CREATE TABLE appointmentlecturers (
     interval_timestamp DATETIME NOT NULL,
 
     PRIMARY KEY(appointmentlecturerid),
-    FOREIGN KEY(appointmentid) REFERENCES appointments(appointmentid),
-    FOREIGN KEY(lecturerid) REFERENCES users(userid)
+    FOREIGN KEY(appointmentid) REFERENCES appointments(appointmentid) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(lecturerid) REFERENCES users(userid) ON UPDATE CASCADE ON DELETE CASCADE
 
 ) ENGINE=InnoDB;
 
@@ -79,7 +79,7 @@ CREATE TABLE appointmentcourses (
     courseid INTEGER UNSIGNED NOT NULL,
 
     PRIMARY KEY(appointmentcourseid),
-    FOREIGN KEY(appointmentid) REFERENCES appointments(appointmentid),
-    FOREIGN KEY(courseid) REFERENCES courses(courseid)
+    FOREIGN KEY(appointmentid) REFERENCES appointments(appointmentid) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(courseid) REFERENCES courses(courseid) ON UPDATE CASCADE ON DELETE CASCADE
 
 ) ENGINE=InnoDB;
