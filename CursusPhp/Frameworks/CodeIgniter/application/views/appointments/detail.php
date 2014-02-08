@@ -41,17 +41,18 @@
                 <div class="panel-title">Inschrijvingen</div>
             </div>
             <div class="panel-body">
-                <p>Selecteer een beschikbaar tijdslot om u in te schrijven.</p>
-                <table class="table table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <td><span class="glyphicon glyphicon-user"></span> Organisator</td>
-                            <td><span class="glyphicon glyphicon-time"></span> Start/Einduur</td>
-                            <td>Beschikbaarheid</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($slots) { ?>
+                <?php if ($slots) { ?>
+                    <p>Selecteer een beschikbaar tijdslot om u in te schrijven.</p>
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <td><span class="glyphicon glyphicon-user"></span> Organisator</td>
+                                <td><span class="glyphicon glyphicon-time"></span> Start/Einduur</td>
+                                <td>Beschikbaarheid</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
                             <?php foreach ($slots as $slot) { ?>
                                 <tr>
                                     <td><?= $slot->firstname ?> <?= $slot->lastname ?></td>
@@ -72,13 +73,11 @@
                                     </td>
                                 </tr>
                             <?php } ?>
-                        <?php } else { ?>
-                            <tr>
-                                <td colspan="5">Er werden nog geen organisatoren toegewezen aan deze afspraak. Een tijdslot reserveren is momenteel niet mogelijk.</td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                <?php } else { ?>
+                    <p>Er werden nog geen organisatoren toegewezen aan deze afspraak. Een tijdslot reserveren is momenteel niet mogelijk.</p>
+                <?php } ?>
             </div>
         </div>
         <div class="panel panel-default">
@@ -87,24 +86,44 @@
             </div>
             <?php if ($appointment->subscribed) { ?>
                 <div class="panel-body alert-success">
-                    U bent ingeschreven voor een afspraak bij <strong><?= $appointment->lecturer ?></strong> om <strong><?= $appointment->subscribestart ?></strong>.  
-                    Deze afspraak duurt ongeveer tot <strong><?= $appointment->subscribeend ?></strong>.
-            <?php } else { ?>
-                <div class="panel-body">
-                    U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.
-            <?php } ?>
+                    <p>U bent ingeschreven voor een afspraak bij <strong><?= $appointment->lecturer ?></strong> om <strong><?= $appointment->subscribestart ?></strong>.  
+                        Deze afspraak duurt ongeveer tot <strong><?= $appointment->subscribeend ?></strong>.</p>
+                <?php } else { ?>
+                    <div class="panel-body">
+                        <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
+                    <?php } ?>
+                    <?php if ($appointment->started) { ?>
+                        <div class="alert alert-info">
+                            <?php if ($appointment->ended) { ?>
+                                Deze afspraak is verlopen. 
+                            <?php } else { ?>
+                                Deze afspraak is al begonnen. 
+                            <?php } ?>
+                            Inschrijvingen zijn niet meer mogelijk.
+                        </div>
+                    <?php } ?>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-6">
-        <?php if ($this->session->userdata('user')->accesslevel >= LECTURER) { ?>
-            <p>
-                <a href="<?= base_url() ?>appointments/edit/<?= $appointment->appointmentid ?>" class="btn btn-primary">Wijzig afspraak</a> 
-                <a href="<?= base_url() ?>appointments/delete/<?= $appointment->appointmentid ?>" class="btn btn-danger">Verwijder afspraak</a>
-            </p>
-        <?php } ?>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <?php if ($this->session->userdata('user')->accesslevel >= LECTURER) { ?>
+                <p>
+                    <a href="<?= base_url() ?>appointments/addlecturer" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus-sign"></span> 
+                        Voeg organisator toe
+                    </a> 
+                    <a href="<?= base_url() ?>appointments/edit/<?= $appointment->appointmentid ?>" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-edit"></span> 
+                        Wijzig afspraak
+                    </a> 
+                    <a href="<?= base_url() ?>appointments/delete/<?= $appointment->appointmentid ?>" class="btn btn-danger">
+                        <span class="glyphicon glyphicon-remove-sign"></span> 
+                        Verwijder afspraak
+                    </a>
+                </p>
+            <?php } ?>
+        </div>
     </div>
-</div>
 

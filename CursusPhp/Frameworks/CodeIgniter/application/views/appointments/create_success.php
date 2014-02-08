@@ -26,8 +26,7 @@
 
 <div class="alert alert-info">
     <p>
-        Er werden nog geen organisatoren toegewezen aan deze afspraak (m.a.w. er is nog niemand waarbij studenten een afspraak kunnen maken voor deze afspraak). 
-        Een afspraak is pas zichtbaar voor studenten wanneer er minstens 1 organisator aan toegewezen werd.
+        Er werden nog geen organisatoren toegewezen aan deze afspraak (m.a.w. er is nog niemand waarbij studenten een afspraak kunnen maken). 
     </p>
     <p><a href="<?= base_url() ?>appointments/addlecturer">Wijs een organisator toe aan deze afspraak.</a></p>
 </div>

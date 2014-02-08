@@ -60,3 +60,4 @@
         </div>
     </form>
 </div>
+<p>Na het aanmaken van een afspraak kan u één of meerdere organisatoren toevoegen aan deze afspraak.</p>

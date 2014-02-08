@@ -38,6 +38,8 @@ class AppointmentModel extends CI_Model {
         $sql = '
             SELECT 
                 appointmentid,
+                appointments.start_timestamp start_timestamp,
+                appointments.end_timestamp end_timestamp,
                 DATE_FORMAT(appointments.start_timestamp, \'%d-%m\') date, 
                 DATE_FORMAT(appointments.start_timestamp, \'%H:%i\') start,
                 DATE_FORMAT(appointments.end_timestamp, \'%H:%i\') end,

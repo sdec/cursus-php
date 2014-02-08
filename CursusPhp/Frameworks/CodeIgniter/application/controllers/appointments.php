@@ -81,7 +81,7 @@ class Appointments extends CI_Controller {
                 $data['end'] = $end;
                 $data['description'] = $description;
                 $data['location'] = $location;
-
+                
                 $this->template->write('title', 'Afspraak aangemaakt');
                 $this->template->write_view('content', 'appointments/create_success', $data);
                 $this->template->render();
@@ -107,6 +107,10 @@ class Appointments extends CI_Controller {
             redirect('appointments');
 
         $slots = $this->AppointmentModel->slots($appointmentid);
+        
+        $currentTime = time();
+        $appointment->started = strtotime($appointment->start_timestamp) <= $currentTime;
+        $appointment->ended = strtotime($appointment->end_timestamp) <= $currentTime;
         
         $data['appointment'] = $appointment;
         $data['slots'] = $slots;
