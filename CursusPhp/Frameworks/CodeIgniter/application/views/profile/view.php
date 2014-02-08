@@ -1,4 +1,4 @@
-<h1>Mijn profiel</h1>
+<h1>Profiel</h1>
 <table class="table table-hover table-striped table-vertical">
     <tr>
         <td>Gebruikersnaam</td>

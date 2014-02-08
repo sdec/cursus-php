@@ -97,38 +97,50 @@ class Appointments extends CI_Controller {
     }
 
     public function detail($appointmentid) {
-     
+
         if (!$this->session->userdata('user'))
             redirect('profile/login');
+
+        $appointment = $this->AppointmentModel->load($appointmentid, $this->session->userdata('user')->userid);
         
-        $appointment = $this->AppointmentModel->load($appointmentid);
-        if($appointment == FALSE)
+        if ($appointment == FALSE)
             redirect('appointments');
-        
-        $lecturers = $this->AppointmentModel->lecturers($appointmentid);
+
+        $slots = $this->AppointmentModel->slots($appointmentid);
         
         $data['appointment'] = $appointment;
-        $data['lecturers'] = $lecturers;
+        $data['slots'] = $slots;
         
         $this->template->write('title', 'Afspraak bekijken');
         $this->template->write_view('content', 'appointments/detail', $data);
         $this->template->render();
     }
     
-    public function delete($appointmentid) {
-        
+    public function subscribe($appointmentid, $appointmentslotid) {
         if (!$this->session->userdata('user'))
             redirect('profile/login');
         
+        $this->AppointmentModel->subscribe($appointmentslotid);
+        
+        $data['appointmentid'] = $appointmentid;
+        $this->template->write('title', 'Ingeschreven voor afspraak');
+        $this->template->write_view('content', 'appointments/subscribe_success', $data);
+        $this->template->render();
+    }
+
+    public function delete($appointmentid) {
+
+        if (!$this->session->userdata('user'))
+            redirect('profile/login');
+
         if ($this->session->userdata('user')->accesslevel < LECTURER)
             redirect('appointments');
-        
+
         $this->AppointmentModel->delete($appointmentid);
-        
+
         $this->template->write('title', 'Afspraak verwijderd');
         $this->template->write_view('content', 'appointments/delete_success');
         $this->template->render();
-        
     }
-    
+
 }

@@ -22,7 +22,7 @@ class Profile extends CI_Controller {
 
         // Check if user is already logged in
         if ($this->session->userdata('user'))
-            redirect(base_url());
+            redirect('');
 
         // Specify rules for login form elements
         $rules = array(
@@ -67,7 +67,7 @@ class Profile extends CI_Controller {
 
         // Check if user is already logged in
         if ($this->session->userdata('user'))
-            redirect(base_url());
+            redirect('');
 
         // Specify rules for register form elements
         $rules = array(
@@ -138,7 +138,7 @@ class Profile extends CI_Controller {
 
         // Check if user is already logged out
         if (!$this->session->userdata('user'))
-            redirect(base_url() . 'profile/login');
+            redirect('profile/login');
 
         // Unset user session data
         $this->session->unset_userdata('user');
@@ -148,12 +148,20 @@ class Profile extends CI_Controller {
         $this->template->render();
     }
 
-    public function view() {
+    public function view($username = '') {
         
         if (!$this->session->userdata('user'))
-            redirect(base_url() . 'profile/login');
+            redirect('profile/login');
         
-        $user = $this->session->userdata('user');
+        $user = null;
+        if(strlen($username)) {
+            $user = $this->UserModel->load($username);
+        } else {
+            $user = $this->session->userdata('user');
+        }
+        
+        if($user == FALSE)
+            redirect('');
         
         $data['username'] = $user->username;
         $data['firstname'] = $user->firstname;
