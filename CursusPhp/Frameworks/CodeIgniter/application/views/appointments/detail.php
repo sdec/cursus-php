@@ -74,7 +74,7 @@
                             <?php } ?>
                         <?php } else { ?>
                             <tr>
-                                <td colspan="5">Er werden nog geen personeelsleden toegewezen aan deze afspraak. Een tijdslot reserveren is nog niet mogelijk.</td>
+                                <td colspan="5">Er werden nog geen organisatoren toegewezen aan deze afspraak. Een tijdslot reserveren is momenteel niet mogelijk.</td>
                             </tr>
                         <?php } ?>
                     </tbody>
