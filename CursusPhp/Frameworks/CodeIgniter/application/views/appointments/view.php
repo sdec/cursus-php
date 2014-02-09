@@ -2,24 +2,36 @@
 <table class="table table-hover table-striped">
     <thead>
         <tr>
+            <td></td>
             <td>Datum</td>
             <td>Startuur</td>
             <td>Einduur</td>
             <td>Beschrijving</td>
             <td>Locatie</td>
-            <td></td>
+            <td width="0"></td>
         </tr>
     </thead>
     <tbody>
-        <?php if (count($appointments) > 0) { ?>
+        <?php if ($appointments) { ?>
             <?php foreach ($appointments as $appointment) { ?>
                 <tr>
+                    <td>
+                        <a href="<?= base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>">
+                            <span class="glyphicon glyphicon-eye-open"></span> 
+                        </a>
+                    </td>
                     <td><?= $appointment->date ?></td>
                     <td><?= $appointment->start ?></td>
                     <td><?= $appointment->end ?></td>
                     <td><?= $appointment->description ?></td>
                     <td><?= $appointment->location ?></td>
-                    <td><a href="<?= base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                    <td>
+                        <?php if ($appointment->subscribed) { ?>
+                            <span class="text-success">
+                                <span class="glyphicon glyphicon-ok-sign"></span> Ingeschreven
+                            </span>
+                        <?php } ?>
+                    </td>
                 </tr>
             <?php } ?>
         <?php } else { ?>

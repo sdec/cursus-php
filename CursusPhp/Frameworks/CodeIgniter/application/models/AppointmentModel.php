@@ -6,20 +6,26 @@ class AppointmentModel extends CI_Model {
         
     }
 
-    public function loadall() {
+    public function loadall($userid = 0) {
 
         $sql = '
             SELECT 
                 appointmentid,
-                DATE_FORMAT(start_timestamp, \'%d-%m\') date, 
-                DATE_FORMAT(start_timestamp, \'%H:%i\') start,
-                DATE_FORMAT(end_timestamp, \'%H:%i\') end,
+                DATE_FORMAT(appointments.start_timestamp, \'%d-%m\') date, 
+                DATE_FORMAT(appointments.start_timestamp, \'%H:%i\') start,
+                DATE_FORMAT(appointments.end_timestamp, \'%H:%i\') end,
                 description, 
-                location
+                location,
+                IF((
+                    SELECT IF(userid IS NULL, FALSE, TRUE)
+                    FROM appointmentsubscribers
+                    WHERE userid = ?
+		) IS NULL, FALSE, TRUE) subscribed
             FROM appointments
+            ORDER BY appointments.start_timestamp DESC, appointments.end_timestamp DESC
         ';
 
-        $query = $this->db->query($sql);
+        $query = $this->db->query($sql, array($userid));
         return $query->num_rows() > 0 ? $query->result() : FALSE;
     }
 
@@ -34,65 +40,45 @@ class AppointmentModel extends CI_Model {
         return $this->db->affected_rows() > 0;
     }
 
-    public function load($appointmentid, $userid = 0) {
+    public function load($appointmentid) {
         $sql = '
             SELECT 
-                appointmentid,
-                appointments.start_timestamp start_timestamp,
-                appointments.end_timestamp end_timestamp,
-                DATE_FORMAT(appointments.start_timestamp, \'%d-%m\') date, 
-                DATE_FORMAT(appointments.start_timestamp, \'%H:%i\') start,
-                DATE_FORMAT(appointments.end_timestamp, \'%H:%i\') end,
-                description, 
-                location,
-                COUNT(DISTINCT slots.lecturerid) AS lecturercount,
-		IF((
-                    SELECT IF(userid IS NULL, FALSE, TRUE)
-                    FROM appointmentsubscribers
-                    WHERE userid = subs.userid
-		) IS NULL, FALSE, TRUE) subscribed,
-		(
-                    SELECT CONCAT(firstname, \' \', lastname) 
-                    FROM users 
-                    WHERE userid = subs.userid
-		) lecturer,
-		(
-                    SELECT DATE_FORMAT(start_timestamp, \'%H:%i\')
-                    FROM appointmentslots
-                    WHERE appointmentslotid = slots.appointmentslotid
-		) subscribestart,
-		(
-                    SELECT DATE_FORMAT(end_timestamp, \'%H:%i\')
-                    FROM appointmentslots
-                    WHERE appointmentslotid = slots.appointmentslotid
-		) subscribeend
-            FROM appointments
-                LEFT JOIN appointmentslots slots USING(appointmentid)
-		LEFT JOIN appointmentsubscribers subs
-                    ON subs.appointmentslotid = slots.appointmentslotid
-                    AND subs.userid = ?
-            WHERE appointmentid = ?
+                ap.appointmentid                    AS	appointmentid,
+                ap.description                      AS	description,
+                ap.location                         AS	location,
+                ap.start_timestamp                  AS	start_timestamp,
+                ap.end_timestamp                    AS	end_timestamp,
+                COUNT(DISTINCT aps.lecturerid)      AS	lecturercount
+
+            FROM appointments ap
+                LEFT JOIN appointmentslots aps USING(appointmentid)
+                
+            WHERE appointmentid = 2
+            ORDER BY start_timestamp DESC, end_timestamp DESC
         ';
 
-        $query = $this->db->query($sql, array($userid, $appointmentid));
+        $query = $this->db->query($sql, array($appointmentid));
         return $query->num_rows() > 0 ? $query->result()[0] : FALSE;
     }
 
     public function slots($appointmentid) {
         $sql = '
-            SELECT appointmentslotid, appointmentslots.lecturerid lecturerid, lecturer.firstname, lecturer.lastname,
-                DATE_FORMAT(appointmentslots.start_timestamp, \'%H:%i\') start,
-                DATE_FORMAT(appointmentslots.end_timestamp, \'%H:%i\') end,
-                DATE_FORMAT(appointmentslots.interval_timestamp, \'%H:%i\') `interval`,
-                IF(subscribers.userid IS NULL, TRUE, FALSE) available,
-                IFNULL(subscribers.userid, 0) subscriberid,
-		CONCAT(susers.firstname, \' \', susers.lastname) subscriber
-            FROM appointmentslots
-                JOIN appointments USING(appointmentid)
-                JOIN users lecturer ON appointmentslots.lecturerid = lecturer.userid
-                LEFT JOIN appointmentsubscribers subscribers USING(appointmentslotid)
-		LEFT JOIN users susers ON susers.userid = subscribers.userid
-            WHERE appointmentid = ?;
+            SELECT 
+                aps.appointmentslotid                       AS appointmentslotid,
+                aps.lecturerid                              AS lecturerid,
+                CONCAT(lu.firstname, \' \', lu.lastname)    AS lecturer,
+                DATE_FORMAT(aps.start_timestamp, \'%H:%i\') AS	start,
+                DATE_FORMAT(aps.end_timestamp, \'%H:%i\')   AS	end,
+                subs.userid                                 AS subscriberid,
+                CONCAT(su.firstname, \' \', su.lastname)    AS subscriber
+
+            FROM appointmentslots aps
+                    LEFT JOIN users lu ON aps.lecturerid = lu.userid
+                    LEFT JOIN appointmentsubscribers subs ON aps.appointmentslotid = subs.appointmentslotid
+                    LEFT JOIN users su ON subs.userid = su.userid
+                    
+            WHERE appointmentid = ?
+            ORDER BY start_timestamp ASC, end_timestamp ASC, lecturer DESC
         ';
 
         $query = $this->db->query($sql, array($appointmentid));
@@ -105,12 +91,21 @@ class AppointmentModel extends CI_Model {
         return $this->db->affected_rows() > 0;
     }
 
-    public function subscribe($appointmentslotid) {
+    public function subscribe($appointmentslotid, $userid) {
         $data = array(
             'appointmentslotid' => $appointmentslotid,
-            'userid' => $this->session->userdata('user')->userid
+            'userid' => $userid
         );
         $this->db->insert('appointmentsubscribers', $data);
+        return $this->db->affected_rows() > 0;
+    }
+    
+    public function unsubscribe($appointmentslotid, $userid) {
+        $data = array(
+            'appointmentslotid' => $appointmentslotid,
+            'userid' => $userid
+        );
+        $this->db->delete('appointmentsubscribers', $data);
         return $this->db->affected_rows() > 0;
     }
 

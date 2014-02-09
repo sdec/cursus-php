@@ -54,7 +54,6 @@ CREATE TABLE appointmentslots (
     lecturerid INTEGER UNSIGNED NOT NULL,
     start_timestamp DATETIME NOT NULL,
     end_timestamp DATETIME NOT NULL,
-    interval_timestamp DATETIME NOT NULL,
 
     PRIMARY KEY(appointmentslotid),
     FOREIGN KEY(appointmentid) REFERENCES appointments(appointmentid) ON UPDATE CASCADE ON DELETE CASCADE,
