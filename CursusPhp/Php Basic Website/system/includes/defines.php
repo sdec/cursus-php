@@ -6,7 +6,7 @@ define('ADVISOR', 2);
 define('ADMIN', 3);
 function getRole($index){
     //Sadly arrays cannot be constants in Php,
-    //as we won't be using classes in yet this is our work-around
+    //as we won't be using classes yet this is our (messy) work-around
     $ROLES = array('Student' => STUDENT,
                    'Lector' => LECTURER,
                    'Studieadviseur' => ADVISOR,

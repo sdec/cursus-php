@@ -1,5 +1,4 @@
 <?php
-
 ?>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
@@ -36,7 +35,7 @@
                                 <li><a href="<?= base_url(); ?>login.php">logout(login.php)</a></li>
                                 <?php else: ?>
                                     <li><a href="<?= base_url(); ?>login.php">login.php</a></li>
-                                    <li><a href="<?= base_url(); ?>register.php">register.php</a></li>
+                                    <li><a href="<?= base_url(); ?>register.php">registreer.php</a></li>
                                 <?php endif; ?>
                             </ul>
                         </li>
@@ -44,4 +43,9 @@
                 </div>
             </div>
         </div>
+    <?php if(isset($_SESSION['flashmessages'])):
+    foreach($_SESSION['flashmessages'] as $msg ): ?>
+        <div class="alert alert-dismissable alert-<?= $msg['id']; ?>"><?= $msg['message']; ?></div>
+    <?php endforeach; endif;
+    $_SESSION['flashmessages'] = array();?>
         <div class="spacer"></div>

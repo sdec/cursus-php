@@ -5,8 +5,7 @@
     include_once(queries_url() . 'DB_userprofile.php');
 
 if(isset($_SESSION['user']['username'])){
-    //Redirect to the logout page, you can't register while logged in!
-    redirect('login.php');
+    redirect('login.php', 'Je kan je niet registreren als je ingelogd bent!', 'warning');
 } else {
     $title = "Register - Cursus PHP Basiswebsite";
     $messages = initializeMessages(array("username", "password", "firstname", "lastname", "email"));
@@ -17,11 +16,17 @@ if(isset($_SESSION['user']['username'])){
          $messages['firstname'] = checkPostLength('inputFirstname', "Je voornaam was te kort/lang! (>= 2 en <= 32)", 2, 32);
          $messages['lastname'] = checkPostLength('inputLastname', "Je naam was te kort/lang! (>= 2 en <= 32)", 2, 32);
          $messages['email'] = checkPostLength('inputEmail', "Je email was te kort/lang! (>= 5 en <= 32)", 5, 32);
+         DB_Connect();
         if($messages['username']['status'] == "" && $messages['password']['status'] == "" && $messages['firstname']['status'] == ""
             && $messages['lastname']['status'] == "" && $messages['email']['status'] == ""){
             $_SESSION['user'] = createUser($_POST['inputUsername'], $_POST['inputFirstname'], $_POST['inputLastname'], $_POST['inputPassword'], $_POST['inputEmail']);
-            redirect('index.php');
+            if(isset($_SESSION['user']['username'])){
+                redirect('index.php');
+            } else {
+                flashmessage("Sorry, deze username bestaat al, gelieve een andere te kiezen...", "warning");
+            }
         }
+        DB_Close();
     }
 }
 ?>

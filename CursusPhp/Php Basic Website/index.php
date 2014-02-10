@@ -3,6 +3,12 @@
     include_once(includes_url() . 'defines.php');
     include_once(includes_url() . 'functions.php');
     $title = "Basic Phpsite - Home";
+    include_once(queries_url() . 'DB_userprofile.php');
+    /*DB_Connect();
+    if(userExists("r0426942")){
+        echo "Username r0426942 exists";
+    }
+    DB_Close();*/
 ?>
         <?php include_once(partials_url() . 'header.php'); ?>
     </head>

@@ -5,12 +5,11 @@
     include_once(queries_url() . 'DB_userprofile.php');
 
 if(isset($_POST['inputLogout']) && isset($_SESSION['user']['username'])){
-    session_destroy();
-    redirect("login.php");
+    unset($_SESSION['user']);
+    redirect("login.php", "U bent uitgelogt.", "success");
 }
 if(isset($_SESSION['user']['username'])){
     $title = "Logout";
-    echo "logged in user : " . $_SESSION['user']['username'];
 } else {
     $title = "Log in - Cursus PHP Basiswebsite";
     $messages = initializeMessages(array("username", "password"));
@@ -23,10 +22,9 @@ if(isset($_SESSION['user']['username'])){
             DB_Connect();
             if(login($_POST['inputUsername'], $_POST['inputPassword'])['username']){ //vb : login("r0426942", "paswoord");
                 $_SESSION['user'] = login($_POST['inputUsername'], $_POST['inputPassword']);
-                redirect("index.php");
+                redirect("index.php", "Welkom terug, " . $_SESSION['user']['firstname'] . "!", "success");
             } else { 
-                $messages["password"]["message"] = "Je username/wachtwoord was niet correct, probeer het nog eens!";
-                $messages["password"]["status"] = "has-error";
+                flashmessage("Sorry, je gegevens waren niet correct, probeer het nog eens...", "danger");
             }
             DB_Close();
         }
@@ -34,17 +32,12 @@ if(isset($_SESSION['user']['username'])){
 }
 ?>
     <?php include_once(partials_url() . 'header.php'); ?>
-        <script type="text/javascript">
-            function testAlert(){
-                alert("Javascript is enabled!");
-            }
-        </script>
         </head>
     <body>
         <?php include_once(partials_url() . 'navbar.php'); ?>
             <div class="container"> <!-- page main-content -->
             <?php if(isset($_SESSION['user']['username'])): ?>
-                <h1>Are you sure you wish to logout?</h1>
+                <h1>Bent u zeker dat u wilt uit loggen?</h1>
                 <div class="well">
                     <form class="form-horizontal" method="POST">
                         <fieldset>
@@ -55,7 +48,7 @@ if(isset($_SESSION['user']['username'])){
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
-                                    <button type="submit" class="btn btn-primary">Log out (<?= $_SESSION['user']['username']; ?>)</button> 
+                                    <button type="submit" class="btn btn-primary">Log uit (<?= $_SESSION['user']['username']; ?>)</button> 
                                 </div>
                             </div>
                         </fieldset>
