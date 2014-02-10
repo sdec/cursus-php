@@ -33,7 +33,7 @@
                                 <li><strong><?php if(!isset($_SESSION['user']['username'])){ echo "Niet ingelogd"; } else { echo "Ingelogd";}?></strong></li>
                                 <li class="nav-divider"></li>
                                 <?php if(isset($_SESSION['user']['username'])): ?>
-                                <li><a href="<?= base_url(); ?>login.php?inputLogout=t">logout(login.php)</a></li>
+                                <li><a href="<?= base_url(); ?>login.php">logout(login.php)</a></li>
                                 <?php else: ?>
                                     <li><a href="<?= base_url(); ?>login.php">login.php</a></li>
                                     <li><a href="<?= base_url(); ?>register.php">Register.php</a></li>
