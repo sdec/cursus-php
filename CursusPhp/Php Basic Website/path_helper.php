@@ -26,4 +26,8 @@ function partials_url() {
     return local_url() . 'partials/';
 }
 
-include_once(local_url() . 'system/functions.php');
+function includes_url() {
+    return local_url() . 'system/includes/';
+}
+
+//include_once(local_url() . 'system/functions.php');

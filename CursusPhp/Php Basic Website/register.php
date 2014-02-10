@@ -1,30 +1,13 @@
 <?php
-include_once('path_helper.php');
+    include_once('path_helper.php');
+    include_once(includes_url() . 'defines.php');
+    include_once(includes_url() . 'functions.php');
 
 if(isset($_SESSION['user']['username'])){
     //Redirect to the logout page, you can't register while logged in!
     header("Location: " . base_url() . "login.php");//, 303);
     die();
 } else {
-    function checkPostLength($postkey, $errormessage, $minChars=2, $maxChars=32, $required=true){
-            if(isset($_POST[$postkey])){
-                $message = array(
-                    "status" => "",
-                    "message" => ""
-                );
-               if(strlen($_POST[$postkey]) >= $minChars && strlen($_POST[$postkey]) <= $maxChars){
-               } else {
-                   $message["message"] = $errormessage;
-                   $message["status"] = "has-error";
-               }
-            } else {
-                if($required){
-                    $message["message"] = "Gelieve hier iets in te vullen!";
-                    $message["status"] = "has-error";
-                }
-            }
-            return $message;
-         }
     $title = "Register - Cursus PHP Basiswebsite";
     $messages = array(
         "username" => array(
@@ -43,37 +26,13 @@ if(isset($_SESSION['user']['username'])){
             "status" => "",
             "message" => "")
         );
-    $messages['username'] = checkPostLength('inputUsername', "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)", 5, 32);
+    if(isset($_POST['inputUsername'])){
+         //Check for length of the fields
+         $messages['username'] = checkPostLength('inputUsername', "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)", 5, 32);
          $messages['password'] = checkPostLength('inputPassword', "Je password was te kort/lang! (>= 5 en <= 32)", 5, 32);
          $messages['firstname'] = checkPostLength('inputFirstname', "Je voornaam was te kort/lang! (>= 2 en <= 32)", 2, 32);
          $messages['lastname'] = checkPostLength('inputLastname', "Je naam was te kort/lang! (>= 2 en <= 32)", 2, 32);
          $messages['email'] = checkPostLength('inputEmail', "Je email was te kort/lang! (>= 5 en <= 32)", 5, 32);
-    if(isset($_POST['inputUsername'])){
-        /*function checkPostLength($postkey, $errormessage, $minChars=2, $maxChars=32, $required=true){
-            if(isset($_POST[$postkey])){
-                $message = array(
-                    "status" => "",
-                    "message" => ""
-                );
-               if(strlen($_POST[$postkey]) >= $minChars && strlen($_POST[$postkey]) <= $maxChars){
-               } else {
-                   $message["message"] = $errormessage;
-                   $message["status"] = "has-error";
-               }
-            } else {
-                if($required){
-                    $message["message"] = "Gelieve hier iets in te vullen!";
-                    $message["status"] = "has-error";
-                }
-            }
-            return $message;
-         }*///TODO: naar functions.php
-         //Check for length of the fields
-         /*$messages['username'] = checkPostLength('inputUsername', "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)", 5, 32);
-         $messages['password'] = checkPostLength('inputPassword', "Je password was te kort/lang! (>= 5 en <= 32)", 5, 32);
-         $messages['firstname'] = checkPostLength('inputFirstname', "Je voornaam was te kort/lang! (>= 2 en <= 32)", 2, 32);
-         $messages['lastname'] = checkPostLength('inputLastname', "Je naam was te kort/lang! (>= 2 en <= 32)", 2, 32);
-         $messages['email'] = checkPostLength('inputEmail', "Je email was te kort/lang! (>= 5 en <= 32)", 5, 32);*/
         if($messages['username']['status'] == "" && $messages['password']['status'] == "" && $messages['firstname']['status'] == ""
             && $messages['lastname']['status'] == "" && $messages['email']['status'] == ""){
             $_SESSION['user'] = createUser($_POST['inputUsername'], $_POST['inputFirstname'], $_POST['inputLastname'], $_POST['inputPassword'], $_POST['inputEmail']);

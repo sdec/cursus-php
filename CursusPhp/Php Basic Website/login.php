@@ -1,5 +1,7 @@
 <?php
-include_once('path_helper.php');
+    include_once('path_helper.php');
+    include_once(includes_url() . 'defines.php');
+    include_once(includes_url() . 'functions.php');
 
 if(isset($_POST['inputLogout']) && isset($_SESSION['user']['username'])){
     session_destroy();
@@ -18,30 +20,20 @@ if(isset($_SESSION['user']['username'])){
             "status" => "",
             "message" => "")
         );
+    
     if(isset($_POST['inputUsername'])){
-        if(strlen($_POST['inputUsername']) >= 5 && strlen($_POST['inputUsername']) <= 32){
-         } else {
-            $messages["username"]["message"] = "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)";
-            $messages["username"]["status"] = "has-error";
-         }
-         if(isset($_POST['inputPassword'])){
-                if(strlen($_POST['inputPassword']) >= 5 && strlen($_POST['inputPassword']) <= 32){
-                    if(login($_POST['inputUsername'], $_POST['inputPassword'])['username']){ //vb : login("r0426942", "paswoord");
-                        $_SESSION['user'] = login($_POST['inputUsername'], $_POST['inputPassword']);
-                        var_dump($_SESSION['user']);
-                    } else { 
-                        $messages["password"]["message"] = "Je username/wachtwoord was niet correct, probeer het nog eens!";
-                        $messages["password"]["status"] = "has-error";
-                    }
-                } else {
-                    $messages["password"]["message"] = "Je password was te kort/lang! (>= 5 en <= 32)";
-                    $messages["password"]["status"] = "has-error";
-                }
-            } else {
-                //$messages["password"]["message"] = "Gelieve een passwoord in te geven";
+        $messages['username'] = checkPostLength('inputUsername', "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)", 5, 32);
+        $messages['password'] = checkPostLength('inputPassword', "Je password was te kort/lang! (>= 5 en <= 32)", 5, 32);
+        
+        if($messages['username']['status'] == "" && $messages['password']['status'] == ""){ //If no form errors
+            if(login($_POST['inputUsername'], $_POST['inputPassword'])['username']){ //vb : login("r0426942", "paswoord");
+                $_SESSION['user'] = login($_POST['inputUsername'], $_POST['inputPassword']);
+                var_dump($_SESSION['user']);
+            } else { 
+                $messages["password"]["message"] = "Je username/wachtwoord was niet correct, probeer het nog eens!";
+                $messages["password"]["status"] = "has-error";
             }
-    } else {
-        //$messages["username"]["message"] = "Gelieve een gebruikersnaam in te vullen";
+        }
     }
 }
 ?>
