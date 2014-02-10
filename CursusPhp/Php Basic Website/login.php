@@ -1,45 +1,32 @@
 <?php
-include_once('system/path_helper.php');
+    include_once('path_helper.php');
+    include_once(includes_url() . 'defines.php');
+    include_once(includes_url() . 'functions.php');
 
-var_dump($_SESSION);
-
+if(isset($_POST['inputLogout']) && isset($_SESSION['user']['username'])){
+    session_destroy();
+    redirect("login.php");
+}
 if(isset($_SESSION['user']['username'])){
     $title = "Logout";
     echo "logged in user : " . $_SESSION['user']['username'];
-    if(isset($_POST['inputLogout'])){
-        //session_destroy();
-        echo "Logout sucessful!";
-    }
 } else {
     $title = "Log in - Cursus PHP Basiswebsite";
-    $messages = array(
-        "username" => array(
-            "status" => "",
-            "message" => ""),
-        "password" => array(
-            "status" => "",
-            "message" => "")
-        );
+    $messages = initializeMessages(array("username", "password"));
+    
     if(isset($_POST['inputUsername'])){
-        if(strlen($_POST['inputUsername']) >= 5 && strlen($_POST['inputUsername']) <= 32){
-         } else {
-            $messages["username"]["message"] = "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)";
-            $messages["username"]["status"] = "has-error";
-         }
-         if(isset($_POST['inputPassword'])){
-                if(strlen($_POST['inputPassword']) >= 5 && strlen($_POST['inputPassword']) <= 32){
-                    session_start();
-                    $_SESSION['user'] = array("username" => $_POST['inputUsername'],
-                                              "role" => "admin");
-                } else {
-                    $messages["password"]["message"] = "Je password was te kort/lang! (>= 5 en <= 32)";
-                    $messages["password"]["status"] = "has-error";
-                }
-            } else {
-                //$messages["password"]["message"] = "Gelieve een passwoord in te geven";
+        $messages['username'] = checkPostLength('inputUsername', "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)", 5, 32);
+        $messages['password'] = checkPostLength('inputPassword', "Je password was te kort/lang! (>= 5 en <= 32)", 5, 32);
+        
+        if($messages['username']['status'] == "" && $messages['password']['status'] == ""){ //If no form errors
+            if(login($_POST['inputUsername'], $_POST['inputPassword'])['username']){ //vb : login("r0426942", "paswoord");
+                $_SESSION['user'] = login($_POST['inputUsername'], $_POST['inputPassword']);
+                redirect("index.php");
+            } else { 
+                $messages["password"]["message"] = "Je username/wachtwoord was niet correct, probeer het nog eens!";
+                $messages["password"]["status"] = "has-error";
             }
-    } else {
-        //$messages["username"]["message"] = "Gelieve een gebruikersnaam in te vullen";
+        }
     }
 }
 ?>
@@ -54,7 +41,7 @@ if(isset($_SESSION['user']['username'])){
         <?php include_once(partials_url() . 'navbar.php'); ?>
             <div class="container"> <!-- page main-content -->
             <?php if(isset($_SESSION['user']['username'])): ?>
-                <h1>Log out</h1>
+                <h1>Are you sure you wish to logout?</h1>
                 <div class="well">
                     <form class="form-horizontal" method="POST">
                         <fieldset>

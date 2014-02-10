@@ -1,5 +1,7 @@
 <?php
-    include_once('system/path_helper.php');
+    include_once('path_helper.php');
+    include_once(includes_url() . 'defines.php');
+    include_once(includes_url() . 'functions.php');
     $title = "Basic Phpsite - Home";
 ?>
         <?php include_once(partials_url() . 'header.php'); ?>

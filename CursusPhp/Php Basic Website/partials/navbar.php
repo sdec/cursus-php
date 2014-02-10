@@ -24,7 +24,7 @@
                                 <span class="glyphicon glyphicon-user"></span> 
                                 <?php 
                                 if(isset($_SESSION['user']['username'])){
-                                    echo $_SESSION['user']['username'] . '(' . $_SESSION['user']['role'] . ')';
+                                    echo $_SESSION['user']['username'] . '(' . getRole($_SESSION['user']['accesslevel']) . ')';
                                 } else {
                                     echo"Profile actions";
                                 }?> <span class="caret"></span>
@@ -33,10 +33,10 @@
                                 <li><strong><?php if(!isset($_SESSION['user']['username'])){ echo "Niet ingelogd"; } else { echo "Ingelogd";}?></strong></li>
                                 <li class="nav-divider"></li>
                                 <?php if(isset($_SESSION['user']['username'])): ?>
-                                <li><a href="<?= base_url(); ?>login.php?inputLogout=t">logout(login.php)</a></li>
+                                <li><a href="<?= base_url(); ?>login.php">logout(login.php)</a></li>
                                 <?php else: ?>
                                     <li><a href="<?= base_url(); ?>login.php">login.php</a></li>
-                                    <li><a href="<?= base_url(); ?>register.php">Register.php</a></li>
+                                    <li><a href="<?= base_url(); ?>register.php">register.php</a></li>
                                 <?php endif; ?>
                             </ul>
                         </li>
