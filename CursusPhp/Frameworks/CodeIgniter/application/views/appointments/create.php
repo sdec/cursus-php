@@ -46,7 +46,17 @@
             <label for="location" class="col-lg-2 control-label">Locatie</label>
             <div class="col-lg-4">
                 <input type="text" class="form-control" id="location" name="location" 
-                       placeholder="Locatie afspraak" maxlength="32" value="<?= set_value('location'); ?>" required></textarea>
+                       placeholder="Locatie afspraak" maxlength="32" value="<?= set_value('location'); ?>" required />
+            </div>
+            <div class="col-lg-6">
+                <?= form_error('location', '<span class="text-danger">', '</span>'); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-6 col-lg-offset-2">
+                <input type="checkbox" id="chronological" name="chronological" 
+                       value="<?= set_value('chronological'); ?>">
+                Verplicht inschrijvingen in chronologische volgorde
             </div>
             <div class="col-lg-6">
                 <?= form_error('location', '<span class="text-danger">', '</span>'); ?>

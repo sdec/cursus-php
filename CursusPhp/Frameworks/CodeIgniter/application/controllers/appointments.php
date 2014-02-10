@@ -70,18 +70,20 @@ class Appointments extends CI_Controller {
             $end = $this->form_validation->set_value('end');
             $description = $this->form_validation->set_value('description');
             $location = $this->form_validation->set_value('location');
-
+            $chronological = isset($_POST['chronological']) ? TRUE : FALSE;
+            
             $start_timestamp = $date . ' ' . $start;
             $end_timestamp = $date . ' ' . $end;
 
-            if ($this->AppointmentModel->create($start_timestamp, $end_timestamp, $description, $location) == TRUE) {
+            if ($this->AppointmentModel->create($start_timestamp, $end_timestamp, $description, $location, $chronological) == TRUE) {
 
                 $data['date'] = $date;
                 $data['start'] = $start;
                 $data['end'] = $end;
                 $data['description'] = $description;
                 $data['location'] = $location;
-
+                $data['chronological'] = $chronological;
+                
                 $this->template->write('title', 'Afspraak aangemaakt');
                 $this->template->write_view('content', 'appointments/create_success', $data);
                 $this->template->render();
@@ -103,7 +105,7 @@ class Appointments extends CI_Controller {
 
         $appointment = $this->AppointmentModel->load($appointmentid);
 
-        if ($appointment == FALSE)
+        if (!$appointment->appointmentid)
             redirect('appointments');
 
         $appointment->date = date('d M Y', strtotime($appointment->start_timestamp));
@@ -113,14 +115,13 @@ class Appointments extends CI_Controller {
         $currentTime = time();
         $appointment->started = strtotime($appointment->start_timestamp) <= $currentTime;
         $appointment->ended = strtotime($appointment->end_timestamp) <= $currentTime;
-        $appointment->chronological = TRUE;
-        
+
         $slots = $this->AppointmentModel->slots($appointmentid);
 
         $subscribtion['subscribed'] = FALSE;
-        $subscribtion['lastSubscribed'] = -1;
-        
+
         if ($slots) {
+            $availableCount = 0;
             foreach ($slots as $slot) {
                 if ($slot->subscriberid == $this->session->userdata('user')->userid) {
                     $subscribtion['subscribed'] = TRUE;
@@ -131,9 +132,16 @@ class Appointments extends CI_Controller {
                     $subscribtion['subscribeslotid'] = $slot->appointmentslotid;
                     break;
                 }
-                
-                if($slot->subscriberid) {
-                    $subscribtion['lastSubscribed'] = $slot->subscriberid;
+
+                if ($appointment->chronological) {
+                    if (!$slot->subscriberid && $availableCount == 0) {
+                        $slot->available = TRUE;
+                        $availableCount++;
+                    } else if (!$slot->subscriberid && $availableCount == 1) {
+                        $slot->available = FALSE;
+                    }
+                } else {
+                    $slot->available = TRUE;
                 }
             }
         }
@@ -195,11 +203,11 @@ class Appointments extends CI_Controller {
             redirect('appointments');
 
         $appointment = $this->AppointmentModel->load($appointmentid);
-        if ($appointment == FALSE)
+        if (!$appointment->appointmentid)
             redirect('appointments');
-        
+
         $data['appointment'] = $appointment;
-        
+
         $rules = array(
             array(
                 'field' => 'start',
@@ -225,20 +233,22 @@ class Appointments extends CI_Controller {
             $start = $this->form_validation->set_value('start');
             $end = $this->form_validation->set_value('end');
             $interval = $this->form_validation->set_value('interval');
-            
+
             $start_timestamp = date('Y-m-d', strtotime($appointment->start_timestamp)) . ' ' . $start;
             $end_timestamp = date('Y-m-d', strtotime($appointment->start_timestamp)) . ' ' . $end;
             $interval_timestamp = date('Y-m-d', strtotime($appointment->start_timestamp)) . ' ' . $interval;
-            
+
+            $start_end = strtotime($start_timestamp) + (strtotime(date('Y-m-d H:i:s', strtotime($interval_timestamp))) - strtotime(date('Y-m-d', strtotime($interval_timestamp))));
+
             // First slot must not exceed the end of the appointment for this lecturer
-            if (strtotime($start_timestamp . ' +' . $interval_timestamp) <= strtotime($end_timestamp)) {
+            if ($start_end <= strtotime($end_timestamp)) {
 
                 // Starting hour must not lie before the starting point of the appointment
                 if (strtotime($start_timestamp) >= strtotime($appointment->start_timestamp)) {
 
                     // Ending hour must not lie before the starting point of the appointment
                     if (strtotime($end_timestamp) <= strtotime($appointment->end_timestamp)) {
-                        
+
                         if ($this->AppointmentModel->addlecturer($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
 
                             $this->template->write('title', 'Organisator toegevoegd');
@@ -263,7 +273,7 @@ class Appointments extends CI_Controller {
 
         $lecturers = $this->UserModel->lecturers();
         $data['lecturers'] = $lecturers;
-        
+
         $this->template->write('title', 'Organisator toevoegen');
         $this->template->write_view('content', 'appointments/addlecturer', $data);
         $this->template->render();

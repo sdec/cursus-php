@@ -6,12 +6,12 @@ class AppointmentModel extends CI_Model {
 
         $sql = '
             SELECT 
-                appointmentid,
-                DATE_FORMAT(ap.start_timestamp, \'%d-%m\') date, 
-                DATE_FORMAT(ap.start_timestamp, \'%H:%i\') start,
-                DATE_FORMAT(ap.end_timestamp, \'%H:%i\') end,
-                description, 
-                location
+                ap.appointmentid                                AS  appointmentid,
+                DATE_FORMAT(ap.start_timestamp, \'%d-%m\')      AS  date, 
+                DATE_FORMAT(ap.start_timestamp, \'%H:%i\')      AS  start,
+                DATE_FORMAT(ap.end_timestamp, \'%H:%i\')        AS  end,
+                ap.description                                  AS  description, 
+                ap.location                                     AS  location
             FROM appointments ap
             ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC
         ';
@@ -20,12 +20,13 @@ class AppointmentModel extends CI_Model {
         return $query->num_rows() > 0 ? $query->result() : FALSE;
     }
 
-    public function create($start_timestamp, $end_timestamp, $description, $location) {
+    public function create($start_timestamp, $end_timestamp, $description, $location, $chronological) {
         $data = array(
             'start_timestamp' => $start_timestamp,
             'end_timestamp' => $end_timestamp,
             'description' => $description,
-            'location' => $location
+            'location' => $location,
+            'chronological' => $chronological
         );
         $this->db->insert('appointments', $data);
         return $this->db->affected_rows() > 0;
@@ -37,6 +38,7 @@ class AppointmentModel extends CI_Model {
                 ap.appointmentid                    AS	appointmentid,
                 ap.description                      AS	description,
                 ap.location                         AS	location,
+                ap.chronological                    AS	chronological,
                 ap.start_timestamp                  AS	start_timestamp,
                 ap.end_timestamp                    AS	end_timestamp,
                 COUNT(DISTINCT aps.lecturerid)      AS	lecturercount

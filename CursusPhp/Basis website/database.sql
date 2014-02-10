@@ -42,6 +42,7 @@ CREATE TABLE appointments (
     start_timestamp DATETIME NOT NULL,
     end_timestamp DATETIME NOT NULL,
     location VARCHAR(32) NOT NULL,
+    chronological BOOLEAN NOT NULL,
 
     PRIMARY KEY(appointmentid)
 

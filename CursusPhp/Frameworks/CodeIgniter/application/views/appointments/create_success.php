@@ -22,6 +22,16 @@
         <td>Locatie</td>
         <td><?= $location ?></td>
     </tr>
+    <tr>
+        <td>Chronologie</td>
+        <td>
+            <?php if($chronological) { ?>
+                Inschrijvingen verlopen verplicht in chronologische volgorde.
+            <?php } else { ?>
+                Inschrijvingen kunnen op elk tijdstip.
+            <?php } ?>
+        </td>
+    </tr>
 </table>
 
 <div class="alert alert-info">

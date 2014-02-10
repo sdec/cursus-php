@@ -40,7 +40,7 @@
             </div>
             <div class="panel-body">
                 <?php if ($subscribtion['subscribed']) { ?>
-                    <?php if($subscribtion['subscribed'] == $subscribtion['lecturerid']) { ?>
+                    <?php if ($subscribtion['subscribed'] == $subscribtion['lecturerid']) { ?>
                         <p>
                             U heeft aangegeven pauze te nemen van <strong><?= $subscribtion['subscribestart'] ?></strong> 
                             tot ongeveer <strong><?= $subscribtion['subscribeend'] ?></strong>.
@@ -49,11 +49,13 @@
                         <p>U bent ingeschreven voor een afspraak bij <strong><?= $subscribtion['lecturer'] ?></strong> om <strong><?= $subscribtion['subscribestart'] ?></strong>.  
                             Deze afspraak duurt ongeveer tot <strong><?= $subscribtion['subscribeend'] ?></strong>.</p>
                     <?php } ?>
-                         <p>
-                            <a href="<?= base_url() ?>appointments/unsubscribe/<?= $appointment->appointmentid ?>/<?= $subscribtion['subscribeslotid'] ?>" class="btn btn-default btn-sm">
-                                <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
-                            </a>
-                        </p>
+                    <?php if(!$appointment->started) { ?>
+                    <p>
+                        <a href="<?= base_url() ?>appointments/unsubscribe/<?= $appointment->appointmentid ?>/<?= $subscribtion['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
+                        </a>
+                    </p>
+                    <?php } ?>
                 <?php } else { ?>
                     <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
                 <?php } ?>
@@ -103,7 +105,7 @@
                             </tr>
                         </thead>
                         <tbody>
-
+                            <?php $slotIndex = 0; ?>
                             <?php foreach ($slots as $slot) { ?>
                                 <tr>
                                     <td><?= $slot->lecturer ?></td>
@@ -111,14 +113,16 @@
                                     <td>
                                         <?php if (!$slot->subscriberid) { ?>
                                             <?php if ($appointment->started == FALSE && $subscribtion['subscribed'] == FALSE) { ?>
-                                                <a class="text-success" href="<?= base_url() ?>appointments/subscribe/<?= $appointment->appointmentid ?>/<?= $slot->appointmentslotid ?>">
-                                                    <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
-                                                </a>
-                                            <?php } else { ?>
-                                                <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
+                                                <?php if ($slot->available || $slot->lecturerid == $this->session->userdata('user')->userid) { ?>
+                                                    <a class="text-success" href="<?= base_url() ?>appointments/subscribe/<?= $appointment->appointmentid ?>/<?= $slot->appointmentslotid ?>">
+                                                        <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
+                                                    </a>
+                                                <?php } else { ?>
+                                                    <span class="glyphicon glyphicon-remove-sign"></span> Niet beschikbaar
+                                                <?php } ?>
                                             <?php } ?>
                                         <?php } else { ?>
-                                            <?php if($slot->subscriberid == $slot->lecturerid) { ?>
+                                            <?php if ($slot->subscriberid == $slot->lecturerid) { ?>
                                                 <span class="text-info">
                                                     <span class="glyphicon glyphicon-pause"></span> Pauze
                                                 </span>
@@ -128,11 +132,12 @@
                                                 </span>
                                             <?php } else { ?>
                                                 <span class="glyphicon glyphicon-remove-sign text-danger"></span> 
-                                                    <?= $slot->subscriber ?>
+                                                <?= $slot->subscriber ?>
                                             <?php } ?>
                                         <?php } ?>
                                     </td>
                                 </tr>
+                                <?php $slotIndex++; ?>
                             <?php } ?>
                         </tbody>
                     </table>
