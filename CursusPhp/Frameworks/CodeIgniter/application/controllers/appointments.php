@@ -18,7 +18,7 @@ class Appointments extends CI_Controller {
         if (!$this->session->userdata('user'))
             redirect('profile/login');
 
-        $appointments = $this->AppointmentModel->loadall($this->session->userdata('user')->userid);
+        $appointments = $this->AppointmentModel->loadall();
         $data['appointments'] = $appointments;
 
         $this->template->write('title', 'Afsprakenplanner');
@@ -132,8 +132,8 @@ class Appointments extends CI_Controller {
                     break;
                 }
                 
-                if($slot->subscribeid) {
-                    $subscribtion['lastSubscribed'] = $slot->subscribeid;
+                if($slot->subscriberid) {
+                    $subscribtion['lastSubscribed'] = $slot->subscriberid;
                 }
             }
         }

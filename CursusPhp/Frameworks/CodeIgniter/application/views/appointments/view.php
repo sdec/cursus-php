@@ -8,7 +8,6 @@
             <td>Einduur</td>
             <td>Beschrijving</td>
             <td>Locatie</td>
-            <td width="0"></td>
         </tr>
     </thead>
     <tbody>
@@ -25,13 +24,6 @@
                     <td><?= $appointment->end ?></td>
                     <td><?= $appointment->description ?></td>
                     <td><?= $appointment->location ?></td>
-                    <td>
-                        <?php if ($appointment->subscribed) { ?>
-                            <span class="text-success">
-                                <span class="glyphicon glyphicon-ok-sign"></span> Ingeschreven
-                            </span>
-                        <?php } ?>
-                    </td>
                 </tr>
             <?php } ?>
         <?php } else { ?>

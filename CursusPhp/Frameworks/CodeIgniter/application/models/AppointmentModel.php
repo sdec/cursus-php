@@ -2,26 +2,21 @@
 
 class AppointmentModel extends CI_Model {
 
-    public function loadall($userid = 0) {
+    public function loadall() {
 
         $sql = '
             SELECT 
                 appointmentid,
-                DATE_FORMAT(appointments.start_timestamp, \'%d-%m\') date, 
-                DATE_FORMAT(appointments.start_timestamp, \'%H:%i\') start,
-                DATE_FORMAT(appointments.end_timestamp, \'%H:%i\') end,
+                DATE_FORMAT(ap.start_timestamp, \'%d-%m\') date, 
+                DATE_FORMAT(ap.start_timestamp, \'%H:%i\') start,
+                DATE_FORMAT(ap.end_timestamp, \'%H:%i\') end,
                 description, 
-                location,
-                IF((
-                    SELECT IF(userid IS NULL, FALSE, TRUE)
-                    FROM appointmentsubscribers
-                    WHERE userid = ?
-		) IS NULL, FALSE, TRUE) subscribed
-            FROM appointments
-            ORDER BY appointments.start_timestamp DESC, appointments.end_timestamp DESC
+                location
+            FROM appointments ap
+            ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC
         ';
 
-        $query = $this->db->query($sql, array($userid));
+        $query = $this->db->query($sql);
         return $query->num_rows() > 0 ? $query->result() : FALSE;
     }
 

@@ -40,14 +40,20 @@
             </div>
             <div class="panel-body">
                 <?php if ($subscribtion['subscribed']) { ?>
-
-                    <p>U bent ingeschreven voor een afspraak bij <strong><?= $subscribtion['lecturer'] ?></strong> om <strong><?= $subscribtion['subscribestart'] ?></strong>.  
-                        Deze afspraak duurt ongeveer tot <strong><?= $subscribtion['subscribeend'] ?></strong>.</p>
-                    <p>
-                        <a href="<?= base_url() ?>appointments/unsubscribe/<?= $appointment->appointmentid ?>/<?= $subscribtion['subscribeslotid'] ?>" class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
-                        </a>
-                    </p>
+                    <?php if($subscribtion['subscribed'] == $subscribtion['lecturerid']) { ?>
+                        <p>
+                            U heeft aangegeven pauze te nemen van <strong><?= $subscribtion['subscribestart'] ?></strong> 
+                            tot ongeveer <strong><?= $subscribtion['subscribeend'] ?></strong>.
+                        </p>
+                    <?php } else { ?>
+                        <p>U bent ingeschreven voor een afspraak bij <strong><?= $subscribtion['lecturer'] ?></strong> om <strong><?= $subscribtion['subscribestart'] ?></strong>.  
+                            Deze afspraak duurt ongeveer tot <strong><?= $subscribtion['subscribeend'] ?></strong>.</p>
+                    <?php } ?>
+                         <p>
+                            <a href="<?= base_url() ?>appointments/unsubscribe/<?= $appointment->appointmentid ?>/<?= $subscribtion['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
+                            </a>
+                        </p>
                 <?php } else { ?>
                     <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
                 <?php } ?>
@@ -112,7 +118,7 @@
                                                 <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
                                             <?php } ?>
                                         <?php } else { ?>
-                                            <?php if($slot->subscriberid == $subscribtion['lecturerid']) { ?>
+                                            <?php if($slot->subscriberid == $slot->lecturerid) { ?>
                                                 <span class="text-info">
                                                     <span class="glyphicon glyphicon-pause"></span> Pauze
                                                 </span>
