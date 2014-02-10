@@ -59,7 +59,7 @@
                 Verplicht inschrijvingen in chronologische volgorde
             </div>
             <div class="col-lg-6">
-                <?= form_error('location', '<span class="text-danger">', '</span>'); ?>
+                <?= form_error('chronological', '<span class="text-danger">', '</span>'); ?>
             </div>
         </div>
         <div class="form-group">

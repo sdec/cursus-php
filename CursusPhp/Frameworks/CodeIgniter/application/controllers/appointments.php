@@ -16,7 +16,7 @@ class Appointments extends CI_Controller {
     public function index() {
 
         if (!$this->session->userdata('user'))
-            redirect('profile/login');
+            redirect(base_url() . 'profile/login');
 
         $appointments = $this->AppointmentModel->loadall();
         $data['appointments'] = $appointments;
@@ -29,10 +29,10 @@ class Appointments extends CI_Controller {
     public function create() {
 
         if (!$this->session->userdata('user'))
-            redirect('profile/login');
+            redirect(base_url() . 'profile/login');
 
         if ($this->session->userdata('user')->accesslevel < LECTURER)
-            redirect('appointments');
+            redirect(base_url() . 'appointments');
 
         $rules = array(
             array(
@@ -71,7 +71,7 @@ class Appointments extends CI_Controller {
             $description = $this->form_validation->set_value('description');
             $location = $this->form_validation->set_value('location');
             $chronological = isset($_POST['chronological']) ? TRUE : FALSE;
-            
+
             $start_timestamp = $date . ' ' . $start;
             $end_timestamp = $date . ' ' . $end;
 
@@ -83,7 +83,7 @@ class Appointments extends CI_Controller {
                 $data['description'] = $description;
                 $data['location'] = $location;
                 $data['chronological'] = $chronological;
-                
+
                 $this->template->write('title', 'Afspraak aangemaakt');
                 $this->template->write_view('content', 'appointments/create_success', $data);
                 $this->template->render();
@@ -101,12 +101,12 @@ class Appointments extends CI_Controller {
     public function detail($appointmentid) {
 
         if (!$this->session->userdata('user'))
-            redirect('profile/login');
+            redirect(base_url() . 'profile/login');
 
         $appointment = $this->AppointmentModel->load($appointmentid);
 
         if (!$appointment->appointmentid)
-            redirect('appointments');
+            redirect(base_url() . 'appointments');
 
         $appointment->date = date('d M Y', strtotime($appointment->start_timestamp));
         $appointment->start = date('H:i', strtotime($appointment->start_timestamp));
@@ -155,37 +155,97 @@ class Appointments extends CI_Controller {
         $this->template->render();
     }
 
-    public function subscribe($appointmentid, $appointmentslotid) {
+    public function edit($appointmentid) {
+
         if (!$this->session->userdata('user'))
-            redirect('profile/login');
+            redirect(base_url() . 'profile/login');
 
-        $this->AppointmentModel->subscribe($appointmentslotid, $this->session->userdata('user')->userid);
+        if ($this->session->userdata('user')->accesslevel < LECTURER)
+            redirect(base_url() . 'appointments/detail/' . $appointmentid);
 
-        $data['appointmentid'] = $appointmentid;
-        $this->template->write('title', 'Ingeschreven voor afspraak');
-        $this->template->write_view('content', 'appointments/subscribe_success', $data);
-        $this->template->render();
-    }
+        $appointment = $this->AppointmentModel->load($appointmentid);
 
-    public function unsubscribe($appointmentid, $appointmentslotid) {
-        if (!$this->session->userdata('user'))
-            redirect('profile/login');
+        if (!$appointment->appointmentid)
+            redirect(base_url() . 'appointments/detail/' . $appointmentid);
 
-        $this->AppointmentModel->unsubscribe($appointmentslotid, $this->session->userdata('user')->userid);
+        $appointment->date = date('Y-m-d', strtotime($appointment->start_timestamp));
+        $appointment->start = date('H:i', strtotime($appointment->start_timestamp));
+        $appointment->end = date('H:i', strtotime($appointment->end_timestamp));
+        $slots = $this->AppointmentModel->slots($appointmentid);
+        
+        $rules = array(
+            array(
+                'field' => 'date',
+                'label' => 'datum afspraak',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'start',
+                'label' => 'startuur',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'end',
+                'label' => 'einduur',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'description',
+                'label' => 'beschrijving',
+                'rules' => 'trim|required|min_length[4]|max_length[128]'
+            ),
+            array(
+                'field' => 'location',
+                'label' => 'locatie',
+                'rules' => 'trim|required|min_length[4]|max_length[32]'
+            )
+        );
+        $this->form_validation->set_rules($rules);
 
-        $data['appointmentid'] = $appointmentid;
-        $this->template->write('title', 'Uitgeschreven voor afspraak');
-        $this->template->write_view('content', 'appointments/unsubscribe_success', $data);
+        if ($this->form_validation->run() == TRUE) {
+
+            $date = $this->form_validation->set_value('date');
+            $start = $this->form_validation->set_value('start');
+            $end = $this->form_validation->set_value('end');
+            $description = $this->form_validation->set_value('description');
+            $location = $this->form_validation->set_value('location');
+            $chronological = isset($_POST['chronological']) ? TRUE : FALSE;
+
+            $start_timestamp = $date . ' ' . $start;
+            $end_timestamp = $date . ' ' . $end;
+
+            if ($this->AppointmentModel->edit($appointmentid, $start_timestamp, $end_timestamp, $description, $location, $chronological) == TRUE) {
+
+                $data['date'] = $date;
+                $data['start'] = $start;
+                $data['end'] = $end;
+                $data['description'] = $description;
+                $data['location'] = $location;
+                $data['chronological'] = $chronological;
+
+                $this->template->write('title', 'Afspraak wijzigen');
+                $this->template->write_view('content', 'appointments/edit_success', $data);
+                $this->template->render();
+                return;
+            } else {
+                $this->template->write('message', 'Er ging iets fout tijdens het wijzigen van uw afspraak!');
+            }
+        }
+
+        $data['appointment'] = $appointment;
+        $data['slots'] = $slots;
+        $this->template->write('title', 'Afspraakwijzigen');
+        $this->template->write_view('content', 'appointments/edit', $data);
         $this->template->render();
     }
 
     public function delete($appointmentid) {
 
         if (!$this->session->userdata('user'))
-            redirect('profile/login');
+            redirect(base_url() . 'profile/login');
 
         if ($this->session->userdata('user')->accesslevel < LECTURER)
-            redirect('appointments');
+            redirect(base_url() . 'appointments/detail/' . $appointmentid);
 
         $this->AppointmentModel->delete($appointmentid);
 
@@ -194,17 +254,18 @@ class Appointments extends CI_Controller {
         $this->template->render();
     }
 
-    public function addlecturer($appointmentid) {
+    public function addtimeslots($appointmentid) {
 
         if (!$this->session->userdata('user'))
-            redirect('profile/login');
+            redirect(base_url() . 'profile/login');
 
         if ($this->session->userdata('user')->accesslevel < LECTURER)
-            redirect('appointments');
+            redirect(base_url() . 'appointments/detail/' . $appointmentid);
 
         $appointment = $this->AppointmentModel->load($appointmentid);
         if (!$appointment->appointmentid)
-            redirect('appointments');
+            redirect(base_url() . 'appointments');
+
 
         $data['appointment'] = $appointment;
 
@@ -249,10 +310,10 @@ class Appointments extends CI_Controller {
                     // Ending hour must not lie before the starting point of the appointment
                     if (strtotime($end_timestamp) <= strtotime($appointment->end_timestamp)) {
 
-                        if ($this->AppointmentModel->addlecturer($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
+                        if ($this->AppointmentModel->addtimeslots($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
 
-                            $this->template->write('title', 'Organisator toegevoegd');
-                            $this->template->write_view('content', 'appointments/addlecturer_success', $data);
+                            $this->template->write('title', 'Tijdsloten toegevoegen');
+                            $this->template->write_view('content', 'appointments/addtimeslots_success', $data);
                             $this->template->render();
                             return;
                         } else {
@@ -274,8 +335,45 @@ class Appointments extends CI_Controller {
         $lecturers = $this->UserModel->lecturers();
         $data['lecturers'] = $lecturers;
 
-        $this->template->write('title', 'Organisator toevoegen');
-        $this->template->write_view('content', 'appointments/addlecturer', $data);
+        $this->template->write('title', 'Tijdsloten toevoegen');
+        $this->template->write_view('content', 'appointments/addtimeslots', $data);
+        $this->template->render();
+    }
+
+    public function deletetimeslot($appointmentid, $appointmentslotid) {
+
+        if (!$this->session->userdata('user'))
+            redirect(base_url() . 'profile/login');
+
+        if ($this->session->userdata('user')->accesslevel < LECTURER)
+            redirect(base_url() . 'appointments/detail/' . $appointmentid);
+
+        $this->AppointmentModel->deletetimeslot($appointmentslotid);
+        $this->edit($appointmentid);
+    }
+
+    public function subscribe($appointmentid, $appointmentslotid) {
+
+        if (!$this->session->userdata('user'))
+            redirect(base_url() . 'profile/login');
+
+        $this->AppointmentModel->subscribe($appointmentslotid, $this->session->userdata('user')->userid);
+
+        $data['appointmentid'] = $appointmentid;
+        $this->template->write('title', 'Ingeschreven voor afspraak');
+        $this->template->write_view('content', 'appointments/subscribe_success', $data);
+        $this->template->render();
+    }
+
+    public function unsubscribe($appointmentid, $appointmentslotid) {
+        if (!$this->session->userdata('user'))
+            redirect(base_url() . 'profile/login');
+
+        $this->AppointmentModel->unsubscribe($appointmentslotid, $this->session->userdata('user')->userid);
+
+        $data['appointmentid'] = $appointmentid;
+        $this->template->write('title', 'Uitgeschreven voor afspraak');
+        $this->template->write_view('content', 'appointments/unsubscribe_success', $data);
         $this->template->render();
     }
 

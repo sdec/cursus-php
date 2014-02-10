@@ -1,6 +1,6 @@
-<h1>Organisator toevoegen</h1>
+<h1>Tijdsloten toevoegen</h1>
 <div class="well">
-    <form method="POST" action="<?= base_url() ?>appointments/addlecturer/<?= $appointment->appointmentid ?>" role="form" class="form-horizontal">
+    <form method="POST" action="<?= base_url() ?>appointments/addtimeslots/<?= $appointment->appointmentid ?>" role="form" class="form-horizontal">
         <div class="form-group">
             <label for="lecturerid" class="col-lg-2 control-label">Organisator</label>
             <div class="col-lg-4">
@@ -48,7 +48,7 @@
         </div>
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="submit" class="btn btn-primary">Voeg organisator toe</button> 
+                <button type="submit" class="btn btn-primary">Voeg tijdsloten toe</button> 
                 <a href="<?= base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>" class="btn btn-default">Annuleer</a>
             </div>
         </div>

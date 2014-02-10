@@ -31,6 +31,19 @@ class AppointmentModel extends CI_Model {
         $this->db->insert('appointments', $data);
         return $this->db->affected_rows() > 0;
     }
+    
+    public function edit($appointmentid, $start_timestamp, $end_timestamp, $description, $location, $chronological) {
+        $data = array(
+            'start_timestamp' => $start_timestamp,
+            'end_timestamp' => $end_timestamp,
+            'description' => $description,
+            'location' => $location,
+            'chronological' => $chronological
+        );
+        $this->db->where('appointmentid', $appointmentid);
+        $this->db->update('appointments', $data);
+        return $this->db->affected_rows() > 0;
+    }
 
     public function load($appointmentid) {
         $sql = '
@@ -102,7 +115,7 @@ class AppointmentModel extends CI_Model {
         return $this->db->affected_rows() > 0;
     }
 
-    public function addlecturer($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) {
+    public function addtimeslots($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) {
 
         $batchData = array();
 
@@ -123,6 +136,15 @@ class AppointmentModel extends CI_Model {
 
         $this->db->insert_batch('appointmentslots', $batchData);
         return $this->db->affected_rows() > 0;
+    }
+    
+    public function deletetimeslot($appointmentslotid) {
+        $this->db->delete('appointmentslots', array('appointmentslotid' => $appointmentslotid));
+        return $this->db->affected_rows() > 0;
+    }
+    
+    public function search($query) {
+        
     }
 
 }

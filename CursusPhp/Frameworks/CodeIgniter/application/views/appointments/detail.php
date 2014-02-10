@@ -73,9 +73,9 @@
         </div>
         <?php if ($this->session->userdata('user')->accesslevel >= LECTURER) { ?>
             <p>
-                <a href="<?= base_url() ?>appointments/addlecturer/<?= $appointment->appointmentid ?>" class="btn btn-primary">
+                <a href="<?= base_url() ?>appointments/addtimeslots/<?= $appointment->appointmentid ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-plus-sign"></span> 
-                    Voeg organisator toe
+                    Voeg tijdsloten toe
                 </a> 
                 <a href="<?= base_url() ?>appointments/edit/<?= $appointment->appointmentid ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-edit"></span> 
@@ -142,7 +142,7 @@
                         </tbody>
                     </table>
                 <?php } else { ?>
-                    <p>Er werden nog geen organisatoren toegewezen aan deze afspraak. Een tijdslot reserveren is momenteel niet mogelijk.</p>
+                    <p>Er werden nog geen tijdsloten toegewezen aan deze afspraak. Een tijdslot reserveren is momenteel niet mogelijk.</p>
                 <?php } ?>
             </div>
         </div>
