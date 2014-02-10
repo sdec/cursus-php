@@ -128,7 +128,7 @@ if(isset($_SESSION['user']['username'])){
                     </div>
                     <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
-                            <button type="submit" class="btn btn-primary">Register</button>
+                            <button type="submit" class="btn btn-primary">Registreer</button>
                         </div>
                     </div>
                 </fieldset>
