@@ -1,5 +1,5 @@
 <?php
-include_once('system/path_helper.php');
+include_once('path_helper.php');
 
 if(isset($_POST['inputLogout']) && isset($_SESSION['user']['username'])){
     session_destroy();

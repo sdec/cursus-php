@@ -1,5 +1,5 @@
 <?php
-    include_once('system/path_helper.php');
+    include_once('path_helper.php');
     $title = "Basic Phpsite - Home";
 ?>
         <?php include_once(partials_url() . 'header.php'); ?>

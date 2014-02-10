@@ -8,7 +8,7 @@ function encryptPassword($password) {
 }
 
 //Database functions
-function dbConnect(){
+function dbConnect(){ //TODO : bovenaan inladen, disconnect in footer
     $mysqli = new mysqli("localhost", "admin", "", "test");//mysqlhost, username & password
     /* check connection */
     if (mysqli_connect_errno()) {
@@ -33,7 +33,7 @@ function login($username, $password){ //I.E. : "r0426942", "paswoord"
             $temp = $row;
         }
         
-        print_r($temp);*/
+        print_r($temp);*/   //Fetcharray functie : mysqli (bind associatieve array op kolomnaam)
         $user = array('userid' => $row[0],
                       'username' => $row[1],
                       'firstname' => $row[2],
@@ -56,7 +56,7 @@ function createUser($username, $firstname, $lastname, $password, $email){
                                  ('$username', '$firstname', '$lastname', '$password', '$email')";
     mysqli_query($link, $query);
 
-    printf ("New Record has id %d.\n", mysqli_insert_id($link));
+    printf ("New Record has id %d.\n", mysqli_insert_id($link)); //TODO : mysql_fetch_array($result);
     /* close connection */
     mysqli_close($link);
     
@@ -65,7 +65,7 @@ function createUser($username, $firstname, $lastname, $password, $email){
                          'lastname' => $lastname,
                          'email' => $email,
                          'accesslevel' => 0,
-                         'role' => "admin");
+                         'role' => "admin"); //TODO: Define.php
 }
 
 ?>

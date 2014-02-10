@@ -1,9 +1,8 @@
 <?php
-    include_once('../system/path_helper.php');
+    include_once('../path_helper.php');
+    $title = "Afspraak maken - Php Basic";
 ?>
 <?php include_once(partials_url() . 'header.php'); ?>
-        <title>Afspraak maken - Cursus PHP Basiswebsite</title>
-        
         <!-- jQuery datum & tijd picker -->
         <link rel="stylesheet" type="text/css" href="<?= assets_url(); ?>css/jquery.datetimepicker.css" />
     </head>
