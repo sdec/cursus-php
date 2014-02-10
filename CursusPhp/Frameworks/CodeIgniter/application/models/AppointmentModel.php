@@ -95,7 +95,7 @@ class AppointmentModel extends CI_Model {
         $this->db->insert('appointmentsubscribers', $data);
         return $this->db->affected_rows() > 0;
     }
-    
+
     public function unsubscribe($appointmentslotid, $userid) {
         $data = array(
             'appointmentslotid' => $appointmentslotid,
@@ -104,22 +104,28 @@ class AppointmentModel extends CI_Model {
         $this->db->delete('appointmentsubscribers', $data);
         return $this->db->affected_rows() > 0;
     }
-    
+
     public function addlecturer($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) {
-        
-        $data = array();
-        while($start_timestamp < $end_timestamp) {            
-            array_push($data, array(
+
+        $batchData = array();
+
+        while (strtotime($start_timestamp) < strtotime($end_timestamp)) {
+
+            $diff = strtotime($start_timestamp) + (strtotime(date('Y-m-d H:i:s', strtotime($interval_timestamp))) - strtotime(date('Y-m-d', strtotime($interval_timestamp))));
+            $slotEnd = date('Y-m-d H:i:s', $diff);
+
+            array_push($batchData, array(
                 'appointmentid' => $appointmentid,
                 'lecturerid' => $lecturerid,
                 'start_timestamp' => $start_timestamp,
-                'end_timestamp' => $end_timestamp
+                'end_timestamp' => $slotEnd
             ));
-            
-            $start_timestamp += $interval_timestamp;
+
+            $start_timestamp = $slotEnd;
         }
-        
-        $this->db->insert('appointmentslots', $data);
+
+        $this->db->insert_batch('appointmentslots', $batchData);
+        return $this->db->affected_rows() > 0;
     }
 
 }

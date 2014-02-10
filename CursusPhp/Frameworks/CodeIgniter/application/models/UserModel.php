@@ -61,4 +61,8 @@ class UserModel extends CI_Model {
         return isset($this->accessLevels[$accessLevel]) ? $this->accessLevels[$accessLevel] : $this->accessLevels[0];
     }
 
+    public function lecturers() {
+        $query = $this->db->get('lecturers');
+        return $query->num_rows() > 0 ? $query->result() : FALSE;
+    }
 }

@@ -34,6 +34,51 @@
                 </table>
             </div>
         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">Mijn inschrijving</div>
+            </div>
+            <div class="panel-body">
+                <?php if ($subscribtion['subscribed']) { ?>
+
+                    <p>U bent ingeschreven voor een afspraak bij <strong><?= $subscribtion['lecturer'] ?></strong> om <strong><?= $subscribtion['subscribestart'] ?></strong>.  
+                        Deze afspraak duurt ongeveer tot <strong><?= $subscribtion['subscribeend'] ?></strong>.</p>
+                    <p>
+                        <a href="<?= base_url() ?>appointments/unsubscribe/<?= $appointment->appointmentid ?>/<?= $subscribtion['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
+                        </a>
+                    </p>
+                <?php } else { ?>
+                    <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
+                <?php } ?>
+                <?php if ($appointment->started) { ?>
+                    <div class="alert alert-info">
+                        <?php if ($appointment->ended) { ?>
+                            Deze afspraak is verlopen. 
+                        <?php } else { ?>
+                            Deze afspraak is al begonnen. 
+                        <?php } ?>
+                        Inschrijvingen zijn niet meer mogelijk.
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+        <?php if ($this->session->userdata('user')->accesslevel >= LECTURER) { ?>
+            <p>
+                <a href="<?= base_url() ?>appointments/addlecturer/<?= $appointment->appointmentid ?>" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus-sign"></span> 
+                    Voeg organisator toe
+                </a> 
+                <a href="<?= base_url() ?>appointments/edit/<?= $appointment->appointmentid ?>" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-edit"></span> 
+                    Wijzig afspraak
+                </a> 
+                <a href="<?= base_url() ?>appointments/delete/<?= $appointment->appointmentid ?>" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-remove-sign"></span> 
+                    Verwijder afspraak
+                </a>
+            </p>
+        <?php } ?>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6">
         <div class="panel panel-default">
@@ -67,7 +112,11 @@
                                                 <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
                                             <?php } ?>
                                         <?php } else { ?>
-                                            <?php if ($slot->subscriberid == $this->session->userdata('user')->userid) { ?>
+                                            <?php if($slot->subscriberid == $subscribtion['lecturerid']) { ?>
+                                                <span class="text-info">
+                                                    <span class="glyphicon glyphicon-pause"></span> Pauze
+                                                </span>
+                                            <?php } else if ($slot->subscriberid == $this->session->userdata('user')->userid) { ?>
                                                 <span class="text-success">
                                                     <span class="glyphicon glyphicon-ok-sign"></span> Ingeschreven
                                                 </span>
@@ -86,55 +135,5 @@
                 <?php } ?>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="panel-title">Mijn inschrijving</div>
-            </div>
-            <div class="panel-body">
-                <?php if ($subscribtion['subscribed']) { ?>
-
-                    <p>U bent ingeschreven voor een afspraak bij <strong><?= $subscribtion['lecturer'] ?></strong> om <strong><?= $subscribtion['subscribestart'] ?></strong>.  
-                        Deze afspraak duurt ongeveer tot <strong><?= $subscribtion['subscribeend'] ?></strong>.</p>
-                    <p>
-                        <a href="<?= base_url() ?>appointments/unsubscribe/<?= $appointment->appointmentid ?>/<?= $subscribtion['subscribeslotid'] ?>" class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
-                        </a>
-                    </p>
-                <?php } else { ?>
-                    <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
-                <?php } ?>
-                <?php if ($appointment->started) { ?>
-                    <div class="alert alert-info">
-                        <?php if ($appointment->ended) { ?>
-                            Deze afspraak is verlopen. 
-                        <?php } else { ?>
-                            Deze afspraak is al begonnen. 
-                        <?php } ?>
-                        Inschrijvingen zijn niet meer mogelijk.
-                    </div>
-                <?php } ?>
-            </div>
-        </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-6">
-        <?php if ($this->session->userdata('user')->accesslevel >= LECTURER) { ?>
-            <p>
-                <a href="<?= base_url() ?>appointments/addlecturer" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-plus-sign"></span> 
-                    Voeg organisator toe
-                </a> 
-                <a href="<?= base_url() ?>appointments/edit/<?= $appointment->appointmentid ?>" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-edit"></span> 
-                    Wijzig afspraak
-                </a> 
-                <a href="<?= base_url() ?>appointments/delete/<?= $appointment->appointmentid ?>" class="btn btn-danger">
-                    <span class="glyphicon glyphicon-remove-sign"></span> 
-                    Verwijder afspraak
-                </a>
-            </p>
-        <?php } ?>
-    </div>
-</div>
-
