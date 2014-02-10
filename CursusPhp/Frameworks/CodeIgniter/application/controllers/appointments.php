@@ -81,7 +81,7 @@ class Appointments extends CI_Controller {
                 $data['end'] = $end;
                 $data['description'] = $description;
                 $data['location'] = $location;
-                
+
                 $this->template->write('title', 'Afspraak aangemaakt');
                 $this->template->write_view('content', 'appointments/create_success', $data);
                 $this->template->render();
@@ -102,60 +102,62 @@ class Appointments extends CI_Controller {
             redirect('profile/login');
 
         $appointment = $this->AppointmentModel->load($appointmentid);
-        
+
         if ($appointment == FALSE)
             redirect('appointments');
 
-        
         $appointment->date = date('d M Y', strtotime($appointment->start_timestamp));
         $appointment->start = date('H:i', strtotime($appointment->start_timestamp));
         $appointment->end = date('H:i', strtotime($appointment->end_timestamp));
-        
+
         $currentTime = time();
         $appointment->started = strtotime($appointment->start_timestamp) <= $currentTime;
         $appointment->ended = strtotime($appointment->end_timestamp) <= $currentTime;
-        
+
         $slots = $this->AppointmentModel->slots($appointmentid);
-        
+
         $subscribtion['subscribed'] = FALSE;
-        foreach($slots as $slot) {
-            if($slot->subscriberid == $this->session->userdata('user')->userid) {
-                $subscribtion['subscribed'] = TRUE;
-                $subscribtion['lecturer'] = $slot->lecturer;
-                $subscribtion['subscribestart'] = $slot->start;
-                $subscribtion['subscribeend'] = $slot->end;
-                $subscribtion['subscribeslotid'] = $slot->appointmentslotid;
-                break;
+        
+        if ($slots) {
+            foreach ($slots as $slot) {
+                if ($slot->subscriberid == $this->session->userdata('user')->userid) {
+                    $subscribtion['subscribed'] = TRUE;
+                    $subscribtion['lecturer'] = $slot->lecturer;
+                    $subscribtion['subscribestart'] = $slot->start;
+                    $subscribtion['subscribeend'] = $slot->end;
+                    $subscribtion['subscribeslotid'] = $slot->appointmentslotid;
+                    break;
+                }
             }
         }
-        
+
         $data['appointment'] = $appointment;
         $data['slots'] = $slots;
         $data['subscribtion'] = $subscribtion;
-        
+
         $this->template->write('title', 'Afspraak bekijken');
         $this->template->write_view('content', 'appointments/detail', $data);
         $this->template->render();
     }
-    
+
     public function subscribe($appointmentid, $appointmentslotid) {
         if (!$this->session->userdata('user'))
             redirect('profile/login');
-        
+
         $this->AppointmentModel->subscribe($appointmentslotid, $this->session->userdata('user')->userid);
-        
+
         $data['appointmentid'] = $appointmentid;
         $this->template->write('title', 'Ingeschreven voor afspraak');
         $this->template->write_view('content', 'appointments/subscribe_success', $data);
         $this->template->render();
     }
-    
+
     public function unsubscribe($appointmentid, $appointmentslotid) {
         if (!$this->session->userdata('user'))
             redirect('profile/login');
-        
+
         $this->AppointmentModel->unsubscribe($appointmentslotid, $this->session->userdata('user')->userid);
-        
+
         $data['appointmentid'] = $appointmentid;
         $this->template->write('title', 'Uitgeschreven voor afspraak');
         $this->template->write_view('content', 'appointments/unsubscribe_success', $data);

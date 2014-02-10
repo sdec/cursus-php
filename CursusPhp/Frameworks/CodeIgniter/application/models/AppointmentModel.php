@@ -2,10 +2,6 @@
 
 class AppointmentModel extends CI_Model {
 
-    public function __construct() {
-        
-    }
-
     public function loadall($userid = 0) {
 
         $sql = '
@@ -53,7 +49,7 @@ class AppointmentModel extends CI_Model {
             FROM appointments ap
                 LEFT JOIN appointmentslots aps USING(appointmentid)
                 
-            WHERE appointmentid = 2
+            WHERE appointmentid = ?
             ORDER BY start_timestamp DESC, end_timestamp DESC
         ';
 
@@ -107,6 +103,23 @@ class AppointmentModel extends CI_Model {
         );
         $this->db->delete('appointmentsubscribers', $data);
         return $this->db->affected_rows() > 0;
+    }
+    
+    public function addlecturer($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) {
+        
+        $data = array();
+        while($start_timestamp < $end_timestamp) {            
+            array_push($data, array(
+                'appointmentid' => $appointmentid,
+                'lecturerid' => $lecturerid,
+                'start_timestamp' => $start_timestamp,
+                'end_timestamp' => $end_timestamp
+            ));
+            
+            $start_timestamp += $interval_timestamp;
+        }
+        
+        $this->db->insert('appointmentslots', $data);
     }
 
 }

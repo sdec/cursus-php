@@ -27,8 +27,8 @@
 <div class="alert alert-info">
     <p>
         Er werden nog geen organisatoren toegewezen aan deze afspraak (m.a.w. er is nog niemand waarbij studenten een afspraak kunnen maken). 
+        Open de detailweergave van een afspraak en klik op "Voeg organisator toe" om iemand toe te voegen aan deze afspraak.
     </p>
-    <p><a href="<?= base_url() ?>appointments/addlecturer">Wijs een organisator toe aan deze afspraak.</a></p>
 </div>
 
 <p><a href="<?= base_url() ?>" class="btn btn-default">Terug</a></p>
