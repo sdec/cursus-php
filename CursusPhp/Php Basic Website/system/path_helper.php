@@ -1,5 +1,4 @@
 <?php
-
 define('APP_PATH', '/cursus-php/CursusPhp/Php Basic Website/');
 
 function base_url() {
@@ -26,3 +25,5 @@ function assets_url() {
 function partials_url() {
     return local_url() . 'partials/';
 }
+
+include_once(local_url() . 'system/functions.php');
