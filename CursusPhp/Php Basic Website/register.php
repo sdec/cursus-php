@@ -2,6 +2,7 @@
     include_once('path_helper.php');
     include_once(includes_url() . 'defines.php');
     include_once(includes_url() . 'functions.php');
+    include_once(queries_url() . 'DB_userprofile.php');
 
 if(isset($_SESSION['user']['username'])){
     //Redirect to the logout page, you can't register while logged in!
