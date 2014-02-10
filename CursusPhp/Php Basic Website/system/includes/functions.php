@@ -2,6 +2,11 @@
 if(!isset($_SESSION)) session_start();
 include_once(includes_url() . 'form_helper.php');
 
+function redirect($page){
+    header("Location: " . base_url() . $page);//, 303); //301 "Moved permanently", 302 (default) "Found", 303 "Moved temporarily"
+    die(); //Force ending transmission of the potentially unauthorized webpage server-side
+}
+
 function encryptPassword($password) {
     // We first uppercase the password to eliminate case
     // We then hash the password using Whirlpool (outputs 128 character hash)
@@ -19,14 +24,19 @@ function dbConnect(){ //TODO : bovenaan inladen, disconnect in footer
     return $mysqli;
 }
 
+$MySQLDB= dbConnect();
+
+function sql_sanitize($input){
+    return mysqli_real_escape_string(MySQLDB, $input);
+}
+
 function login($username, $password){ //I.E. : "r0426942", "paswoord"
     $pwd = encryptPassword($password);
-    $link = dbConnect();
+    //$link = dbConnect();
     
     $query = "SELECT * FROM users WHERE username = '$username' AND password = '$pwd'";
-    $result = mysqli_query($link, $query);
+    $result = mysqli_query(MySQLDB, $query);
     if ($result) {
-        echo("result found");
         /* fetch associative array */
         $row = mysqli_fetch_row($result);
         /*while ($row = mysqli_fetch_row($result)) {
@@ -47,26 +57,33 @@ function login($username, $password){ //I.E. : "r0426942", "paswoord"
         return $user;
     }
     
-    mysqli_close($link);
+    mysqli_close(MySQLDB);
 }
 
 function createUser($username, $firstname, $lastname, $password, $email){
-    $link = dbConnect();
+    //$link = dbConnect();
     $password = encryptPassword($password);
     $query = "INSERT INTO users(username, firstname, lastname, password, email) VALUES
                                  ('$username', '$firstname', '$lastname', '$password', '$email')";
-    mysqli_query($link, $query);
-
-    printf ("New Record has id %d.\n", mysqli_insert_id($link)); //TODO : mysql_fetch_array($result);
-    /* close connection */
-    mysqli_close($link);
+    mysqli_query(MySQLDB, $query);
+    printf ("New Record has id %d.\n", mysqli_insert_id(MySQLDB)); //TODO : mysql_fetch_array($result);
     
-    return $user = array('username' => $username,
+    $query = "SELECT * FROM users WHERE username = '$username'";
+    $result = mysqli_query(MySQLDB, $query);
+    $user = $result->fetch_array(MYSQLI_ASSOC);
+    unset($user['password']);
+    
+    /* close connection */
+    //mysqli_close(MySQLDB);
+    
+    return $user;
+    
+    /*return $user = array('username' => $username,
                          'firstname' => $firstname,
                          'lastname' => $lastname,
                          'email' => $email,
                          'accesslevel' => 0,
-                         'role' => "admin"); //TODO: Define.php
+                         'role' => "admin");*/
 }
 
 ?>

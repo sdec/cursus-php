@@ -5,21 +5,14 @@
 
 if(isset($_POST['inputLogout']) && isset($_SESSION['user']['username'])){
     session_destroy();
-    echo "Logout sucessful!";
+    redirect("login.php");
 }
 if(isset($_SESSION['user']['username'])){
     $title = "Logout";
     echo "logged in user : " . $_SESSION['user']['username'];
 } else {
     $title = "Log in - Cursus PHP Basiswebsite";
-    $messages = array(
-        "username" => array(
-            "status" => "",
-            "message" => ""),
-        "password" => array(
-            "status" => "",
-            "message" => "")
-        );
+    $messages = initializeMessages(array("username", "password"));
     
     if(isset($_POST['inputUsername'])){
         $messages['username'] = checkPostLength('inputUsername', "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)", 5, 32);
@@ -28,7 +21,7 @@ if(isset($_SESSION['user']['username'])){
         if($messages['username']['status'] == "" && $messages['password']['status'] == ""){ //If no form errors
             if(login($_POST['inputUsername'], $_POST['inputPassword'])['username']){ //vb : login("r0426942", "paswoord");
                 $_SESSION['user'] = login($_POST['inputUsername'], $_POST['inputPassword']);
-                var_dump($_SESSION['user']);
+                redirect("index.php");
             } else { 
                 $messages["password"]["message"] = "Je username/wachtwoord was niet correct, probeer het nog eens!";
                 $messages["password"]["status"] = "has-error";

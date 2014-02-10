@@ -5,27 +5,10 @@
 
 if(isset($_SESSION['user']['username'])){
     //Redirect to the logout page, you can't register while logged in!
-    header("Location: " . base_url() . "login.php");//, 303);
-    die();
+    redirect('login.php');
 } else {
     $title = "Register - Cursus PHP Basiswebsite";
-    $messages = array(
-        "username" => array(
-            "status" => "",
-            "message" => ""),
-        "password" => array(
-            "status" => "",
-            "message" => ""),
-        "firstname" => array(
-            "status" => "",
-            "message" => ""),
-        "lastname" => array(
-            "status" => "",
-            "message" => ""),
-        "email" => array(
-            "status" => "",
-            "message" => "")
-        );
+    $messages = initializeMessages(array("username", "password", "firstname", "lastname", "email"));
     if(isset($_POST['inputUsername'])){
          //Check for length of the fields
          $messages['username'] = checkPostLength('inputUsername', "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)", 5, 32);
@@ -36,6 +19,7 @@ if(isset($_SESSION['user']['username'])){
         if($messages['username']['status'] == "" && $messages['password']['status'] == "" && $messages['firstname']['status'] == ""
             && $messages['lastname']['status'] == "" && $messages['email']['status'] == ""){
             $_SESSION['user'] = createUser($_POST['inputUsername'], $_POST['inputFirstname'], $_POST['inputLastname'], $_POST['inputPassword'], $_POST['inputEmail']);
+            redirect('index.php');
         }
     }
 }

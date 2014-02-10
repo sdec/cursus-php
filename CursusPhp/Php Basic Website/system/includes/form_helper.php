@@ -1,4 +1,17 @@
 <?php
+//setup
+function initializeMessages($messages){
+    $messagesReturn['foo'] = array ("foo" => "bar");
+    foreach ($messages as &$message) {
+        $messagesReturn[$message] = array(
+            "status" => "",
+            "message" => ""
+        );
+    }
+    unset($messagesReturn['foo']);
+    return $messagesReturn;
+}
+
 //Validation
 function checkPostLength($postkey, $errormessage, $minChars=2, $maxChars=32, $required=true){
     if(isset($_POST[$postkey])){
