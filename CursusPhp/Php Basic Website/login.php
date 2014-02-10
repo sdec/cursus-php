@@ -28,6 +28,7 @@ if(isset($_SESSION['user']['username'])){
                 if(strlen($_POST['inputPassword']) >= 5 && strlen($_POST['inputPassword']) <= 32){
                     if(login($_POST['inputUsername'], $_POST['inputPassword'])['username']){ //vb : login("r0426942", "paswoord");
                         $_SESSION['user'] = login($_POST['inputUsername'], $_POST['inputPassword']);
+                        var_dump($_SESSION['user']);
                     } else { 
                         $messages["password"]["message"] = "Je username/wachtwoord was niet correct, probeer het nog eens!";
                         $messages["password"]["status"] = "has-error";
