@@ -9,8 +9,8 @@ function encryptPassword($password) {
 
 function login($username, $password){ //I.E. : "r0426942", "paswoord"
     $link = DB_Link();
-    //$username = sql_sanitize($username);
-    //$password = sql_sanitize($password);
+    $username = sql_sanitize($username);
+    $password = sql_sanitize($password);
     $pwd = encryptPassword($password);
     $query = "SELECT * FROM users WHERE username = '$username' AND password = '$pwd'";
     $result = mysqli_query($link, $query);
@@ -30,8 +30,8 @@ function login($username, $password){ //I.E. : "r0426942", "paswoord"
 function createUser($username, $firstname, $lastname, $password, $email){
     $link = DB_Link();
     
-    //$arr = sql_sanitize(array($username, $firstname, $lastname, $password, $email));
-    //$username = $arr[0]; $firstname = $arr[1]; $lastname = $arr[2]; $password = $arr[3]; $email = $arr[4];
+    $arr = sql_sanitize(array($username, $firstname, $lastname, $password, $email));
+    $username = $arr[0]; $firstname = $arr[1]; $lastname = $arr[2]; $password = $arr[3]; $email = $arr[4];
     $password = encryptPassword($password);
     
     $query = "INSERT INTO users(username, firstname, lastname, password, email) VALUES
