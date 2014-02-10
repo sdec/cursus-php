@@ -30,4 +30,8 @@ function includes_url() {
     return local_url() . 'system/includes/';
 }
 
+function queries_url() {
+    return local_url() . 'system/includes/queries/';
+}
+
 //include_once(local_url() . 'system/functions.php');

@@ -2,6 +2,7 @@
     include_once('path_helper.php');
     include_once(includes_url() . 'defines.php');
     include_once(includes_url() . 'functions.php');
+    include_once(queries_url() . 'DB_userprofile.php');
 
 if(isset($_POST['inputLogout']) && isset($_SESSION['user']['username'])){
     session_destroy();
@@ -19,6 +20,7 @@ if(isset($_SESSION['user']['username'])){
         $messages['password'] = checkPostLength('inputPassword', "Je password was te kort/lang! (>= 5 en <= 32)", 5, 32);
         
         if($messages['username']['status'] == "" && $messages['password']['status'] == ""){ //If no form errors
+            DB_Connect();
             if(login($_POST['inputUsername'], $_POST['inputPassword'])['username']){ //vb : login("r0426942", "paswoord");
                 $_SESSION['user'] = login($_POST['inputUsername'], $_POST['inputPassword']);
                 redirect("index.php");
@@ -26,6 +28,7 @@ if(isset($_SESSION['user']['username'])){
                 $messages["password"]["message"] = "Je username/wachtwoord was niet correct, probeer het nog eens!";
                 $messages["password"]["status"] = "has-error";
             }
+            DB_Close();
         }
     }
 }
