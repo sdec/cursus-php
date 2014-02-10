@@ -27,7 +27,7 @@
                 </tr>
             <?php } ?>
         <?php } else { ?>
-            <tr><td colspan="6">Er zijn momenteel geen afspraken beschikbaar.</td></tr>
+            <tr><td colspan="6">Er zijn geen afspraken om te tonen.</td></tr>
         <?php } ?>
     </tbody>
 </table>
@@ -39,15 +39,25 @@
         <?php } ?>
     </div>
     <div class="col-lg-9 col-md-9 col-sm-9">
-        <form class="form-horizontal" method="get" action="<?= base_url() ?>appointments/index" role="form">
+        <form class="form-horizontal" method="get" action="<?= base_url() ?>appointments" role="form">
             <div class="form-group">
                 <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Zoek afspraken op omschrijving, organisator, locatie, vakken, ..." />
+                    <input type="text" class="form-control" id="search" name="search" 
+                           placeholder="Zoek afspraken op beschrijving, organisator, locatie, vakken, start & einddata, studenten, ..." />
                 </div>
                 <div class="col-sm-2">
-                    <input type="submit" class="form-control btn btn-primary" placeholder="Email" value="Zoek" />
+                    <input type="submit" class="form-control btn btn-primary" value="Zoek" />
                 </div>
             </div>
         </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <?php if (strlen($search)) { ?>
+            <hr />
+            <p>Er werden <strong><?= $appointments == FALSE ? 0 : count((array) $appointments) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $search ?>".</p>
+            <a href="<?= base_url() ?>appointments" class="btn btn-default">Terug</a>
+        <?php } ?>
     </div>
 </div>

@@ -18,9 +18,15 @@ class Appointments extends CI_Controller {
         if (!$this->session->userdata('user'))
             redirect(base_url() . 'profile/login');
 
-        $appointments = $this->AppointmentModel->loadall();
+        $search = isset($_GET['search']) ? $_GET['search'] : '';
+        
+        $appointments = strlen($search) 
+                            ? $this->AppointmentModel->search($search) 
+                            : $this->AppointmentModel->loadall();
+        
         $data['appointments'] = $appointments;
-
+        $data['search'] = $search;
+        
         $this->template->write('title', 'Afsprakenplanner');
         $this->template->write_view('content', 'appointments/view', $data);
         $this->template->render();

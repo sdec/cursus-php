@@ -13,9 +13,44 @@ class AppointmentModel extends CI_Model {
                 ap.description                                  AS  description, 
                 ap.location                                     AS  location
             FROM appointments ap
+            
+            GROUP BY ap.appointmentid
             ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC
         ';
 
+        $query = $this->db->query($sql);
+        return $query->num_rows() > 0 ? $query->result() : FALSE;
+    }
+    
+    public function search($query) {
+        $sql = '
+            SELECT 
+                ap.appointmentid                                    AS  appointmentid,
+                DATE_FORMAT(ap.start_timestamp, \'%d-%m\')          AS  date, 
+                DATE_FORMAT(ap.start_timestamp, \'%H:%i\')          AS  start,
+                DATE_FORMAT(ap.end_timestamp, \'%H:%i\')            AS  end,
+                ap.description                                      AS  description, 
+                ap.location                                         AS  location
+            FROM appointments ap
+                LEFT JOIN appointmentslots aps USING(appointmentid)
+                LEFT JOIN appointmentsubscribers subs USING(appointmentslotid)
+		LEFT JOIN users lu ON lu.userid = aps.lecturerid
+		LEFT JOIN users su ON su.userid = subs.userid
+						
+            WHERE
+                ap.start_timestamp LIKE \'%'.$this->db->escape_str($query).'%\'
+                OR ap.end_timestamp LIKE \'%'.$this->db->escape_str($query).'%\'
+                OR description LIKE \'%'.$this->db->escape_str($query).'%\'
+                OR location LIKE \'%'.$this->db->escape_str($query).'%\'
+                OR lu.username LIKE \'%'.$this->db->escape_str($query).'%\'
+                OR su.username LIKE \'%'.$this->db->escape_str($query).'%\'
+                OR CONCAT(lu.firstname, \' \', lu.lastname) LIKE \'%'.$this->db->escape_str($query).'%\'
+                OR CONCAT(su.firstname, \' \', su.lastname) LIKE \'%'.$this->db->escape_str($query).'%\'
+
+            GROUP BY ap.appointmentid
+            ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC
+            
+        ';
         $query = $this->db->query($sql);
         return $query->num_rows() > 0 ? $query->result() : FALSE;
     }
@@ -141,10 +176,6 @@ class AppointmentModel extends CI_Model {
     public function deletetimeslot($appointmentslotid) {
         $this->db->delete('appointmentslots', array('appointmentslotid' => $appointmentslotid));
         return $this->db->affected_rows() > 0;
-    }
-    
-    public function search($query) {
-        
     }
 
 }
