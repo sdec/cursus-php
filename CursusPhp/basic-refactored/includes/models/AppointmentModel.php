@@ -1,33 +1,33 @@
 <?php
 
 function loadAllAppointments() {
+    $sql = '
+        SELECT 
+            ap.appointmentid                                AS  appointmentid,
+            DATE_FORMAT(ap.start_timestamp, \'%d-%m\')      AS  date, 
+            DATE_FORMAT(ap.start_timestamp, \'%H:%i\')      AS  start,
+            DATE_FORMAT(ap.end_timestamp, \'%H:%i\')        AS  end,
+            ap.description                                  AS  description, 
+            ap.location                                     AS  location
+        FROM appointments ap
+
+        GROUP BY ap.appointmentid
+        ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC
+    ';
+    
+    $result = mysqli_query(DB_Link(), $sql);
     $appointments = array();
-
-    $query = "SELECT 
-                  ap.appointmentid                                AS  appointmentid,
-                  DATE_FORMAT(ap.start_timestamp, '%d-%m')      AS  date, 
-                  DATE_FORMAT(ap.start_timestamp, '%H:%i')      AS  start,
-                  DATE_FORMAT(ap.end_timestamp, '%H:%i')        AS  end,
-                  ap.description                                  AS  description, 
-                  ap.location                                     AS  location
-              FROM appointments ap
-
-              GROUP BY ap.appointmentid
-              ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC";
-    $link = DB_Link();
-    $stmt = mysqli_prepare($link, $query);
-    if($stmt){
-        $result = mysqli_query($link, $query);
-        while($row = $result->fetch_array(MYSQLI_ASSOC)){
-            $appointments[] = $row;
-        }
+    while ($appointment = mysqli_fetch_assoc($result)) {
+        array_push($appointments, $appointment);
     }
     return (count($appointments) > 0) ? $appointments : FALSE;
 }
 
-function searchAppointments($searchArg) {
-    $searchArg = sql_sanitize($searchArg);
-    $sql = "SELECT 
+function searchAppointments($search) {
+
+    $search = sanitize($search);
+
+    $sql = 'SELECT 
             ap.appointmentid                                    AS  appointmentid,
             DATE_FORMAT(ap.start_timestamp, \'%d-%m\')          AS  date, 
             DATE_FORMAT(ap.start_timestamp, \'%H:%i\')          AS  start,
@@ -41,39 +41,41 @@ function searchAppointments($searchArg) {
             LEFT JOIN users su ON su.userid = subs.userid
 
         WHERE
-            ap.start_timestamp LIKE \'%'.$searchArg.'%\'
-            OR ap.end_timestamp LIKE \'%'.$searchArg.'%\'
-            OR description LIKE \'%'.$searchArg.'%\'
-            OR location LIKE \'%'.$searchArg.'%\'
-            OR lu.username LIKE \'%'.$searchArg.'%\'
-            OR su.username LIKE \'%'.$searchArg.'%\'
-            OR CONCAT(lu.firstname, \' \', lu.lastname) LIKE \'%'.$searchArg.'%\'
-            OR CONCAT(su.firstname, \' \', su.lastname) LIKE \'%'.$searchArg.'%\'
+            ap.start_timestamp LIKE \'%'.$search . '%\'
+            OR ap.end_timestamp LIKE \'%'.$search.'%\'
+            OR description LIKE \'%'.$search.'%\'
+            OR location LIKE \'%'.$search.'%\'
+            OR lu.username LIKE \'%'.$search.'%\'
+            OR su.username LIKE \'%'.$search.'%\'
+            OR CONCAT(lu.firstname, \' \', lu.lastname) LIKE \'%'.$search.'%\'
+            OR CONCAT(su.firstname, \' \', su.lastname) LIKE \'%'.$search.'%\'
 
         GROUP BY ap.appointmentid
-        ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC";
-    
-    $link = DB_Link();
-    $stmt = mysqli_prepare($link, $query);
-    if($stmt){
-        $result = mysqli_query($link, $query);
-        while($row = $result->fetch_array(MYSQLI_ASSOC)){
-            $appointments[] = $row;
-        }
+        ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC
+    ';
+
+    $result = mysqli_query(DB_Link(), $sql);
+    $appointments = array();
+    while ($appointment = mysqli_fetch_assoc($result)) {
+        array_push($appointments, $appointment);
     }
     return (count($appointments) > 0) ? $appointments : FALSE;
 }
 
 function createAppointment($start_timestamp, $end_timestamp, $description, $location, $chronological) {
     $arr = sql_sanitize(array($start_timestamp, $end_timestamp, $description, $location, $chronological));
-    $start_timestamp = $arr[0]; $end_timestamp = $arr[1]; $description = $arr[2]; $location = $arr[3]; $chronological = $arr[4];
-    
+    $start_timestamp = $arr[0];
+    $end_timestamp = $arr[1];
+    $description = $arr[2];
+    $location = $arr[3];
+    $chronological = $arr[4];
+
     $query = "INSERT INTO appointments(start_timestamp, end_timestamp, description, location, chronological) VALUES
              ('$start_timestamp', '$end_timestamp', '$description', '$location', '$chronological')";
     $link = DB_Link();
     mysqli_query($link, $query);
-    
-    printf ("New appointment has id %d.\n", mysqli_insert_id($link));
+
+    printf("New appointment has id %d.\n", mysqli_insert_id($link));
     return mysqli_insert_id($link);
 }
 
@@ -104,7 +106,7 @@ function loadAppointment($appointmentid) {
             FROM appointments ap
                 LEFT JOIN appointmentslots aps USING(appointmentid)
                 
-            WHERE appointmentid = \''.  sanitize($appointmentid).'\'
+            WHERE appointmentid = \'' . sanitize($appointmentid) . '\'
             ORDER BY start_timestamp DESC, end_timestamp DESC
         ';
 
@@ -128,13 +130,13 @@ function slots($appointmentid) {
                     LEFT JOIN appointmentsubscribers subs ON aps.appointmentslotid = subs.appointmentslotid
                     LEFT JOIN users su ON subs.userid = su.userid
                     
-            WHERE appointmentid = \''.  sanitize($appointmentid).'\'
+            WHERE appointmentid = \'' . sanitize($appointmentid) . '\'
             ORDER BY start_timestamp ASC, end_timestamp ASC, lecturer DESC
         ';
 
     $result = mysqli_query(DB_Link(), $sql);
     $slots = array();
-    while($slot = mysqli_fetch_assoc($result)) {
+    while ($slot = mysqli_fetch_assoc($result)) {
         array_push($slots, $slot);
     }
     return count($slots) > 0 ? $slots : FALSE;
