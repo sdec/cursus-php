@@ -60,3 +60,7 @@ function isAlphaNumeric($field) {
     
     return !preg_match('/[^a-z0-9]/i', $values[$field]);
 }
+
+function isValidEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
