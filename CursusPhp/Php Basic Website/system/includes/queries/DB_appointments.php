@@ -1,7 +1,7 @@
 <?php
 include_once(includes_url() . 'database.php');
 
-function create($start_timestamp, $end_timestamp, $description, $location, $chronological) {
+function createAppointment($start_timestamp, $end_timestamp, $description, $location, $chronological) {
     $arr = sql_sanitize(array($start_timestamp, $end_timestamp, $description, $location, $chronological));
     $start_timestamp = $arr[0]; $end_timestamp = $arr[1]; $description = $arr[2]; $location = $arr[3]; $chronological = $arr[4];
     
@@ -14,7 +14,7 @@ function create($start_timestamp, $end_timestamp, $description, $location, $chro
     return mysqli_insert_id($link);
 }
 
-function loadall() {
+function loadAllAppointments() {
     $appointments = array();
 
     $query = "SELECT 
@@ -39,7 +39,7 @@ function loadall() {
     return (count($appointments) > 0) ? $appointments : FALSE;
 }
 
-function search($searchArg) {
+function searchAppointments($searchArg) {
     $searchArg = sql_sanitize($searchArg);
 $sql = "SELECT 
             ap.appointmentid                                    AS  appointmentid,

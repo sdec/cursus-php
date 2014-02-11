@@ -65,15 +65,16 @@ function searchAppointments($searchArg) {
 }
 
 function createAppointment($start_timestamp, $end_timestamp, $description, $location, $chronological) {
-    $data = array(
-        'start_timestamp' => $start_timestamp,
-        'end_timestamp' => $end_timestamp,
-        'description' => $description,
-        'location' => $location,
-        'chronological' => $chronological
-    );
-    $this->db->insert('appointments', $data);
-    return $this->db->affected_rows() > 0;
+    $arr = sql_sanitize(array($start_timestamp, $end_timestamp, $description, $location, $chronological));
+    $start_timestamp = $arr[0]; $end_timestamp = $arr[1]; $description = $arr[2]; $location = $arr[3]; $chronological = $arr[4];
+    
+    $query = "INSERT INTO appointments(start_timestamp, end_timestamp, description, location, chronological) VALUES
+             ('$start_timestamp', '$end_timestamp', '$description', '$location', '$chronological')";
+    $link = DB_Link();
+    mysqli_query($link, $query);
+    
+    printf ("New appointment has id %d.\n", mysqli_insert_id($link));
+    return mysqli_insert_id($link);
 }
 
 function editAppointment($appointmentid, $start_timestamp, $end_timestamp, $description, $location, $chronological) {
