@@ -48,4 +48,4 @@
         <div class="alert alert-dismissable alert-<?= $msg['id']; ?>"><?= $msg['message']; ?></div>
     <?php endforeach; endif;
     $_SESSION['flashmessages'] = array();?>
-        <div class="spacer"></div>
+        <!--<div class="spacer"/>-->

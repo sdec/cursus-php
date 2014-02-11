@@ -1,7 +1,7 @@
 <?php
-    include_once('../path_helper.php');
-    include_once(includes_url() . 'defines.php');
-    include_once(includes_url() . 'functions.php');
+    require_once('../path_helper.php');
+    require_once(includes_url() . 'defines.php');
+    require_once(includes_url() . 'functions.php');
     require_once(queries_url() . 'DB_appointments.php');
     
     if($_SESSION['user']['accesslevel'] < LECTURER){
@@ -11,17 +11,24 @@
     $messages = initializeMessages(array("date", "start", "end", "description", "location", "chronological"));
     if(isset($_POST['description'])){
          //Check for length of the fields
-         var_dump($_POST);
          //$messages['date'] = checkPostLength('date', "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)", 5, 32);
          //$messages['start'] = checkPostLength('start', "Je password was te kort/lang! (>= 5 en <= 32)", 5, 32);
          //$messages['end'] = checkPostLength('end', "Je voornaam was te kort/lang! (>= 2 en <= 32)", 2, 32);
          $messages['description'] = checkPostLength('description', "Je beschrijving was te kort/lang! (>= 2 en <= 32)", 2, 32);
          $messages['location'] = checkPostLength('location', "Je locatie was te kort/lang! (>= 3 en <= 32)", 3, 32);
          $chronological = (isset($_POST['chronological'])) ?  true : false;
-         DB_Connect();
-         $id = create($_POST['date'].' '.$_POST['start'], $_POST['date'].' '.$_POST['end'], $_POST['description'], $_POST['location'], $_POST['description'], $chronological);
-         DB_Close();
-    } else { flashmessage("Gelieve velden iets in te vullen", "danger"); }
+         $noError = true;
+         foreach($messages as $message){
+             if($message['status'] != ''){ $noError = false;}
+         }
+         if($noError){
+            DB_Connect();
+            $id = create($_POST['date'].' '.$_POST['start'], $_POST['date'].' '.$_POST['end'], $_POST['description'], $_POST['location'], $_POST['description'], $chronological);
+            DB_Close();
+         }
+    } else { flashmessage("Gelieve het formulier in te vullen", "info"); }
+    
+    //Pre-set the values for the fields
     if(!isset($_POST['date'])){
         $_POST['date'] = date("o-m-d");
     }
@@ -113,19 +120,22 @@
                     </fieldset>
                 </form>
             </div>
-        <?php include_once(partials_url() .'footer.php'); ?>
-        <!-- Configuratie van de datetimepicker -->
-        <script src="<?= assets_url(); ?>js/jquery.datetimepicker.js"></script>
-        <script type="text/javascript">
-            var allowedTimes = [];
-            for(var i = 8; i <= 17; i++) {
-                for(var j = 0; j <= 50; j += 10) {
-                    allowedTimes.push(('0' + i).slice(-2) + ':' + ('0' + j).slice(-2));
+            <?php include_once(partials_url() .'footer.php'); ?>
+            <!-- Configuratie van de datetimepicker -->
+            <script src="<?= assets_url(); ?>js/jquery.datetimepicker.js"></script>
+            <script type="text/javascript">
+                var allowedTimes = [];
+                for(var i = 8; i <= 17; i++) {
+                    for(var j = 0; j <= 50; j += 10) {
+                        allowedTimes.push(('0' + i).slice(-2) + ':' + ('0' + j).slice(-2));
+                    }
                 }
-            }
-            $('#inputDateTime').datetimepicker({
-                lang: 'nl',
-                allowTimes: allowedTimes,
-                format: 'd/m/Y H:i'
-            });
-        </script>
+                $('#inputDateTime').datetimepicker({
+                    lang: 'nl',
+                    allowTimes: allowedTimes,
+                    format: 'd/m/Y H:i'
+                });
+            </script>
+        </div>
+    </body>
+</html>

@@ -4,14 +4,78 @@ include_once(includes_url() . 'database.php');
 function create($start_timestamp, $end_timestamp, $description, $location, $chronological) {
     $arr = sql_sanitize(array($start_timestamp, $end_timestamp, $description, $location, $chronological));
     $start_timestamp = $arr[0]; $end_timestamp = $arr[1]; $description = $arr[2]; $location = $arr[3]; $chronological = $arr[4];
+    
     $query = "INSERT INTO appointments(start_timestamp, end_timestamp, description, location, chronological) VALUES
              ('$start_timestamp', '$end_timestamp', '$description', '$location', '$chronological')";
     $link = DB_Link();
     mysqli_query($link, $query);
+    
     printf ("New appointment has id %d.\n", mysqli_insert_id($link));
     return mysqli_insert_id($link);
 }
 
+function loadall() {
+    $appointments = array();
+
+    $query = "SELECT 
+                  ap.appointmentid                                AS  appointmentid,
+                  DATE_FORMAT(ap.start_timestamp, '%d-%m')      AS  date, 
+                  DATE_FORMAT(ap.start_timestamp, '%H:%i')      AS  start,
+                  DATE_FORMAT(ap.end_timestamp, '%H:%i')        AS  end,
+                  ap.description                                  AS  description, 
+                  ap.location                                     AS  location
+              FROM appointments ap
+
+              GROUP BY ap.appointmentid
+              ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC";
+    $link = DB_Link();
+    $stmt = mysqli_prepare($link, $query);
+    if($stmt){
+        $result = mysqli_query($link, $query);
+        while($row = $result->fetch_array(MYSQLI_ASSOC)){
+            $appointments[] = $row;
+        }
+    }
+    return (count($appointments) > 0) ? $appointments : FALSE;
+}
+
+function search($searchArg) {
+    $searchArg = sql_sanitize($searchArg);
+$sql = "SELECT 
+            ap.appointmentid                                    AS  appointmentid,
+            DATE_FORMAT(ap.start_timestamp, \'%d-%m\')          AS  date, 
+            DATE_FORMAT(ap.start_timestamp, \'%H:%i\')          AS  start,
+            DATE_FORMAT(ap.end_timestamp, \'%H:%i\')            AS  end,
+            ap.description                                      AS  description, 
+            ap.location                                         AS  location
+        FROM appointments ap
+            LEFT JOIN appointmentslots aps USING(appointmentid)
+            LEFT JOIN appointmentsubscribers subs USING(appointmentslotid)
+            LEFT JOIN users lu ON lu.userid = aps.lecturerid
+            LEFT JOIN users su ON su.userid = subs.userid
+
+        WHERE
+            ap.start_timestamp LIKE \'%'.$searchArg.'%\'
+            OR ap.end_timestamp LIKE \'%'.$searchArg.'%\'
+            OR description LIKE \'%'.$searchArg.'%\'
+            OR location LIKE \'%'.$searchArg.'%\'
+            OR lu.username LIKE \'%'.$searchArg.'%\'
+            OR su.username LIKE \'%'.$searchArg.'%\'
+            OR CONCAT(lu.firstname, \' \', lu.lastname) LIKE \'%'.$searchArg.'%\'
+            OR CONCAT(su.firstname, \' \', su.lastname) LIKE \'%'.$searchArg.'%\'
+
+        GROUP BY ap.appointmentid
+        ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC";
+    $link = DB_Link();
+    $stmt = mysqli_prepare($link, $query);
+    if($stmt){
+        $result = mysqli_query($link, $query);
+        while($row = $result->fetch_array(MYSQLI_ASSOC)){
+            $appointments[] = $row;
+        }
+    }
+    return (count($appointments) > 0) ? $appointments : FALSE;
+}
 /*function userExists($username, $encryptedPwd = 0){
     $link = DB_Link();
     $query = "SELECT * FROM users WHERE username = '$username' AND password = '$encryptedPwd'";
@@ -35,25 +99,5 @@ function login($username, $password){ //I.E. : "r0426942", "paswoord"
     } else {
         return 0;
     }
-}
-
-function createUser($username, $firstname, $lastname, $password, $email){
-    $link = DB_Link();
-    
-    $arr = sql_sanitize(array($username, $firstname, $lastname, $password, $email));
-    $username = $arr[0]; $firstname = $arr[1]; $lastname = $arr[2]; $password = $arr[3]; $email = $arr[4];
-    $password = encryptPassword($password);
-    if(userExists($username)){
-        return 0;
-        exit();
-    }
-    $query = "INSERT INTO users(username, firstname, lastname, password, email) VALUES
-                                 ('$username', '$firstname', '$lastname', '$password', '$email')";
-    mysqli_query($link, $query);
-    printf ("New Record has id %d.\n", mysqli_insert_id($link));
-    
-    $user = userExists($username);
-    unset($user['password']);
-    return $user;
 }*/
 ?>
