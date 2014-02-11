@@ -2,17 +2,21 @@
 
 define('BASE_URL', '../');
 require_once BASE_URL . 'includes/config/routes.php';
+require_once config_url()   . 'sessions.php';
 
-require_once config_url() . 'sessions.php';
-require_once config_url() . 'database.php';
-require_once helpers_url() . 'form_helper.php';
+if(loggedin())
+    redirect('index.php');
+
+require_once config_url()   . 'database.php';
+require_once models_url()   . 'UserModel.php';
+require_once helpers_url()  . 'form_helper.php';
 
 if(isset($_POST['submit'])) {
     
     if(isset($_POST['username']) && isset($_POST['password'])) {
         
         set_value('username', $_POST['username']);
-        set_value('password', $_POST['username']);
+        set_value('password', $_POST['password']);
         
         if(isMinLength('username', 4) == FALSE)
             set_error ('username', 'Het gebuikersnaam veld moet minstens 4 karakters lang zijn');
@@ -31,8 +35,12 @@ if(isset($_POST['submit'])) {
         
         if(hasErrors() == FALSE) {
             
-            message('Validatie is goed verlopen!');
-            redirect('profile/login_success.php');
+            if(isCorrectCredentialsUser(set_value('username'), set_value('password'))) {
+                set_userdata(loadUser(set_value('username')));
+                redirect('profile/login_success.php');
+            }
+            
+            message('Foutieve gebruikersnaam/paswoord combinatie!', 'danger');
         }
     }
 }
@@ -84,3 +92,4 @@ if(isset($_POST['submit'])) {
         <?php include_once partials_url() . 'scripts.php' ?>
     </body>
 </html>
+

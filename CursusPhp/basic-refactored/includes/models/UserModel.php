@@ -21,10 +21,13 @@ function isCorrectCredentialsUser($username, $password) {
 
     $hashedPassword = encryptPassword($password);
 
-    // We count how many rows match this username AND password
-    $conditions = array('username' => $username, 'password' => $hashedPassword);
-    $query = $this->db->get_where('users', $conditions);
-    return $query->num_rows() > 0;
+    $sql = '
+        SELECT *
+        FROM users
+        WHERE username = \''.  sanitize($username).'\' AND password = \''.  $hashedPassword .'\'
+    ';
+    $result = mysqli_query(DB_Link(), $sql);
+    return mysqli_num_rows($result) > 0;
 }
 
 function registerUser($username, $firstname, $lastname, $password, $email) {
@@ -46,9 +49,13 @@ function registerUser($username, $firstname, $lastname, $password, $email) {
 }
 
 function loadUser($username) {
-    $this->db->where(array('username' => $username));
-    $query = $this->db->get('users');
-    return $query->num_rows() > 0 ? $query->result()[0] : FALSE;
+    $sql = '
+        SELECT *
+        FROM users
+        WHERE username = \''.  sanitize($username).'\'
+    ';
+    $result = mysqli_query(DB_Link(), $sql);
+    return mysqli_num_rows($result) > 0 ? mysqli_fetch_assoc($result) : FALSE;
 }
 
 function accessLevelName($accessLevel) {

@@ -12,10 +12,10 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <?php if (isset($_SESSION['user'])) { ?>
+                    <?php if (loggedin()) { ?>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
                             <span class="glyphicon glyphicon-user"></span> 
-                            <?= $_SESSION['user']['username'] ?> <span class="caret"></span>
+                            <?= userdata('username') ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
                             <li><a tabindex="-1" href="<?= base_url() ?>profile/view.php">Mijn profiel</a></li>
