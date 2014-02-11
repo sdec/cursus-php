@@ -1,7 +1,7 @@
 <h1>Afspraak maken</h1>
 
 <div class="well">
-    <form method="POST" action="<?= base_url() ?>appointments/create" role="form" class="form-horizontal">
+    <form method="POST" action="<?= base_url() ?>appointments/create.php" role="form" class="form-horizontal">
         <div class="form-group">
             <label for="date" class="col-lg-2 control-label">Datum</label>
             <div class="col-lg-4">
