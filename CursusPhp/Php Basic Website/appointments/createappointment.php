@@ -23,7 +23,7 @@
          }
          if($noError){
             DB_Connect();
-            $id = create($_POST['date'].' '.$_POST['start'], $_POST['date'].' '.$_POST['end'], $_POST['description'], $_POST['location'], $_POST['description'], $chronological);
+            $id = createAppointment($_POST['date'].' '.$_POST['start'], $_POST['date'].' '.$_POST['end'], $_POST['description'], $_POST['location'], $_POST['description'], $chronological);
             DB_Close();
          }
     } else { flashmessage("Gelieve het formulier in te vullen", "info"); }

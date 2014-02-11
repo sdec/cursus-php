@@ -7,8 +7,8 @@
     $title = "Php Basic - View appointments";
     
     DB_Connect();
-    $appointments = loadall();
-    $search = (isset($_POST['search'])) ? search($_POST['search']) : false;
+    $appointments = loadAllAppointments();
+    $search = (isset($_POST['search'])) ? searchAppointments($_POST['search']) : false;
     DB_Close();
 ?>
         <?php include_once(partials_url() . 'header.php'); ?>>
