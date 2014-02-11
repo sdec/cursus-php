@@ -27,7 +27,7 @@ function loadAllAppointments() {
 
 function searchAppointments($searchArg) {
     $searchArg = sql_sanitize($searchArg);
-$sql = "SELECT 
+    $sql = "SELECT 
             ap.appointmentid                                    AS  appointmentid,
             DATE_FORMAT(ap.start_timestamp, \'%d-%m\')          AS  date, 
             DATE_FORMAT(ap.start_timestamp, \'%H:%i\')          AS  start,
@@ -52,6 +52,7 @@ $sql = "SELECT
 
         GROUP BY ap.appointmentid
         ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC";
+    
     $link = DB_Link();
     $stmt = mysqli_prepare($link, $query);
     if($stmt){
@@ -102,12 +103,12 @@ function loadAppointment($appointmentid) {
             FROM appointments ap
                 LEFT JOIN appointmentslots aps USING(appointmentid)
                 
-            WHERE appointmentid = ?
+            WHERE appointmentid = \''.  sanitize($appointmentid).'\'
             ORDER BY start_timestamp DESC, end_timestamp DESC
         ';
 
-    $query = $this->db->query($sql, array($appointmentid));
-    return $query->num_rows() > 0 ? $query->result()[0] : FALSE;
+    $result = mysqli_query(DB_Link(), $sql);
+    return mysqli_num_rows($result) > 0 ? mysqli_fetch_assoc($result) : FALSE;
 }
 
 function slots($appointmentid) {
@@ -116,8 +117,8 @@ function slots($appointmentid) {
                 aps.appointmentslotid                       AS appointmentslotid,
                 aps.lecturerid                              AS lecturerid,
                 CONCAT(lu.firstname, \' \', lu.lastname)    AS lecturer,
-                DATE_FORMAT(aps.start_timestamp, \'%H:%i\') AS	start,
-                DATE_FORMAT(aps.end_timestamp, \'%H:%i\')   AS	end,
+                DATE_FORMAT(aps.start_timestamp, \'%H:%i\') AS start,
+                DATE_FORMAT(aps.end_timestamp, \'%H:%i\')   AS end,
                 subs.userid                                 AS subscriberid,
                 CONCAT(su.firstname, \' \', su.lastname)    AS subscriber
 
@@ -126,12 +127,16 @@ function slots($appointmentid) {
                     LEFT JOIN appointmentsubscribers subs ON aps.appointmentslotid = subs.appointmentslotid
                     LEFT JOIN users su ON subs.userid = su.userid
                     
-            WHERE appointmentid = ?
+            WHERE appointmentid = \''.  sanitize($appointmentid).'\'
             ORDER BY start_timestamp ASC, end_timestamp ASC, lecturer DESC
         ';
 
-    $query = $this->db->query($sql, array($appointmentid));
-    return $query->num_rows() > 0 ? $query->result() : FALSE;
+    $result = mysqli_query(DB_Link(), $sql);
+    $slots = array();
+    while($slot = mysqli_fetch_assoc($result)) {
+        array_push($slots, $slot);
+    }
+    return count($slots) > 0 ? $slots : FALSE;
 }
 
 function deleteAppointment($appointmentid) {
