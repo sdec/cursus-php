@@ -32,20 +32,15 @@ function isCorrectCredentialsUser($username, $password) {
 
 function registerUser($username, $firstname, $lastname, $password, $email) {
 
-    $hashedPassword = $this->encryptPassword($password);
+    $hashedPassword = encryptPassword($password);
 
-    // Insert the new user in the database
-    $insertData = array(
-        'username' => $username,
-        'firstname' => $firstname,
-        'lastname' => $lastname,
-        'password' => $hashedPassword,
-        'email' => $email
-    );
-    $this->db->insert('users', $insertData);
-
-    // Check if the insert succeeded
-    return $this->db->affected_rows() > 0;
+    $sql = '
+        INSERT INTO users (username, firstname, lastname, password, email) 
+        VALUES (\''.  sanitize($username).'\', \''.  sanitize($firstname).'\', \''.  sanitize($lastname).'\', 
+            \''.  sanitize($hashedPassword).'\', \''.  sanitize($email).'\');
+    ';
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_affected_rows(DB_Link());
 }
 
 function loadUser($username) {
@@ -56,6 +51,16 @@ function loadUser($username) {
     ';
     $result = mysqli_query(DB_Link(), $sql);
     return mysqli_num_rows($result) > 0 ? mysqli_fetch_assoc($result) : FALSE;
+}
+
+function usernameExists($username) {
+    $sql = '
+        SELECT *
+        FROM users
+        WHERE username LIKE \''.  sanitize($username).'\'
+    ';
+    $result = mysqli_query(DB_Link(), $sql);
+    return mysqli_num_rows($result) > 0;
 }
 
 function accessLevelName($accessLevel) {
