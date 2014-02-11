@@ -1,12 +1,6 @@
 <?php
 include_once(config_url() . 'database.php');
 
-function encryptPassword($password) {
-    // We first uppercase the password to eliminate case
-    // We then hash the password using Whirlpool (outputs 128 character hash)
-    return hash('whirlpool', strtoupper($password));
-}
-
 function userExists($username, $encryptedPwd = 0){
     $link = DB_Link();
     $query = "SELECT * FROM users WHERE username = '$username' AND password = '$encryptedPwd'";
