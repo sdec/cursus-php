@@ -2,26 +2,32 @@
     include_once('../path_helper.php');
     include_once(includes_url() . 'defines.php');
     include_once(includes_url() . 'functions.php');
+    require_once(queries_url() . 'DB_appointments.php');
     
     if($_SESSION['user']['accesslevel'] < LECTURER){
         redirect('index.php', 'Je moet het toegangsniveau van minstens een ' . getRole(LECTURER) . ' hebben om deze pagina te bekijken...', "danger");
     }
     $title = "Afspraak maken - Php Basic";
-    $messages = initializeMessages(array("date", "start", "end", "description", "location"));
+    $messages = initializeMessages(array("date", "start", "end", "description", "location", "chronological"));
     if(isset($_POST['description'])){
          //Check for length of the fields
          var_dump($_POST);
          //$messages['date'] = checkPostLength('date', "Je gebruikersnaam was te kort/lang! (>= 5 en <= 32)", 5, 32);
          //$messages['start'] = checkPostLength('start', "Je password was te kort/lang! (>= 5 en <= 32)", 5, 32);
          //$messages['end'] = checkPostLength('end', "Je voornaam was te kort/lang! (>= 2 en <= 32)", 2, 32);
-         $messages['description'] = checkPostLength('description', "Je naam was te kort/lang! (>= 2 en <= 32)", 2, 32);
-         $messages['location'] = checkPostLength('location', "Je email was te kort/lang! (>= 5 en <= 32)", 5, 32);
+         $messages['description'] = checkPostLength('description', "Je beschrijving was te kort/lang! (>= 2 en <= 32)", 2, 32);
+         $messages['location'] = checkPostLength('location', "Je locatie was te kort/lang! (>= 3 en <= 32)", 3, 32);
+         $chronological = (isset($_POST['chronological'])) ?  true : false;
          DB_Connect();
+         $id = create($_POST['date'].' '.$_POST['start'], $_POST['date'].' '.$_POST['end'], $_POST['description'], $_POST['location'], $_POST['description'], $chronological);
          DB_Close();
-    }
+    } else { flashmessage("Gelieve velden iets in te vullen", "danger"); }
     if(!isset($_POST['date'])){
         $_POST['date'] = date("o-m-d");
     }
+    if(!isset($_POST['start'])){ $_POST['start'] = '08:00'; }
+    $_POST['start'] = (isset($_POST['start'])) ?  $_POST['start'] : '08:00';
+    $_POST['end'] = (isset($_POST['end'])) ?  $_POST['end'] : '16:00';
 ?>
 <?php include_once(partials_url() . 'header.php'); ?>
         <!-- jQuery datum & tijd picker -->
@@ -34,10 +40,10 @@
             <p>Vul onderstaande gegevens in om een afspraakmoment te voorzien.</p>
 
             <div class="well">
-                <form class="form-horizontal">
+                <form class="form-horizontal" method="POST">
                     <fieldset>
-                        <div class="form-group <?=$messages['date']['message']; ?>">
-                            <label for="date" class="col-lg-2 control-label">Datum</label>
+                        <div class="form-group <?=$messages['date']['status']; ?>">
+                            <label for="date" class="col-lg-2 control-label">Datum(*)</label>
                             <div class="col-lg-4">
                                 <input type="date" class="form-control" id="date" name="date" 
                                        placeholder="Datum afspraak" maxlength="32" value="<?= $_POST['date']; ?>" required>
@@ -47,43 +53,55 @@
                             </div>
                         </div>
                         <div class="form-group <?=$messages['start']['status']; ?>">
-                            <label for="start" class="col-lg-2 control-label">Startuur</label>
+                            <label for="start" class="col-lg-2 control-label">Startuur(*)</label>
                             <div class="col-lg-4">
                                 <input type="time" class="form-control" id="start" name="start" 
-                                       placeholder="Startuur afspraak" maxlength="32" value="08:00" required>
+                                       placeholder="Startuur afspraak" maxlength="32" value="<?= $_POST['start']; ?>" required>
                             </div>
                             <div class="col-lg-6">
                                 <span class="text-danger"><?=$messages['start']['message']; ?></span>
                             </div>
                         </div>
                         <div class="form-group <?=$messages['end']['status']; ?>">
-                            <label for="end" class="col-lg-2 control-label">Einduur</label>
+                            <label for="end" class="col-lg-2 control-label">Einduur(*)</label>
                             <div class="col-lg-4">
                                 <input type="time" class="form-control" id="end" name="end" 
-                                       placeholder="Einduur afspraak" maxlength="32" value="16:00" required>
+                                       placeholder="Einduur afspraak" maxlength="32" value="<?= $_POST['end']; ?>" required>
                             </div>
                             <div class="col-lg-6">
                                 <span class="text-danger"><?=$messages['end']['message']; ?></span>
                             </div>
                         </div>
                         <div class="form-group" <?=$messages['description']['status']; ?>>
-                            <label for="description" class="col-lg-2 control-label">Beschrijving</label>
+                            <label for="description" class="col-lg-2 control-label">Beschrijving(*)</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" id="description" name="description" 
-                                          placeholder="Beschrijving afspraak" maxlength="128" required></textarea>
+                                          placeholder="Beschrijving afspraak" maxlength="128" required><?=@$_POST['description']?></textarea>
                             </div>
                             <div class="col-lg-6">
                                 <span class="text-danger"><?=$messages['description']['message']; ?></span>
                             </div>
                         </div>
                         <div class="form-group <?=$messages['location']['status']; ?>">
-                            <label for="location" class="col-lg-2 control-label">Locatie</label>
+                            <label for="location" class="col-lg-2 control-label">Locatie(*)</label>
                             <div class="col-lg-4">
                                 <input type="text" class="form-control" id="location" name="location" 
-                                       placeholder="Lokaal 001" maxlength="32" value="" required></textarea>
+                                       placeholder="Lokaal 001" maxlength="32" value="<?=@$_POST['location']?>" required></textarea>
                             </div>
                             <div class="col-lg-6">
                                 <span class="text-danger"><?=$messages['location']['message']; ?></span>
+                            </div>
+                        </div>
+                        <div class="form-group <?=$messages['chronological']['status']; ?>">
+                            <div class="col-lg-6 col-lg-offset-2">
+                                <input type="checkbox" id="chronological" name="chronological" 
+                                       <?php if (isset($_POST['chronological'])):?>
+                                        <?='checked="true"'?>
+                                       <?php endif; ?>>
+                                Verplicht inschrijvingen in chronologische volgorde
+                            </div>
+                            <div class="col-lg-6">
+                                <span class="text-danger"><?=$messages['chronological']['message']; ?></span>
                             </div>
                         </div>
                         <div class="form-group">
