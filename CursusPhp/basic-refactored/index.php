@@ -19,6 +19,5 @@ require_once config_url() . 'database.php';
             
             <?php include_once partials_url() . 'message.php' ?>
         </div>
-        <?php include_once partials_url() . 'scripts.php' ?>
     </body>
 </html>

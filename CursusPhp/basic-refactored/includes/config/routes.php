@@ -20,3 +20,7 @@ function config_url() {
 function helpers_url() {
     return base_url() . 'includes/partials/';
 }
+
+function queries_url() {
+    return base_url() . 'includes/queries/';
+}
