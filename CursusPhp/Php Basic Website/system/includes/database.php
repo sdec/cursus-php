@@ -3,7 +3,7 @@ $link = 0;
 
 function DB_Connect(){
     global $link;
-    $link = new mysqli("localhost", "admin", "", "test");//mysqlhost, username & password
+    $link = new mysqli("localhost", "root", "", "cursusphp");//mysqlhost, username & password
     /* check connection */
     if (mysqli_connect_errno()) {
         printf("Connect failed: %s\n", mysqli_connect_error()); 

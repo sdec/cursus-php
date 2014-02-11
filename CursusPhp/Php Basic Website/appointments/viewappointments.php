@@ -11,7 +11,7 @@
     $search = (isset($_POST['search'])) ? searchAppointments($_POST['search']) : false;
     DB_Close();
 ?>
-        <?php include_once(partials_url() . 'header.php'); ?>>
+        <?php include_once(partials_url() . 'header.php'); ?>
     </head>
     <body>
         <?php include_once(partials_url() . 'navbar.php'); ?>
