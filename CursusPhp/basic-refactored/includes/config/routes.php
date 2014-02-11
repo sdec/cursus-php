@@ -21,6 +21,10 @@ function helpers_url() {
     return base_url() . 'includes/partials/';
 }
 
+function models_url() {
+    return base_url() . 'includes/models/';
+}
+
 function redirect($page) {
     header('Location: ' . base_url() . $page);
     die;

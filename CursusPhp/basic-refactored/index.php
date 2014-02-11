@@ -4,6 +4,8 @@ define('BASE_URL', './');
 require_once 'includes/config/routes.php';
 require_once config_url() . 'database.php';
 
+require_once helpers_url() . 'message_helper.php';
+
 ?>
 <!DOCTYPE html>
 <html>
