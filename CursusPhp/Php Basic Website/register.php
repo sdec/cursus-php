@@ -21,7 +21,7 @@ if(isset($_SESSION['user']['username'])){
             && $messages['lastname']['status'] == "" && $messages['email']['status'] == ""){
             $_SESSION['user'] = createUser($_POST['inputUsername'], $_POST['inputFirstname'], $_POST['inputLastname'], $_POST['inputPassword'], $_POST['inputEmail']);
             if(isset($_SESSION['user']['username'])){
-                redirect('index.php');
+                redirect('index.php', 'U bent sucessvol geregistreerd!');
             } else {
                 flashmessage("Sorry, deze username bestaat al, gelieve een andere te kiezen...", "warning");
             }
