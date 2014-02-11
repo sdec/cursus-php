@@ -75,7 +75,7 @@ function createAppointment($start_timestamp, $end_timestamp, $description, $loca
     $link = DB_Link();
     mysqli_query($link, $query);
 
-    printf("New appointment has id %d.\n", mysqli_insert_id($link));
+    //printf("New appointment has id %d.\n", mysqli_insert_id($link));
     return mysqli_insert_id($link);
 }
 
