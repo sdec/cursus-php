@@ -18,7 +18,7 @@ function config_url() {
 }
 
 function helpers_url() {
-    return base_url() . 'includes/partials/';
+    return base_url() . 'includes/helpers/';
 }
 
 function models_url() {

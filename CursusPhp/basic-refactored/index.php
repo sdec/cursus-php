@@ -1,10 +1,11 @@
 <?php
 
-define('BASE_URL', './');
-require_once 'includes/config/routes.php';
+define('BASE_URL', '../');
+require_once BASE_URL . 'includes/config/routes.php';
+
+require_once config_url() . 'sessions.php';
 require_once config_url() . 'database.php';
 
-require_once helpers_url() . 'message_helper.php';
 
 ?>
 <!DOCTYPE html>
@@ -16,10 +17,9 @@ require_once helpers_url() . 'message_helper.php';
     <body>
         <?php include_once partials_url() . 'navigation.php' ?>
         <div class="container">
-            
-            <!-- Content -->
-            
+
             <?php include_once partials_url() . 'message.php' ?>
         </div>
+        <?php include_once partials_url() . 'scripts.php' ?>
     </body>
 </html>
