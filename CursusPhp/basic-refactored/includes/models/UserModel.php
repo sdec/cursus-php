@@ -59,7 +59,8 @@ function loadUser($username) {
 }
 
 function accessLevelName($accessLevel) {
-    return isset($this->accessLevels[$accessLevel]) ? $this->accessLevels[$accessLevel] : $this->accessLevels[0];
+    global $accessLevels;
+    return isset($accessLevels[$accessLevel]) ? $accessLevels[$accessLevel] : $accessLevels[0];
 }
 
 function lecturers() {
