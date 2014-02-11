@@ -1,11 +1,12 @@
 <?php
-    include_once('path_helper.php');
-    include_once(includes_url() . 'defines.php');
-    include_once(includes_url() . 'functions.php');
-    include_once(queries_url() . 'DB_userprofile.php');
-
+    define('BASE_URL', '../');
+    require_once(BASE_URL . 'includes/config/routes.php');
+    require_once(config_url() . 'form_helper.php');
+    require_once(config_url() . 'functions.php');
+    require_once(queries_url() . 'DB_userprofile.php');
+    
 if(isset($_SESSION['user']['username'])){
-    redirect('login.php', 'Je kan je niet registreren als je ingelogd bent!', 'warning');
+    redirect('profile/login.php', 'Je kan je niet registreren als je ingelogd bent!', 'warning');
 } else {
     $title = "Register - Cursus PHP Basiswebsite";
     $messages = initializeMessages(array("username", "password", "firstname", "lastname", "email"));
@@ -30,10 +31,13 @@ if(isset($_SESSION['user']['username'])){
     }
 }
 ?>
-<?php include_once(partials_url() . 'header.php'); ?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <?php include_once(partials_url() . 'header.php'); ?>
     </head>
     <body>
-    <?php include_once(partials_url() . 'navbar.php'); ?>
+    <?php include_once(partials_url() . 'navigation.php'); ?>
     <div class="container"> <!-- page main-content -->
         <h1>Registreer</h1>
         <div class="well">
@@ -107,7 +111,9 @@ if(isset($_SESSION['user']['username'])){
                 </fieldset>
             </form>
         </div>
+        <?php include_once partials_url() . 'message.php' ?>
     </div> <!-- end page main-content -->
     <?php include_once(partials_url().'footer.php'); ?>
     </body>
+    <?php include_once partials_url() . 'scripts.php' ?>
 </html>
