@@ -36,7 +36,7 @@
         <div class="form-group">
             <label for="interval" class="col-lg-2 control-label">Lengte tijdsloten</label>
             <div class="col-lg-4">
-                <input type="time" class="form-control" id="end" name="interval" 
+                <input type="time" class="form-control" id="interval" name="interval" 
                        placeholder="Lengte tijdsloten (bv 15 minuten)" maxlength="5" value="<?= set_value('interval'); ?>" required>
             </div>
             <div class="col-lg-6">
