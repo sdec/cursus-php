@@ -63,7 +63,7 @@ function searchAppointments($search) {
 }
 
 function createAppointment($start_timestamp, $end_timestamp, $description, $location, $chronological) {
-    $arr = sql_sanitize(array($start_timestamp, $end_timestamp, $description, $location, $chronological));
+    $arr = sanitize(array($start_timestamp, $end_timestamp, $description, $location, $chronological));
     $start_timestamp = $arr[0];
     $end_timestamp = $arr[1];
     $description = $arr[2];

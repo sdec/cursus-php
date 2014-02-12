@@ -2,6 +2,24 @@
 require_once BASE_URL . 'includes/config/routes.php';
 require_once config_url() . 'sessions.php';
 require_once models_url() . 'UserModel.php';
+
+    function retrieve($key){
+        $temp = $_SESSION[$key];
+        unset($_SESSION[$key]);
+        return $temp;
+    }
+
+    $date = retrieve('date');
+    $start = retrieve('start');
+    $end = retrieve('end');
+    $description = retrieve('description');
+    $location = retrieve('location');
+    $chronological = false;
+    if(isset($_SESSION['chronological'])){
+        $chronological = true;
+        unset($_SESSION['chronological']);
+    }
+
 ?>
 <!DOCTYPE html>
 <html>

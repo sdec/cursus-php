@@ -7,14 +7,18 @@ require_once models_url() . 'UserModel.php';
 require_once models_url() . 'AppointmentModel.php';
 require_once helpers_url()  . 'form_helper.php';
 
-if (!loggedin())
+if (!loggedin()){
     message("Je moet ingelogt zijn om deze pagina te bekijken!", "danger");
-    redirect(base_url() . 'profile/login');
+    redirect('profile/login.php');
+}
 
-if (userdata('accesslevel') < LECTURER)
+if (userdata('accesslevel') < LECTURER){
     message("Je moet een toegangsniveau van een lector (of hoger) hebben om een afspraak te maken!", "danger");
-    redirect(base_url() . 'appointments');
+    redirect('appointments/view.php');
+}
 
+
+var_dump($_POST);
 if(isset($_POST['submit'])) {
     if(isset($_POST['date']) && isset($_POST['start']) && isset($_POST['end']) && isset($_POST['description']) && isset($_POST['location'])) {
         
@@ -27,20 +31,28 @@ if(isset($_POST['submit'])) {
         $chronological = (isset($_POST['chronological'])) ?  true : false;
         set_value('chronological', $chronological);
         
-        if(isMinLength('description', 4) == FALSE)
+        if(isMinLength('description', 4) == FALSE){
             set_error ('description', 'Het omschrijvingsveld moet minstens 4 karakters lang zijn');
+        }
         
-        if(isMinLength('location', 4) == FALSE)
-            set_error ('location', 'Het locatieveld moet minstens 4 karakters lang zijn');
+        if(isMinLength('location', 3) == FALSE){
+            set_error ('location', 'Het locatieveld moet minstens 3 karakters lang zijn');
+        }
         
-        if(isMaxLength('location', 32) == FALSE)
+        if(isMaxLength('location', 32) == FALSE){
             set_error ('location', 'Het locatieveld veld max maximum 32 karakters lang zijn');
+        }
         
-        if(isMaxLength('description', 128) == FALSE)
+        if(isMaxLength('description', 128) == FALSE){
             set_error ('description', 'Het omschrijvingsveld max maximum 128 karakters lang zijn');
+        }
         
         if(hasErrors() == FALSE) {
             if(createAppointment(set_value('date').' '.set_value('start'), set_value('date').' '.set_value('end'), set_value('description'), set_value('location'), set_value('chronological'))) {
+                foreach($_POST as $key => $value){ //copy all $_POST values into session
+                    $_SESSION[$key] = $_POST[$key];
+                }
+                unset($_SESSION['submit']); //Knop niet belangrijk :)
                 redirect('appointments/create_success.php');
             } else {
                 message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
@@ -125,7 +137,7 @@ if(isset($_POST['submit'])) {
                     </div>
                     <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
-                            <button type="submit" class="btn btn-primary">Maak afspraak</button> 
+                            <button type="submit" name="submit" class="btn btn-primary">Maak afspraak</button> 
                             <a href="<?= base_url() ?>" class="btn btn-default">Annuleer</a>
                         </div>
                     </div>
