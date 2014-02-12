@@ -43,7 +43,7 @@ if ($slots !== FALSE) {
             $subscribtion['lecturer'] = $slot['lecturer'];
             $subscribtion['subscribestart'] = $slot['start'];
             $subscribtion['subscribeend'] = $slot['end'];
-            $subscribtion['subscriberslotid'] = $slot['appointmentslotid'];
+            $subscribtion['subscribeslotid'] = $slot['appointmentslotid'];
             break;
         }
         
