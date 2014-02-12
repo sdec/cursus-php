@@ -75,7 +75,6 @@ function createAppointment($start_timestamp, $end_timestamp, $description, $loca
     $link = DB_Link();
     mysqli_query($link, $query);
 
-    //printf("New appointment has id %d.\n", mysqli_insert_id($link));
     return mysqli_insert_id($link);
 }
 
@@ -143,9 +142,13 @@ function slots($appointmentid) {
 }
 
 function deleteAppointment($appointmentid) {
-    $data = array('appointmentid' => $appointmentid);
-    $this->db->delete('appointments', $data);
-    return $this->db->affected_rows() > 0;
+    $appointmentid = sanitize($appointmentid);
+    $query = "
+            DELETE FROM appointments
+            WHERE appointmentid = '$appointmentid'";
+    $link = DB_Link();
+    mysqli_query($link, $query);
+    return mysqli_affected_rows($link) > 0;
 }
 
 function subscribeAppointment($appointmentslotid, $userid) {
