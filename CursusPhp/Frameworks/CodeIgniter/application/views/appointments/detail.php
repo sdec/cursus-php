@@ -40,7 +40,7 @@
             </div>
             <div class="panel-body">
                 <?php if ($subscribtion['subscribed']) { ?>
-                    <?php if ($subscribtion['subscribed'] == $subscribtion['lecturerid']) { ?>
+                    <?php if ($subscribtion['lecturerid'] == $this->session->userdata('user')->userid) { ?>
                         <p>
                             U heeft aangegeven pauze te nemen van <strong><?= $subscribtion['subscribestart'] ?></strong> 
                             tot ongeveer <strong><?= $subscribtion['subscribeend'] ?></strong>.
