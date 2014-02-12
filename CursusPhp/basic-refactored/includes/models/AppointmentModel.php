@@ -139,9 +139,13 @@ function slots($appointmentid) {
 }
 
 function deleteAppointment($appointmentid) {
-    $data = array('appointmentid' => $appointmentid);
-    $this->db->delete('appointments', $data);
-    return $this->db->affected_rows() > 0;
+    $appointmentid = sanitize($appointmentid);
+    $query = "
+            DELETE FROM appointments
+            WHERE appointmentid = '$appointmentid'";
+    $link = DB_Link();
+    mysqli_query($link, $query);
+    return mysqli_affected_rows($link) > 0;
 }
 
 function subscribeAppointment($appointmentslotid, $userid) {
