@@ -158,10 +158,12 @@ function subscribeAppointment($appointmentslotid, $userid) {
 }
 
 function unSubscribeAppointment($appointmentslotid, $userid) {
+    $appointmentslotid = sanitize($appointmentslotid);
+    $userid = sanitize($userid);
     $sql = "
         DELETE FROM appointmentsubscribers
-        WHERE appointmentslotid = '".sanitize($appointmentslotid)."' 
-            AND userid = '".  sanitize($userid)."';
+        WHERE appointmentslotid = '$appointmentslotid' 
+          AND userid = '$userid';
     ";
     mysqli_query(DB_Link(), $sql);
     return mysqli_affected_rows(DB_Link()) > 0;
