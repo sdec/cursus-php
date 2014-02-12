@@ -15,40 +15,54 @@ if (userdata('accesslevel') < LECTURER)
 
 $lecturers = lecturers();
 $appointment = loadAppointment($_GET['appointmentid']);
+if($appointment == FALSE){
+    message("Onze excuses, er is *iets* mis gegaan met het tijdsloten toevoegen aan afspraak met id ".$_GET['appointmentid']."!", "danger");
+    redirect('');
+}
 
-set_value('start_timestamp', $_POST['start']);
-set_value('end_timestamp', $_POST['end']);
-set_value('length_timestamp', $_POST['length']);
-if ($this->form_validation->run() == TRUE) {
-    // First slot must not exceed the end of the appointment for this lecturer
-    if ($start_end <= strtotime($end_timestamp)) {
+if(isset($_POST['submit'])) {
+    if(isset($_POST['start']) && isset($_POST['end']) && isset($_POST['interval'])) {
+        $lecturerid = $_POST['lecturerid'];
+        set_value('start', $_POST['start']);
+        set_value('end', $_POST['end']);
+        set_value('interval', $_POST['interval']);
 
-        // Starting hour must not lie before the starting point of the appointment
-        if (strtotime($start_timestamp) >= strtotime($appointment['start_timestamp'])) {
+        $start_timestamp = date('Y-m-d', strtotime($appointment['start_timestamp'])) . ' ' . set_value('start');
+        $end_timestamp = date('Y-m-d', strtotime($appointment['start_timestamp'])) . ' ' . set_value('end');
+        $interval_timestamp = date('Y-m-d', strtotime($appointment['start_timestamp'])) . ' ' . set_value('interval');
+        
+        $start_end = strtotime($start_timestamp) + (strtotime(date('Y-m-d H:i:s', strtotime($interval_timestamp))) - strtotime(date('Y-m-d', strtotime($interval_timestamp))));
+        // First slot must not exceed the end of the appointment for this lecturer
+        if ($start_end <= strtotime($end_timestamp)) {
 
-            // Ending hour must not lie before the starting point of the appointment
-            if (strtotime($end_timestamp) <= strtotime($appointment->end_timestamp)) {
+            // Starting hour must not lie before the starting point of the appointment
+            if (strtotime($start_timestamp) >= strtotime($appointment['start_timestamp'])) {
 
-                if ($this->AppointmentModel->addtimeslots($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
+                // Ending hour must not lie before the starting point of the appointment
+                if (strtotime($end_timestamp) <= strtotime($appointment['end_timestamp'])) {
 
-                    $this->template->write('title', 'Tijdsloten toegevoegen');
-                    $this->template->write_view('content', 'appointments/addtimeslots_success', $data);
-                    $this->template->render();
-                    return;
+                    if (addTimeSlotsAppointment($_GET['appointmentid'], $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
+                        redirect('appointments/addtimeslots_success.php?appointmentid='.$appointment['appointmentid']);
+                    } else {
+                        message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
+                    }
                 } else {
-                    message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
+                    message('Het einduur van de afspraken moet gelijk aan of vroeger zijn dan '
+                            . date('H:i', strtotime($appointment['end_timestamp'])), 'danger');
                 }
             } else {
-                $this->template->write('message', 'Het einduur van de afspraken moet gelijk aan of vroeger zijn dan '
-                        . date('H:i', strtotime($appointment->end_timestamp)));
+                message('Het startuur van de afspraken moet gelijk aan of later zijn dan '
+                        . date('H:i', strtotime($appointment['start_timestamp'])), 'danger');
             }
         } else {
-            $this->template->write('message', 'Het startuur van de afspraken moet gelijk aan of later zijn dan '
-                    . date('H:i', strtotime($appointment->start_timestamp)));
+            message('Het einde van uw eerste slot mag het einduur niet overschrijden', 'danger');
         }
-    } else {
-        $this->template->write('message', 'Het einde van uw eerste slot mag het einduur niet overschrijden');
     }
+} else {
+    // Set default form values
+    set_value('start', date('H:i', strtotime($appointment['start_timestamp'])));
+    set_value('end', date('H:i', strtotime($appointment['end_timestamp'])));
+    set_value('interval', '00:15');
 }
 
 ?>
@@ -63,7 +77,7 @@ if ($this->form_validation->run() == TRUE) {
         <div class="container">
             <h1>Tijdsloten toevoegen</h1>
             <div class="well">
-                <form method="POST" action="<?= base_url() ?>appointments/addtimeslots/<?= $appointment->appointmentid ?>" role="form" class="form-horizontal">
+                <form method="POST" action="<?= base_url() ?>appointments/addtimeslots.php?appointmentid=<?= $appointment['appointmentid']; ?>" role="form" class="form-horizontal">
                     <div class="form-group">
                         <label for="lecturerid" class="col-lg-2 control-label">Organisator</label>
                         <div class="col-lg-4">
@@ -108,8 +122,8 @@ if ($this->form_validation->run() == TRUE) {
                     </div>
                     <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
-                            <button type="submit" class="btn btn-primary">Voeg tijdsloten toe</button> 
-                            <a href="<?= base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>" class="btn btn-default">Annuleer</a>
+                            <button type="submit" name="submit" class="btn btn-primary">Voeg tijdsloten toe</button> 
+                            <a href="<?= base_url() ?>appointments/detail.php?appointmentid=<?= $appointment['appointmentid']; ?>" class="btn btn-default">Annuleer</a>
                         </div>
                     </div>
                 </form>

@@ -45,7 +45,6 @@ if(isset($_POST['submit'])) {
         }
     }
 } else {
-
     // Set default form values
     set_value('date', date('Y-m-d', time()));
     set_value('start', '08:00');
