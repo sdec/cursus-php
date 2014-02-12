@@ -12,9 +12,6 @@
                     <?php } ?>
                 </select>
             </div>
-            <div class="col-lg-6">
-                <?= form_error('start', '<span class="text-danger">', '</span>'); ?>
-            </div>
         </div>
         <div class="form-group">
             <label for="start" class="col-lg-2 control-label">Startuur</label>

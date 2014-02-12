@@ -64,7 +64,6 @@ function searchAppointments($search) {
 }
 
 function createAppointment($start_timestamp, $end_timestamp, $description, $location, $chronological) {
-
     $sql = "
         INSERT INTO appointments (start_timestamp, end_timestamp, description, location, chronological) 
         VALUES ('" . sanitize($start_timestamp) . "', '" . sanitize($end_timestamp) . "', '" . sanitize($description) . "', 
@@ -139,13 +138,12 @@ function slots($appointmentid) {
 }
 
 function deleteAppointment($appointmentid) {
-    $appointmentid = sanitize($appointmentid);
-    $query = "
-            DELETE FROM appointments
-            WHERE appointmentid = '$appointmentid'";
-    $link = DB_Link();
-    mysqli_query($link, $query);
-    return mysqli_affected_rows($link) > 0;
+    $sql = "
+        DELETE FROM appointments
+        WHERE appointmentid = '".sanitize($appointmentid)."';
+    ";
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_affected_rows(DB_Link()) > 0;
 }
 
 function subscribeAppointment($appointmentslotid, $userid) {
@@ -190,6 +188,10 @@ function addTimeSlotsAppointment($appointmentid, $lecturerid, $start_timestamp, 
 }
 
 function deleteTimeSlotAppointment($appointmentslotid) {
-    $this->db->delete('appointmentslots', array('appointmentslotid' => $appointmentslotid));
-    return $this->db->affected_rows() > 0;
+    $sql = "
+        DELETE FROM appointmentslots
+        WHERE appointmentslotid = '".sanitize($appointmentslotid)."';
+    ";
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_affected_rows(DB_Link()) > 0;
 }

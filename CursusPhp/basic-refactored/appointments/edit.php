@@ -20,6 +20,7 @@ $appointment = loadAppointment($_GET['appointmentid']);
 if($appointment == FALSE)
     redirect('');
 
+$slots = slots($appointment['appointmentid']);
 
 if(isset($_POST['submit'])) {
     if(isset($_POST['date']) && isset($_POST['start']) && isset($_POST['end']) && isset($_POST['description']) && isset($_POST['location'])) {
