@@ -44,13 +44,19 @@ if(isset($_POST['submit'])) {
             }
         }
     }
+} else {
+
+    // Set default form values
+    set_value('date', date('Y-m-d', time()));
+    set_value('start', '08:00');
+    set_value('end', '16:00');
 }
     
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Afspraken - Afspraken planner</title>
+        <title>Afspraak maken - Afspraken planner</title>
         <?php include_once partials_url() . 'header.php' ?>
     </head>
     <body>

@@ -8,7 +8,7 @@ require_once config_url() . 'sessions.php';
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Registratie compleet - Afspraken planner</title>
+        <title>Registreren - Afspraken planner</title>
         <?php include_once partials_url() . 'header.php' ?>
     </head>
     <body>

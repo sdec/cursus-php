@@ -60,7 +60,7 @@ if ($slots !== FALSE) {
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Afspraken - Afspraken planner</title>
+        <title>Afspraak bekijken - Afspraken planner</title>
         <?php include_once partials_url() . 'header.php' ?>
     </head>
     <body>

@@ -1,20 +1,20 @@
 <?php
 
 function loadAllAppointments() {
-    $sql = '
+    $sql = "
         SELECT 
             ap.appointmentid                                AS  appointmentid,
-            DATE_FORMAT(ap.start_timestamp, \'%d-%m\')      AS  date, 
-            DATE_FORMAT(ap.start_timestamp, \'%H:%i\')      AS  start,
-            DATE_FORMAT(ap.end_timestamp, \'%H:%i\')        AS  end,
+            DATE_FORMAT(ap.start_timestamp, '%d-%m')        AS  date, 
+            DATE_FORMAT(ap.start_timestamp, '%H:%i')        AS  start,
+            DATE_FORMAT(ap.end_timestamp, '%H:%i')          AS  end,
             ap.description                                  AS  description, 
             ap.location                                     AS  location
         FROM appointments ap
 
         GROUP BY ap.appointmentid
         ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC
-    ';
-    
+    ";
+
     $result = mysqli_query(DB_Link(), $sql);
     $appointments = array();
     while ($appointment = mysqli_fetch_assoc($result)) {
@@ -27,11 +27,12 @@ function searchAppointments($search) {
 
     $search = sanitize($search);
 
-    $sql = 'SELECT 
+    $sql = "
+        SELECT 
             ap.appointmentid                                    AS  appointmentid,
-            DATE_FORMAT(ap.start_timestamp, \'%d-%m\')          AS  date, 
-            DATE_FORMAT(ap.start_timestamp, \'%H:%i\')          AS  start,
-            DATE_FORMAT(ap.end_timestamp, \'%H:%i\')            AS  end,
+            DATE_FORMAT(ap.start_timestamp, '%d-%m')          AS  date, 
+            DATE_FORMAT(ap.start_timestamp, '%H:%i')          AS  start,
+            DATE_FORMAT(ap.end_timestamp, '%H:%i')            AS  end,
             ap.description                                      AS  description, 
             ap.location                                         AS  location
         FROM appointments ap
@@ -41,18 +42,18 @@ function searchAppointments($search) {
             LEFT JOIN users su ON su.userid = subs.userid
 
         WHERE
-            ap.start_timestamp LIKE \'%'.$search . '%\'
-            OR ap.end_timestamp LIKE \'%'.$search.'%\'
-            OR description LIKE \'%'.$search.'%\'
-            OR location LIKE \'%'.$search.'%\'
-            OR lu.username LIKE \'%'.$search.'%\'
-            OR su.username LIKE \'%'.$search.'%\'
-            OR CONCAT(lu.firstname, \' \', lu.lastname) LIKE \'%'.$search.'%\'
-            OR CONCAT(su.firstname, \' \', su.lastname) LIKE \'%'.$search.'%\'
+            ap.start_timestamp LIKE '%" . $search . "%'
+            OR ap.end_timestamp LIKE '%" . $search . "%'
+            OR description LIKE '%" . $search . "%'
+            OR location LIKE '%" . $search . "%'
+            OR lu.username LIKE '%" . $search . "%'
+            OR su.username LIKE '%" . $search . "%'
+            OR CONCAT(lu.firstname, ' ', lu.lastname) LIKE '%" . $search . "%'
+            OR CONCAT(su.firstname, ' ', su.lastname) LIKE '%" . $search . "%'
 
         GROUP BY ap.appointmentid
         ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC
-    ';
+    ";
 
     $result = mysqli_query(DB_Link(), $sql);
     $appointments = array();
@@ -63,33 +64,28 @@ function searchAppointments($search) {
 }
 
 function createAppointment($start_timestamp, $end_timestamp, $description, $location, $chronological) {
-    $arr = sanitize(array($start_timestamp, $end_timestamp, $description, $location, $chronological));
-    $start_timestamp = $arr[0];
-    $end_timestamp = $arr[1];
-    $description = $arr[2];
-    $location = $arr[3];
-    $chronological = $arr[4];
 
-    $query = "INSERT INTO appointments(start_timestamp, end_timestamp, description, location, chronological) VALUES
-             ('$start_timestamp', '$end_timestamp', '$description', '$location', '$chronological')";
-    $link = DB_Link();
-    mysqli_query($link, $query);
-
-    //printf("New appointment has id %d.\n", mysqli_insert_id($link));
-    return mysqli_insert_id($link);
+    $sql = "
+        INSERT INTO appointments (start_timestamp, end_timestamp, description, location, chronological) 
+        VALUES ('" . sanitize($start_timestamp) . "', '" . sanitize($end_timestamp) . "', '" . sanitize($description) . "', 
+            '" . sanitize($location) . "', '" . sanitize($chronological) . "');
+    ";
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_insert_id(DB_Link());
 }
 
 function editAppointment($appointmentid, $start_timestamp, $end_timestamp, $description, $location, $chronological) {
-    $data = array(
-        'start_timestamp' => $start_timestamp,
-        'end_timestamp' => $end_timestamp,
-        'description' => $description,
-        'location' => $location,
-        'chronological' => $chronological
-    );
-    $this->db->where('appointmentid', $appointmentid);
-    $this->db->update('appointments', $data);
-    return $this->db->affected_rows() > 0;
+
+    $sql = "
+        UPDATE appointments 
+        SET start_timestamp = '" . sanitize($start_timestamp) . "', end_timestamp = '" . sanitize($end_timestamp) . "', 
+            description = '" . sanitize($description) . "', location = '" . sanitize($location) . "', 
+                chronological = '" . sanitize($chronological) . "'
+        WHERE appointmentid = '" . $appointmentid . "';
+    ";
+
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_affected_rows(DB_Link()) > 0;
 }
 
 function loadAppointment($appointmentid) {

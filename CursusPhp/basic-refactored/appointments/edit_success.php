@@ -26,14 +26,14 @@ $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Afspraak maken - Afspraken planner</title>
+        <title>Afspraak wijzigen - Afspraken planner</title>
         <?php include_once partials_url() . 'header.php' ?>
     </head>
     <body>
         <?php include_once partials_url() . 'navigation.php' ?>
         <div class="container">
-            <h1>Afspraak aangemaakt</h1>
-            <p>Een afspraak met de volgende details werd aangemaakt.</p>
+            <h1>Afspraak gewijzigd</h1>
+            <p>De afspraak werd gewijzigd naar de volgende gegevens.</p>
 
             <table class="table table-hover table-striped table-vertical">
                 <tr>
@@ -68,14 +68,7 @@ $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
                 </tr>
             </table>
 
-            <div class="alert alert-info">
-                <p>
-                    Er werden nog geen organisatoren toegewezen aan deze afspraak (m.a.w. er is nog niemand waarbij studenten een afspraak kunnen maken). 
-                    Open de detailweergave van een afspraak en klik op "Voeg organisator toe" om iemand toe te voegen aan deze afspraak.
-                </p>
-            </div>
-
-            <p><a href="<?= base_url() ?>" class="btn btn-default">Terug</a></p>
+            <p><a href="<?= base_url() ?>appointments/detail.php?appointmentid=<?= $appointment['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
             <?php include_once partials_url() . 'message.php' ?>
         </div>
         <?php include_once partials_url() . 'scripts.php' ?>
