@@ -147,9 +147,11 @@ function deleteAppointment($appointmentid) {
 }
 
 function subscribeAppointment($appointmentslotid, $userid) {
+    $appointmentslotid = sanitize($appointmentslotid);
+    $userid = sanitize($userid);
     $sql = "
         INSERT INTO appointmentsubscribers (appointmentslotid, userid)
-        VALUES('".sanitize($appointmentslotid)."', '".  sanitize($userid)."');
+        VALUES('$appointmentslotid', '$userid');
     ";
     mysqli_query(DB_Link(), $sql);
     return mysqli_affected_rows(DB_Link()) > 0;
