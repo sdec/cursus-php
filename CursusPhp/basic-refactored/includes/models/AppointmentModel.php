@@ -147,44 +147,43 @@ function deleteAppointment($appointmentid) {
 }
 
 function subscribeAppointment($appointmentslotid, $userid) {
-    $data = array(
-        'appointmentslotid' => $appointmentslotid,
-        'userid' => $userid
-    );
-    $this->db->insert('appointmentsubscribers', $data);
-    return $this->db->affected_rows() > 0;
+    $sql = "
+        INSERT INTO appointmentsubscribers (appointmentslotid, userid)
+        VALUES('".sanitize($appointmentslotid)."', '".  sanitize($userid)."');
+    ";
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_affected_rows(DB_Link()) > 0;
 }
 
 function unSubscribeAppointment($appointmentslotid, $userid) {
-    $data = array(
-        'appointmentslotid' => $appointmentslotid,
-        'userid' => $userid
-    );
-    $this->db->delete('appointmentsubscribers', $data);
-    return $this->db->affected_rows() > 0;
+    $sql = "
+        DELETE FROM appointmentsubscribers
+        WHERE appointmentslotid = '".sanitize($appointmentslotid)."' 
+            AND userid = '".  sanitize($userid)."';
+    ";
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_affected_rows(DB_Link()) > 0;
 }
 
 function addTimeSlotsAppointment($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) {
 
+    $sql = "INSERT INTO appointmentslots (appointmentid, lecturerid, start_timestamp, end_timestamp) VALUES ";
     $batchData = array();
-
+    
     while (strtotime($start_timestamp) < strtotime($end_timestamp)) {
 
         $diff = strtotime($start_timestamp) + (strtotime(date('Y-m-d H:i:s', strtotime($interval_timestamp))) - strtotime(date('Y-m-d', strtotime($interval_timestamp))));
         $slotEnd = date('Y-m-d H:i:s', $diff);
 
-        array_push($batchData, array(
-            'appointmentid' => $appointmentid,
-            'lecturerid' => $lecturerid,
-            'start_timestamp' => $start_timestamp,
-            'end_timestamp' => $slotEnd
-        ));
-
+        array_push($batchData, "('".$appointmentid."', '".$lecturerid."', '".$start_timestamp."', '".$slotEnd."')");
+        
         $start_timestamp = $slotEnd;
     }
+    
+    $sql .= implode(',', $batchData) . ';';
 
-    $this->db->insert_batch('appointmentslots', $batchData);
-    return $this->db->affected_rows() > 0;
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_affected_rows(DB_Link()) > 0;
 }
 
 function deleteTimeSlotAppointment($appointmentslotid) {

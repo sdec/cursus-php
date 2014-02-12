@@ -71,7 +71,8 @@ function accessLevelName($accessLevel) {
 function lecturers() {
     $sql = "
         SELECT *
-        FROM lecturers";
+        FROM lecturers
+    ";
     $result = mysqli_query(DB_Link(), $sql);
     $lecturers = array();
     while ($lecturer = mysqli_fetch_assoc($result)) {
