@@ -1,24 +1,27 @@
 <?php define('BASE_URL', '../');
 require_once BASE_URL . 'includes/config/routes.php';
 require_once config_url() . 'sessions.php';
+require_once config_url() . 'database.php';
+require_once models_url() . 'AppointmentModel.php';
 require_once models_url() . 'UserModel.php';
 
-    function retrieve($key){
-        $temp = $_SESSION[$key];
-        unset($_SESSION[$key]);
-        return $temp;
-    }
+if(!isset($_GET['appointmentid']))
+    redirect('');
 
-    $date = retrieve('date');
-    $start = retrieve('start');
-    $end = retrieve('end');
-    $description = retrieve('description');
-    $location = retrieve('location');
-    $chronological = false;
-    if(isset($_SESSION['chronological'])){
-        $chronological = true;
-        unset($_SESSION['chronological']);
-    }
+if (!loggedin())
+    redirect('profile/login.php');
+
+if (userdata('accesslevel') < LECTURER)
+    redirect('appointments/view.php');
+    
+
+$appointment = loadAppointment($_GET['appointmentid']);
+if($appointment == FALSE)
+    redirect('');
+
+$appointment['date'] = date('d M Y', strtotime($appointment['start_timestamp']));
+$appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
+$appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
 
 ?>
 <!DOCTYPE html>
@@ -36,28 +39,28 @@ require_once models_url() . 'UserModel.php';
             <table class="table table-hover table-striped table-vertical">
                 <tr>
                     <td>Startdatum</td>
-                    <td><?= $date ?></td>
+                    <td><?= $appointment['date'] ?></td>
                 </tr>
                 <tr>
                     <td>Startuur</td>
-                    <td><?= $start ?></td>
+                    <td><?= $appointment['start'] ?></td>
                 </tr>
                 <tr>
                     <td>Einduur</td>
-                    <td><?= $end ?></td>
+                    <td><?= $appointment['end'] ?></td>
                 </tr>
                 <tr>
                     <td>Beschrijving</td>
-                    <td><?= $description ?></td>
+                    <td><?= $appointment['description'] ?></td>
                 </tr>
                 <tr>
                     <td>Locatie</td>
-                    <td><?= $location ?></td>
+                    <td><?= $appointment['location'] ?></td>
                 </tr>
                 <tr>
                     <td>Chronologie</td>
                     <td>
-                        <?php if($chronological) { ?>
+                        <?php if($appointment['chronological']) { ?>
                             Inschrijvingen verlopen verplicht in chronologische volgorde.
                         <?php } else { ?>
                             Inschrijvingen kunnen op elk tijdstip.
