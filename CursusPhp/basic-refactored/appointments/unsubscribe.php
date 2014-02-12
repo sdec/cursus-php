@@ -11,18 +11,14 @@ if (!loggedin())
     redirect('profile/login.php');
 
 $appointmentid = isset($_GET['appointmentid']) ? trim($_GET['appointmentid']) : -1;
-$appointmentslotid = isset($_GET['appointmentslotid']) ? trim($_GET['appointmentslotid']) : -1;
+$appointmentslotid = isset($_GET['subscribeslotid']) ? trim($_GET['subscribeslotid']) : -1;
 
 if($appointmentid == -1 || $appointmentslotid == -1)
-    redirect('profile/login.php');
-
-$appointment = loadAppointment($appointmentid);
-
-if (!$appointment['appointmentid'] )
     redirect('');
 
-if (!loggedin())
-    redirect(base_url() . 'profile/login');
+$appointment = loadAppointment($appointmentid);
+if (!$appointment['appointmentid'] )
+    redirect('');
 
 if(unSubscribeAppointment($appointmentslotid, userdata('userid'))){
     redirect('appointments/unsubscribe_success.php?appointmentid='.$appointment['appointmentid']);

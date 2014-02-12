@@ -14,15 +14,12 @@ $appointmentid = isset($_GET['appointmentid']) ? trim($_GET['appointmentid']) : 
 $appointmentslotid = isset($_GET['appointmentslotid']) ? trim($_GET['appointmentslotid']) : -1;
 
 if($appointmentid == -1 || $appointmentslotid == -1)
-    redirect('profile/login.php');
+    redirect('');
 
 $appointment = loadAppointment($appointmentid);
 
 if (!$appointment['appointmentid'] )
     redirect('');
-
-if (!loggedin())
-    redirect(base_url() . 'profile/login');
 
 if(subscribeAppointment($appointmentslotid, userdata('userid'))){
     redirect('appointments/subscribe_success.php?appointmentid='.$appointment['appointmentid']);
