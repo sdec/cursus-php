@@ -20,7 +20,7 @@ $appointment = deleteAppointment($_GET['appointmentid']);
 if($appointment == FALSE){
     message("Onze excuses, er is *iets* mis gegaan met het deleten van afspraak met id ".$_GET['appointmentid']."!", "danger");
 } else {
-    message("Uw afspraak werd succesvol geaunnuleerd!");
+    message("Uw afspraak werd succesvol geannuleerd!");
 }
 redirect('');
 
