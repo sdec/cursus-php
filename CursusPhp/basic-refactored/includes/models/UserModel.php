@@ -69,6 +69,13 @@ function accessLevelName($accessLevel) {
 }
 
 function lecturers() {
-    $query = $this->db->get('lecturers');
-    return $query->num_rows() > 0 ? $query->result() : FALSE;
+    $sql = "
+        SELECT *
+        FROM lecturers";
+    $result = mysqli_query(DB_Link(), $sql);
+    $lecturers = array();
+    while ($lecturer = mysqli_fetch_assoc($result)) {
+        array_push($lecturers, $lecturer);
+    }
+    return (count($lecturers) > 0) ? $lecturers : FALSE;
 }
