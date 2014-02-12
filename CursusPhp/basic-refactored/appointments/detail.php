@@ -31,28 +31,28 @@ $slots = slots($appointmentid);
 
 $subscribtion['subscribed'] = FALSE;
 
-if ($slots !== FALSE) {
+if ($slots) {
     $availableCount = 0;
-    foreach ($slots as $slot) {
-        
-        $slot['available'] = TRUE;
-        
-        if ($slot['subscriberid'] == userdata('userid')) {
+    for($i = 0; $i < count($slots); $i++) {
+        if ($slots[$i]['subscriberid'] == userdata('userid')) {
             $subscribtion['subscribed'] = TRUE;
-            $subscribtion['lecturerid'] = $slot['lecturerid'];
-            $subscribtion['lecturer'] = $slot['lecturer'];
-            $subscribtion['subscribestart'] = $slot['start'];
-            $subscribtion['subscribeend'] = $slot['end'];
-            $subscribtion['subscribeslotid'] = $slot['appointmentslotid'];
+            $subscribtion['lecturerid'] = $slots[$i]['lecturerid'];
+            $subscribtion['lecturer'] = $slots[$i]['lecturer'];
+            $subscribtion['subscribestart'] = $slots[$i]['start'];
+            $subscribtion['subscribeend'] = $slots[$i]['end'];
+            $subscribtion['subscribeslotid'] = $slots[$i]['appointmentslotid'];
             break;
         }
-        
+
         if ($appointment['chronological']) {
-            if (!$slot['subscriberid'] && $availableCount == 0) {
+            if (!$slots[$i]['subscriberid'] && $availableCount == 0) {
+                $slots[$i]['available'] = TRUE;
                 $availableCount++;
-            } else if (!$slot['subscriberid'] && $availableCount == 1) {
+            } else if (!$slots[$i]['subscriberid'] && $availableCount == 1) {
                 $slot['available'] = FALSE;
             }
+        } else {
+            $slot['available'] = TRUE;
         }
     }
 }
@@ -109,7 +109,7 @@ if ($slots !== FALSE) {
                         </div>
                         <div class="panel-body">
                             <?php if ($subscribtion['subscribed']) { ?>
-                                <?php if ($subscribtion['subscribed'] == $subscribtion['lecturerid']) { ?>
+                                <?php if ($subscribtion['lecturerid'] == userdata('userid')) { ?>
                                     <p>
                                         U heeft aangegeven pauze te nemen van <strong><?= $subscribtion['subscribestart'] ?></strong> 
                                         tot ongeveer <strong><?= $subscribtion['subscribeend'] ?></strong>.
@@ -118,19 +118,19 @@ if ($slots !== FALSE) {
                                     <p>U bent ingeschreven voor een afspraak bij <strong><?= $subscribtion['lecturer'] ?></strong> om <strong><?= $subscribtion['subscribestart'] ?></strong>.  
                                         Deze afspraak duurt ongeveer tot <strong><?= $subscribtion['subscribeend'] ?></strong>.</p>
                                 <?php } ?>
-                                <?php if (!$appointment['started']) { ?>
-                                    <p>
-                                        <a href="<?= base_url() ?>appointments/unsubscribe.php?appointmentid=<?= $appointment['appointmentid'] ?>&subscribeslotid=<?= $subscribtion['subscribeslotid'] ?>" class="btn btn-default btn-sm">
-                                            <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
-                                        </a>
-                                    </p>
+                                <?php if(!$appointment['started']) { ?>
+                                <p>
+                                    <a href="<?= base_url() ?>appointments/unsubscribe.php?appointmentid=<?= $appointment['appointmentid'] ?>&subscribeslotid=<?= $subscribtion['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
+                                    </a>
+                                </p>
                                 <?php } ?>
                             <?php } else { ?>
                                 <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
                             <?php } ?>
                             <?php if ($appointment['started']) { ?>
                                 <div class="alert alert-info">
-                                <?php if ($appointment['ended']) { ?>
+                                    <?php if ($appointment['ended']) { ?>
                                         Deze afspraak is verlopen. 
                                     <?php } else { ?>
                                         Deze afspraak is al begonnen. 

@@ -8,9 +8,6 @@ require_once models_url() . 'UserModel.php';
 if (!loggedin())
     redirect('profile/login.php');
 
-if (userdata('accesslevel') < LECTURER)
-    redirect('appointments/view.php');
-
 if(!isset($_GET['appointmentid']))
     redirect('');
 
