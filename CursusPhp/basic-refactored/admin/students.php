@@ -10,39 +10,19 @@ if(!loggedin())
 
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-if(userdata('accesslevel') >= ADMIN){
+//if(userdata('accesslevel') >= ADMIN){
     //display all users
-    $users = strlen($search)
-        ? searchUsers($search)
-        : users();
-} else { //otherwise display students only
+$users = strlen($search)
+    ? searchUsers($search)
+    : users();
+/*} else { //otherwise display students only
     $users = strlen($search) 
         ? searchStudents($search) 
         : students();
-}
+}*/
 
 $data['users'] = $users;
 $data['search'] = $search;
-
-function getRole($index){
-    switch ($index) {
-        case STUDENT:
-            return "Student";
-            break;
-        CASE LECTURER:
-            return "Lector";
-            break;
-        CASE ADVISOR:
-            return "Studieadviseur";
-            break;
-        CASE ADMIN:
-            return "Admin";
-            break;
-        default:
-            return "Error";
-            break;
-    }
-}
 
 ?>
 <!DOCTYPE html>
@@ -81,7 +61,7 @@ function getRole($index){
                         <?php foreach ($users as $user) { ?>
                             <tr>
                                 <td>
-                                    <a href="<?= base_url() ?>profile/view.php?userid=<?= $user['userid'] ?>">
+                                    <a href="<?= base_url() ?>profile/view.php?username=<?= $user['username'] ?>">
                                         <span class="glyphicon glyphicon-eye-open"></span> 
                                     </a>
                                 </td>
@@ -90,7 +70,7 @@ function getRole($index){
                                 <td>
                                     <a href="<?= 'mailto:'.$user['email'] ;?>"><?= $user['email'] ;?></a>
                                 </td>
-                                <td><?= getRole($user['accesslevel']); ?> </td>
+                                <td><?= accessLevelName($user['accesslevel']); ?> </td>
                                 <!--<?php// if(userdata('accesslevel') >= ADMIN): ?>
                                     <td>
                                         <a href="<?= base_url() ?>admin/edit.php?userid=<?= $user['userid'] ?>">

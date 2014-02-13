@@ -3,7 +3,12 @@
 define('BASE_URL', '../');
 require_once BASE_URL . 'includes/config/routes.php';
 require_once config_url() . 'sessions.php';
+require_once config_url() . 'database.php';
 require_once models_url() . 'UserModel.php';
+
+$user = ($_GET['username']) ? loadUser($_GET['username']) : loadUser(userdata('username'));
+
+var_dump($user);
 
 ?>
 <!DOCTYPE html>
@@ -20,23 +25,23 @@ require_once models_url() . 'UserModel.php';
             <table class="table table-hover table-striped table-vertical">
                 <tr>
                     <td>Gebruikersnaam</td>
-                    <td><?= userdata('username') ?></td>
+                    <td><?= $user['username'];?></td>
                 </tr>
                 <tr>
                     <td>Voornaam</td>
-                    <td><?= userdata('firstname') ?></td>
+                    <td><?= $user['firstname'];?></td>
                 </tr>
                 <tr>
                     <td>Familienaam</td>
-                    <td><?= userdata('lastname') ?></td>
+                    <td><?= $user['lastname'];?></td>
                 </tr>
                 <tr>
                     <td>Email adres</td>
-                    <td><a href="mailto:<?= userdata('email') ?>"><?= userdata('email') ?></a></td>
+                    <td><a href="mailto:<?= $user['email'];?>"><?= $user['email'];?></a></td>
                 </tr>
                 <tr>
                     <td>Type profiel</td>
-                    <td><?= accessLevelName(userdata('accesslevel')) ?></td>
+                    <td><?= accessLevelName($user['accesslevel']);?></td>
                 </tr>
             </table>
             
