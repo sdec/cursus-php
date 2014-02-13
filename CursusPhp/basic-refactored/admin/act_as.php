@@ -16,10 +16,10 @@ if(!isset($_GET['username']))
 
 $user = loadUser($_GET['username']);
 if ($user == FALSE)
-    redirect(base_url() . 'admin/users');
+    redirect('admin/users.php');
 
 if ($user['accesslevel'] >= userdata('accesslevel'))
-    redirect(base_url() . 'profile/view.php?username=' . $user['username']);
+    redirect('profile/view.php?username=' . $user['username']);
 
 // Store my old session
 $_SESSION['act'] = $_SESSION['user'];
@@ -27,4 +27,4 @@ $_SESSION['act'] = $_SESSION['user'];
 // Set the new session
 set_userdata($user);
 
-redirect(base_url());
+redirect('');

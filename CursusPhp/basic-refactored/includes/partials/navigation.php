@@ -11,11 +11,13 @@
             <a class="navbar-brand" href="<?= base_url() ?>">Afsprakenplanner</a>
         </div>
         <div class="collapse navbar-collapse">
-            <?php if(userdata('accesslevel') && userdata('accesslevel') > LECTURER): ?>
-            <ul class="nav navbar-nav">
-                <li><a tabindex="-1" href="<?= base_url() ?>admin/students.php">Gebruikers</a></li>
-            </ul>
-            <?php endif; ?>
+            <?php if (loggedin()) { ?>
+                <?php if (userdata('accesslevel') >= LECTURER) { ?>
+                    <ul class="nav navbar-nav">
+                        <li><a href="<?= base_url() ?>admin/users.php">Gebruikers</a></li>
+                    </ul>
+                <?php } ?>
+            <?php } ?>
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <?php if (loggedin()) { ?>
@@ -25,6 +27,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
                             <li><a tabindex="-1" href="<?= base_url() ?>profile/view.php">Mijn profiel</a></li>
+                            <li><a tabindex="-1" href="<?= base_url() ?>profile/appointments.php">Mijn afspraken</a></li>
                             <li><a tabindex="-1" href="<?= base_url() ?>profile/logout.php">Log uit</a></li>
                         </ul>
                     <?php } else { ?>
