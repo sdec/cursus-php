@@ -12,7 +12,7 @@ if (!loggedin())
     redirect('profile/login.php');
 
 if (userdata('accesslevel') < ADMIN){
-    message("Only admins have the right to do that!");
+    message("Enkel admins mogen gebruikers deleten!", "info");
     redirect('');
 }
 

@@ -52,7 +52,7 @@ $user = (isset($_GET['username'])) ? loadUser($_GET['username']) : loadUser(user
                     </a>
                     <?php if (userdata('accesslevel') >= ADMIN) { ?>
 
-                        <a href="<?= base_url() ?>admin/edituser.php?userid=<?= $user['userid'];?>" class="btn btn-primary">
+                        <a href="<?= base_url() ?>admin/edituser.php?username=<?= $user['username'];?>" class="btn btn-primary">
                             <span class="glyphicon glyphicon-edit"></span> 
                             Wijzig gebruiker
                         </a> 

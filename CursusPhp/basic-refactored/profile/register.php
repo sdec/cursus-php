@@ -6,13 +6,11 @@ require_once config_url()   . 'sessions.php';
 
 if(loggedin())
     redirect('index.php');
-
 require_once config_url()   . 'database.php';
 require_once models_url()   . 'UserModel.php';
 require_once helpers_url()  . 'form_helper.php';
 
 if(isset($_POST['submit'])) {
-    
     if(isset($_POST['username']) && isset($_POST['password'])) {
         
         set_value('username', $_POST['username']);
@@ -38,7 +36,7 @@ if(isset($_POST['submit'])) {
             set_error ('username', 'Het gebuikersnaam veld max maximum 32 karakters lang zijn');
         
         if(isMaxLength('firstname', 32) == FALSE)
-            set_error ('firstname', 'Het gebuikersnaam veld max maximum 32 karakters lang zijn');
+            set_error ('firstname', 'Het voornaam veld max maximum 32 karakters lang zijn');
         
         if(isMaxLength('lastname', 32) == FALSE)
             set_error ('lastname', 'Het familienaam veld max maximum 32 karakters lang zijn');
@@ -163,4 +161,3 @@ if(isset($_POST['submit'])) {
         <?php include_once partials_url() . 'scripts.php' ?>
     </body>
 </html>
-
