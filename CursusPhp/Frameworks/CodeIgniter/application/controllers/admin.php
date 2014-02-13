@@ -56,7 +56,7 @@ class Admin extends CI_Controller {
             array(
                 'field' => 'username',
                 'label' => 'gebruikersnaam',
-                'rules' => ($this->form_validation->set_value('username') !== $username ? 'is_unique[users.username]]' : '') . '|trim|required|min_length[4]|max_length[32]|alpha_numeric'
+                'rules' => (strcasecmp($user->username, $username) ? 'is_unique[users.username]|' : '') . 'trim|required|min_length[4]|max_length[32]|alpha_numeric'
             ),
             array(
                 'field' => 'firstname',
@@ -74,6 +74,7 @@ class Admin extends CI_Controller {
                 'rules' => 'valid_email'
             )
         );
+
         $this->form_validation->set_rules($rules);
         $this->form_validation->set_message('is_unique', 'Deze %s bestaat bestaat al');
         $this->form_validation->set_message('matches', 'Het %s en %s veld moeten hetzelfde zijn');
@@ -84,8 +85,9 @@ class Admin extends CI_Controller {
             $firstname = $this->form_validation->set_value('firstname');
             $lastname = $this->form_validation->set_value('lastname');
             $email = $this->form_validation->set_value('email');
-
-            $this->UserModel->edit($user->userid, $username, $firstname, $lastname, $email);
+            $accesslevel = $_POST['accesslevel'];
+            
+            $this->UserModel->edit($user->userid, $username, $firstname, $lastname, $email, $accesslevel);
             $data['user'] = $this->UserModel->load($username);
             $this->template->write('title', 'Gebruiker gewijzigd');
             $this->template->write_view('content', 'admin/edituser_success', $data);

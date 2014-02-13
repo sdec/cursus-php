@@ -7,7 +7,7 @@ define('ADMIN', 3);
 
 class UserModel extends CI_Model {
 
-    private $accessLevels = array(
+    public $accessLevels = array(
         'Student',
         'Lector',
         'Studieadviseur',
@@ -51,13 +51,14 @@ class UserModel extends CI_Model {
         return $this->db->affected_rows() > 0;
     }
     
-    public function edit($userid, $username, $firstname, $lastname, $email) {
+    public function edit($userid, $username, $firstname, $lastname, $email, $accesslevel) {
 
         $updateData = array(
             'username' => $username,
             'firstname' => $firstname,
             'lastname' => $lastname,
-            'email' => $email
+            'email' => $email,
+            'accesslevel' => $accesslevel
         );
         $this->db->where(array('userid' => $userid));
         $this->db->update('users', $updateData);

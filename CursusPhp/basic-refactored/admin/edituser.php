@@ -29,6 +29,7 @@ if(isset($_POST['submit'])) {
         set_value('firstname', $_POST['firstname']);
         set_value('lastname', $_POST['lastname']);
         set_value('email', $_POST['email']);
+        set_value('accesslevel', $_POST['accesslevel']);
         
         if(isMinLength('username', 4) == FALSE)
             set_error ('username', 'Het gebuikersnaam veld moet minstens 4 karakters lang zijn');
@@ -54,7 +55,8 @@ if(isset($_POST['submit'])) {
                         set_value('username'), 
                         set_value('firstname'),
                         set_value('lastname'),
-                        set_value('email'));
+                        set_value('email'),
+                        set_value('accesslevel'));
                 redirect('profile/view.php?username='. set_value('username'));
             }
         }
@@ -80,7 +82,6 @@ if(isset($_POST['submit'])) {
                     <h3>Wijzig gebruiker</h3>
                     <div class="well">
                     <form method="POST" role="form" class="form-horizontal">
-                        <fieldset>
                             <div class="form-group">
                                 <label for="username" class="col-lg-2 control-label">Gebruikersnaam</label>
                                 <div class="col-lg-4">
@@ -122,12 +123,23 @@ if(isset($_POST['submit'])) {
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="accesslevel" class="col-lg-2 control-label">Profiel type</label>
+                                <div class="col-lg-4">
+                                    <select class="form-control" id="accesslevel" name="accesslevel" required>
+                                        <?php foreach($accessLevels as $accesslevel => $accessLevelname) { ?>
+                                            <option value="<?= $accesslevel ?>" <?= $user['accesslevel'] == $accesslevel ? 'selected' : '' ?>>
+                                                <?= $accessLevelname ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
                                     <button type="submit" name="submit" class="btn btn-primary">Wijzig gebruiker</button> 
                                     <a href="<?= base_url() ?>profile/view.php?username=<?= $user['username'] ?>" class="btn btn-default">Annuleer</a>
                                 </div>
                             </div>
-                        </fieldset>
                     </form>
                 </div>
             <?php include_once partials_url() . 'message.php' ?>

@@ -128,11 +128,11 @@ function deleteUser($userid) {
     return mysqli_affected_rows(DB_Link()) > 0;
 }
 
-function editUser($userid, $username, $firstname, $lastname, $email) {
+function editUser($userid, $username, $firstname, $lastname, $email, $accesslevel) {
     $sql = "
         UPDATE users
         SET username = '" . sanitize($username) . "', firstname = '" . sanitize($firstname) . "', 
-            lastname = '" . sanitize($lastname) . "', email = '" . sanitize($email) . "'
+            lastname = '" . sanitize($lastname) . "', email = '" . sanitize($email) . "', accesslevel = '" . sanitize($accesslevel) . "'
         WHERE userid = '" . sanitize($userid) . "';
     ";
     mysqli_query(DB_Link(), $sql);
