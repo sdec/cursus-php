@@ -137,14 +137,11 @@ class Admin extends CI_Controller {
         if ($user->accesslevel >= $this->session->userdata('user')->accesslevel)
             redirect(base_url() . 'profile/view/' . $user->username);
         
-        // Retrieve user to act as
-        $actuser = $this->UserModel->load($username);
-        
         // Store my old session
         $this->session->set_userdata('act', $this->session->userdata('user'));
         
         // Set the new session
-        $this->session->set_userdata('user', $actuser);
+        $this->session->set_userdata('user', $user);
         redirect(base_url());
     }
     
