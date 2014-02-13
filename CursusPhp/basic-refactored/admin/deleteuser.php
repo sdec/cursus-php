@@ -22,6 +22,6 @@ if($user == FALSE){
 } else {
     message("De user werd succesvol gedelete!");
 }
-redirect('admin/students.php');
+redirect('admin/users.php');
 
 ?>
