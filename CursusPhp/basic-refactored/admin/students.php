@@ -14,7 +14,7 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
     //display all users
 $users = strlen($search)
     ? searchUsers($search)
-    : users();
+    : loadAllUsers();
 /*} else { //otherwise display students only
     $users = strlen($search) 
         ? searchStudents($search) 
