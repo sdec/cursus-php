@@ -48,7 +48,7 @@ function loadUser($username) {
     $sql = "
         SELECT *
         FROM users
-        WHERE username = '" . sanitize($username) . "'
+        WHERE username LIKE '" . sanitize($username) . "'
     ";
     $result = mysqli_query(DB_Link(), $sql);
     return mysqli_num_rows($result) > 0 ? mysqli_fetch_assoc($result) : FALSE;
