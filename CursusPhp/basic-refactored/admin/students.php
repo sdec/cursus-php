@@ -35,23 +35,23 @@ $data['search'] = $search;
         <?php include_once partials_url() . 'navigation.php' ?>
         <div class="container">
             
-            <h1>Personen</h1>
+            <h1>Gebruikers</h1>
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
-                        <td>Profiel</td>
+                        <td></td>
+                        <td>Naam</td>
                         <?php if(userdata('accesslevel') >= ADMIN): ?>
                             <td>Username</td>
                         <?php else: ?>
                             <td>StudNr</td>
                         <?php endif; ?>
-                        <td>Naam</td>
                         <td>Email</td>
                         <?php if(userdata('accesslevel') >= ADMIN): ?>
-                            <td>Ken rechten toe aan deze user</td>
-                            <td>Vertegenwoordig deze user</td>
+                            <td>Ken rechten toe</td>
+                            <td>Vertegenwoordig</td>
                         <?php elseif(userdata('accesslevel') >= ADVISOR): ?>
-                            <td>Vertegenwoordig deze student</td>
+                            <td>Vertegenwoordig</td>
                         <?php endif; ?>
                     </tr>
                 </thead>
@@ -64,8 +64,8 @@ $data['search'] = $search;
                                         <span class="glyphicon glyphicon-eye-open"></span> 
                                     </a>
                                 </td>
-                                <td><?= $user['username']; ?></td>
                                 <td><?= $user['firstname'].' '.$user['lastname']; ?></td>
+                                <td><?= $user['username']; ?></td>
                                 <td>
                                 <a href="<?= 'mailto:'.$user['email'] ;?>"><?= $user['email'] ;?></a>
                                 </td>
@@ -106,7 +106,7 @@ $data['search'] = $search;
                         <div class="form-group">
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="search" name="search" 
-                                       placeholder="Zoek gebruikers op voornaam, achternaam, email, studentennr, ..." value="<?= @$_GET['search']; ?>" />
+                                       placeholder="Zoek gebruikers op voornaam, familienaam, gebruikersnaam of email." value="<?= @$_GET['search']; ?>" />
                             </div>
                             <div class="col-sm-2">
                                 <input type="submit" class="form-control btn btn-primary" value="Zoek" />

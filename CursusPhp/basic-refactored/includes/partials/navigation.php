@@ -11,10 +11,12 @@
             <a class="navbar-brand" href="<?= base_url() ?>">Afsprakenplanner</a>
         </div>
         <div class="collapse navbar-collapse">
+            <?php if(userdata('accesslevel') && userdata('accesslevel') > LECTURER): ?>
+            <ul class="nav navbar-nav">
+                <li><a tabindex="-1" href="<?= base_url() ?>admin/students.php">Gebruikers</a></li>
+            </ul>
+            <?php endif; ?>
             <ul class="nav navbar-nav navbar-right">
-                <?php if(userdata('accesslevel') && userdata('accesslevel') > LECTURER): ?>
-                    <li><a tabindex="-1" href="<?= base_url() ?>admin/students.php">Beheer</a></li>
-                <?php endif; ?>
                 <li>
                     <?php if (loggedin()) { ?>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
