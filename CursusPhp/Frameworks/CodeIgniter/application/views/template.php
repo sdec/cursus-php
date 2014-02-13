@@ -74,8 +74,9 @@
                 <p>
                     U handelt momenteel in naam van 
                     <strong><?= $this->session->userdata('user')->firstname ?> 
-                        <?= $this->session->userdata('user')->lastname ?></strong>. 
+                    <?= $this->session->userdata('user')->lastname ?> (<?= $this->session->userdata('user')->username ?>)</strong>.
                 </p>
+                <p><a class="btn btn-default" href="<?= base_url() ?>admin/stopact_as">Terug naar eigen profiel</a></p>
             <?php } ?>
         </div>
         

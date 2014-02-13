@@ -143,6 +143,9 @@ class Profile extends CI_Controller {
         // Unset user session data
         $this->session->unset_userdata('user');
         
+        // Should the user be acting as someone else, also end that session
+        $this->session->unset_userdata('act');
+        
         $this->template->write('title', 'Log out');
         $this->template->write_view('content', 'profile/logout_success');
         $this->template->render();

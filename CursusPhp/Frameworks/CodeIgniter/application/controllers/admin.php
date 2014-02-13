@@ -121,5 +121,46 @@ class Admin extends CI_Controller {
         $this->template->render();
         
     }
+    
+    public function act_as($username) {
+        
+        if (!$this->session->userdata('user'))
+            redirect(base_url() . 'profile/login');
+
+        if ($this->session->userdata('user')->accesslevel < ADMIN)
+            redirect(base_url() . 'admin/users');
+
+        $user = $this->UserModel->load($username);
+        if ($user == FALSE)
+            redirect(base_url() . 'admin/users');
+
+        if ($user->accesslevel >= $this->session->userdata('user')->accesslevel)
+            redirect(base_url() . 'profile/view/' . $user->username);
+        
+        // Retrieve user to act as
+        $actuser = $this->UserModel->load($username);
+        
+        // Store my old session
+        $this->session->set_userdata('act', $this->session->userdata('user'));
+        
+        // Set the new session
+        $this->session->set_userdata('user', $actuser);
+        redirect(base_url());
+    }
+    
+    public function stopact_as() {
+        
+        if (!$this->session->userdata('user'))
+            redirect(base_url() . 'profile/login');
+
+        if(!$this->session->userdata('act'))
+            redirect(base_url());
+        
+        $username = $this->session->userdata('act')->username;
+        $this->session->unset_userdata('user');
+        $this->session->unset_userdata('act');
+        $this->session->set_userdata('user', $this->UserModel->load($username));
+        redirect(base_url());
+    }
 
 }
