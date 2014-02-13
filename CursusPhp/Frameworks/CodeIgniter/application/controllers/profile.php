@@ -148,7 +148,34 @@ class Profile extends CI_Controller {
         $this->template->render();
     }
 
-    public function view($username = '') {
+    public function view($username = null) {
+        
+        if (!$this->session->userdata('user'))
+            redirect(base_url() . 'profile/login');
+
+        $user = null;
+        if($username) {
+            if ($this->session->userdata('user')->accesslevel < LECTURER)
+                redirect(base_url() . 'profile/view');
+            
+            $user = $this->UserModel->load($username);
+            
+            if($user == FALSE)
+                redirect(base_url() . 'profile/view');
+            
+        } else {
+            $user = $this->session->userdata('user');
+        }
+        
+        $data['user'] = $user;
+        
+        $this->template->write('title', 'Mijn profiel');
+        $this->template->write_view('content', 'profile/view', $data);
+        $this->template->render();
+        
+    }
+    
+    public function appointments($username = '') {
         
         if (!$this->session->userdata('user'))
             redirect('profile/login');
@@ -163,15 +190,16 @@ class Profile extends CI_Controller {
         if($user == FALSE)
             redirect('');
         
-        $data['username'] = $user->username;
-        $data['firstname'] = $user->firstname;
-        $data['lastname'] = $user->lastname;
-        $data['email'] = $user->email;
-        $data['lastActivity'] = date('M d H:i:s', $this->session->userdata('last_activity'));
-        $data['accessLevelName'] = $this->UserModel->accessLevelname($user->accesslevel);
+        $search = isset($_GET['search']) ? $_GET['search'] : '';
+        $appointments = strlen($search) 
+                            ? $this->AppointmentModel->search($search) 
+                            : $this->AppointmentModel->loadall($user->userid);
         
-        $this->template->write('title', 'Mijn profiel');
-        $this->template->write_view('content', 'profile/view', $data);
+        $data['appointments'] = $appointments;
+        $data['search'] = $search;
+        
+        $this->template->write('title', 'Mijn afspraken');
+        $this->template->write_view('content', 'profile/appointments', $data);
         $this->template->render();
         
     }

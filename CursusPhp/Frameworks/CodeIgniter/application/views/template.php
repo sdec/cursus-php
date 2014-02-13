@@ -24,8 +24,13 @@
                     <a class="navbar-brand" href="<?= base_url() ?>">Afsprakenplanner</a>
                 </div>
                 <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                    </ul>
+                    <?php if($this->session->userdata('user')) { ?>
+                        <?php if($this->session->userdata('user')->accesslevel >= LECTURER) { ?>
+                            <ul class="nav navbar-nav">
+                                <li><a href="<?= base_url() ?>admin/users">Gebruikers</a></li>
+                            </ul>
+                        <?php } ?>
+                    <?php } ?>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <?php if($this->session->userdata('user')) { ?>
@@ -35,6 +40,7 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="themes">
                                     <li><a tabindex="-1" href="<?= base_url() ?>profile/view">Mijn profiel</a></li>
+                                    <li><a tabindex="-1" href="<?= base_url() ?>profile/appointments">Mijn afspraken</a></li>
                                     <li><a tabindex="-1" href="<?= base_url() ?>profile/logout">Log uit</a></li>
                                 </ul>
                             <?php } else { ?>
@@ -58,12 +64,19 @@
             <?= $content ?>
             
             <?php if(strlen($message) > 0) { ?>
-            <div class="alert alert-info">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <?= $message ?>
-            </div>
+                <div class="alert alert-info">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <?= $message ?>
+                </div>
             <?php } ?>
-            
+            <?php if($this->session->userdata('act')) { ?>
+                <hr />
+                <p>
+                    U handelt momenteel in naam van 
+                    <strong><?= $this->session->userdata('user')->firstname ?> 
+                        <?= $this->session->userdata('user')->lastname ?></strong>. 
+                </p>
+            <?php } ?>
         </div>
         
         <!-- Javascript files staan op het einde voor snellere laadtijden -->

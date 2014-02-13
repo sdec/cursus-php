@@ -50,11 +50,46 @@ class UserModel extends CI_Model {
         // Check if the insert succeeded
         return $this->db->affected_rows() > 0;
     }
+    
+    public function edit($userid, $username, $firstname, $lastname, $email) {
+
+        $updateData = array(
+            'username' => $username,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'email' => $email
+        );
+        $this->db->where(array('userid' => $userid));
+        $this->db->update('users', $updateData);
+        
+        return $this->db->affected_rows() > 0;
+    }
+    
+    public function delete($userid) {
+        $data = array('userid' => $userid);
+        $this->db->delete('users', $data);
+        return $this->db->affected_rows() > 0;
+    }
 
     public function load($username) {
         $this->db->where(array('username' => $username));
         $query = $this->db->get('users');
         return $query->num_rows() > 0 ? $query->result()[0] : FALSE;
+    }
+    
+    public function loadall() {
+        $query = $this->db->get('users');
+        return $query->num_rows() > 0 ? $query->result() : FALSE;
+    }
+    
+    public function search($query) {
+        
+        $this->db->like('firstname', $query);
+        $this->db->or_like('lastname', $query);
+        $this->db->or_like('username', $query);
+        $this->db->or_like('email', $query);
+        $query = $this->db->get('users');
+        return $query->num_rows() > 0 ? $query->result() : FALSE;
     }
 
     public function accessLevelName($accessLevel) {
@@ -65,4 +100,5 @@ class UserModel extends CI_Model {
         $query = $this->db->get('lecturers');
         return $query->num_rows() > 0 ? $query->result() : FALSE;
     }
+    
 }

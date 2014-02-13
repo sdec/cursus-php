@@ -2,7 +2,7 @@
 
 class AppointmentModel extends CI_Model {
 
-    public function loadall() {
+    public function loadall($userid = null) {
 
         $sql = '
             SELECT 
@@ -13,12 +13,22 @@ class AppointmentModel extends CI_Model {
                 ap.description                                  AS  description, 
                 ap.location                                     AS  location
             FROM appointments ap
-            
+        ';
+        
+        if($userid) {
+            $sql .= '
+                LEFT JOIN appointmentslots USING(appointmentid)
+                    LEFT JOIN appointmentsubscribers USING(appointmentslotid)
+                WHERE userid = ?
+            ';
+        }
+        
+        $sql .= '
             GROUP BY ap.appointmentid
             ORDER BY ap.start_timestamp DESC, ap.end_timestamp DESC
         ';
 
-        $query = $this->db->query($sql);
+        $query = $this->db->query($sql, array($userid));
         return $query->num_rows() > 0 ? $query->result() : FALSE;
     }
     
