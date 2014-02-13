@@ -56,7 +56,7 @@ class Admin extends CI_Controller {
             array(
                 'field' => 'username',
                 'label' => 'gebruikersnaam',
-                'rules' => 'is_unique[users.username]|trim|required|min_length[4]|max_length[32]|alpha_numeric'
+                'rules' => ($this->form_validation->set_value('username') !== $username ? 'is_unique[users.username]]' : '') . '|trim|required|min_length[4]|max_length[32]|alpha_numeric'
             ),
             array(
                 'field' => 'firstname',
