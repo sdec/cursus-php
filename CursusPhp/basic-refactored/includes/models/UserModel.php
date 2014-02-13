@@ -132,8 +132,8 @@ function editUser($userid, $username, $firstname, $lastname, $email) {
     $sql = "
         UPDATE users
         SET username = '" . sanitize($username) . "', firstname = '" . sanitize($firstname) . "', 
-            lastname = '" . sanitize($lastname) . "', email = '" . sanitize($email) . "';
-        WHERE userid = '" . sanitize($userid) . "'
+            lastname = '" . sanitize($lastname) . "', email = '" . sanitize($email) . "'
+        WHERE userid = '" . sanitize($userid) . "';
     ";
     mysqli_query(DB_Link(), $sql);
     return mysqli_affected_rows(DB_Link()) > 0;
