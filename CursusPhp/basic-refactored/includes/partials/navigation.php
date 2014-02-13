@@ -1,3 +1,4 @@
+<?php require_once models_url() . 'UserModel.php'; ?>
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -11,6 +12,9 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
+                <?php if(userdata('accesslevel') && userdata('accesslevel') > LECTURER): ?>
+                    <li><a tabindex="-1" href="<?= base_url() ?>admin/students.php">Beheer</a></li>
+                <?php endif; ?>
                 <li>
                     <?php if (loggedin()) { ?>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">

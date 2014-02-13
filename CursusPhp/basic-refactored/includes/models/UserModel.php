@@ -80,3 +80,73 @@ function lecturers() {
     }
     return (count($lecturers) > 0) ? $lecturers : FALSE;
 }
+
+function students() {
+    $sql = "
+        SELECT *
+        FROM students";
+    $result = mysqli_query(DB_Link(), $sql);
+    $students = array();
+    while ($student = mysqli_fetch_assoc($result)) {
+        array_push($students, $student);
+    }
+    return (count($students) > 0) ? $students : FALSE;
+}
+
+function searchStudents($search) {
+    $search = sanitize($search);
+
+    $sql = "
+        SELECT *
+        FROM students
+        WHERE
+            username LIKE '%$search%'
+            OR firstname LIKE '%$search%'
+            OR lastname LIKE '%$search%'
+            OR email LIKE '%$search%'
+            OR CONCAT(firstname, ' ', lastname) LIKE '%$search%'
+
+        GROUP BY username";
+
+    $result = mysqli_query(DB_Link(), $sql);
+    $students = array();
+    while ($student = mysqli_fetch_assoc($result)) {
+        array_push($students, $student);
+    }
+    return (count($students) > 0) ? $students : FALSE;
+}
+
+function users() {
+    $sql = "
+        SELECT *
+        FROM users";
+    $result = mysqli_query(DB_Link(), $sql);
+    $users = array();
+    while ($user = mysqli_fetch_assoc($result)) {
+        array_push($users, $user);
+    }
+    return (count($users) > 0) ? $users : FALSE;
+}
+
+function searchUsers($search) {
+    $search = sanitize($search);
+
+    $sql = "
+        SELECT *
+        FROM users
+        WHERE
+            username LIKE '%$search%'
+            OR firstname LIKE '%$search%'
+            OR lastname LIKE '%$search%'
+            OR email LIKE '%$search%'
+            OR CONCAT(firstname, ' ', lastname) LIKE '%$search%'
+
+        GROUP BY username";
+
+    $result = mysqli_query(DB_Link(), $sql);
+    $users = array();
+    while ($user = mysqli_fetch_assoc($result)) {
+        array_push($users, $user);
+    }
+    return (count($users) > 0) ? $users : FALSE;
+}
