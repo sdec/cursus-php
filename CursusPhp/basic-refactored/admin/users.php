@@ -42,7 +42,7 @@ $users = strlen($search) ? searchUsers($search) : loadAllUsers();
                     <?php if(count($users) > 0) { ?>
                         <?php foreach($users as $user) { ?>
                             <tr>
-                                <td><a href="<?= base_url() ?>profile/view.php?username=<?= $user->username ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                                <td><a href="<?= base_url() ?>profile/view.php?username=<?= $user['username'] ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                                 <td><?= ucfirst($user['firstname']) ?></td>
                                 <td><?= ucfirst($user['lastname']) ?></td>
                                 <td><?= $user['username'] ?></td>
