@@ -1,4 +1,5 @@
 <?php
+
 define('STUDENT', 0);
 define('LECTURER', 1);
 define('ADVISOR', 2);
@@ -21,11 +22,11 @@ function isCorrectCredentialsUser($username, $password) {
 
     $hashedPassword = encryptPassword($password);
 
-    $sql = '
+    $sql = "
         SELECT *
         FROM users
-        WHERE username = \''.  sanitize($username).'\' AND password = \''.  $hashedPassword .'\'
-    ';
+        WHERE username = '" . sanitize($username) . "' AND password = '" . $hashedPassword . "'
+    ";
     $result = mysqli_query(DB_Link(), $sql);
     return mysqli_num_rows($result) > 0;
 }
@@ -34,31 +35,31 @@ function registerUser($username, $firstname, $lastname, $password, $email) {
 
     $hashedPassword = encryptPassword($password);
 
-    $sql = '
+    $sql = "
         INSERT INTO users (username, firstname, lastname, password, email) 
-        VALUES (\''.  sanitize($username).'\', \''.  sanitize($firstname).'\', \''.  sanitize($lastname).'\', 
-            \''.  sanitize($hashedPassword).'\', \''.  sanitize($email).'\');
-    ';
+        VALUES ('" . sanitize($username) . "', '" . sanitize($firstname) . "', '" . sanitize($lastname) . "', 
+            '" . sanitize($hashedPassword) . "', '" . sanitize($email) . "');
+    ";
     mysqli_query(DB_Link(), $sql);
     return mysqli_affected_rows(DB_Link());
 }
 
 function loadUser($username) {
-    $sql = '
+    $sql = "
         SELECT *
         FROM users
-        WHERE username = \''.  sanitize($username).'\'
-    ';
+        WHERE username = '" . sanitize($username) . "'
+    ";
     $result = mysqli_query(DB_Link(), $sql);
     return mysqli_num_rows($result) > 0 ? mysqli_fetch_assoc($result) : FALSE;
 }
 
 function usernameExists($username) {
-    $sql = '
+    $sql = "
         SELECT *
         FROM users
-        WHERE username LIKE \''.  sanitize($username).'\'
-    ';
+        WHERE username LIKE '" . sanitize($username) . "'
+    ";
     $result = mysqli_query(DB_Link(), $sql);
     return mysqli_num_rows($result) > 0;
 }
@@ -81,45 +82,11 @@ function lecturers() {
     return (count($lecturers) > 0) ? $lecturers : FALSE;
 }
 
-function students() {
-    $sql = "
-        SELECT *
-        FROM students";
-    $result = mysqli_query(DB_Link(), $sql);
-    $students = array();
-    while ($student = mysqli_fetch_assoc($result)) {
-        array_push($students, $student);
-    }
-    return (count($students) > 0) ? $students : FALSE;
-}
-
-function searchStudents($search) {
-    $search = sanitize($search);
-
-    $sql = "
-        SELECT *
-        FROM students
-        WHERE
-            username LIKE '%$search%'
-            OR firstname LIKE '%$search%'
-            OR lastname LIKE '%$search%'
-            OR email LIKE '%$search%'
-            OR CONCAT(firstname, ' ', lastname) LIKE '%$search%'
-
-        GROUP BY username";
-
-    $result = mysqli_query(DB_Link(), $sql);
-    $students = array();
-    while ($student = mysqli_fetch_assoc($result)) {
-        array_push($students, $student);
-    }
-    return (count($students) > 0) ? $students : FALSE;
-}
-
 function loadAllUsers() {
     $sql = "
         SELECT *
-        FROM users";
+        FROM users
+    ";
     $result = mysqli_query(DB_Link(), $sql);
     $users = array();
     while ($user = mysqli_fetch_assoc($result)) {
@@ -151,11 +118,22 @@ function searchUsers($search) {
     return (count($users) > 0) ? $users : FALSE;
 }
 
-function deleteUser($userid){
+function deleteUser($userid) {
     $userid = sanitize($userid);
     $sql = "
         DELETE FROM users
-        WHERE userid = '".$userid."';
+        WHERE userid = '" . $userid . "';
+    ";
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_affected_rows(DB_Link()) > 0;
+}
+
+function editUser($userid, $username, $firstname, $lastname, $email) {
+    $sql = "
+        UPDATE users
+        SET username = '" . sanitize($username) . "', firstname = '" . sanitize($firstname) . "', 
+            lastname = '" . sanitize($lastname) . "', email = '" . sanitize($email) . "';
+        WHERE userid = '" . sanitize($userid) . "'
     ";
     mysqli_query(DB_Link(), $sql);
     return mysqli_affected_rows(DB_Link()) > 0;

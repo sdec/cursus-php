@@ -18,7 +18,7 @@ class AppointmentModel extends CI_Model {
         if($userid) {
             $sql .= '
                 LEFT JOIN appointmentslots USING(appointmentid)
-                    LEFT JOIN appointmentsubscribers USING(appointmentslotid)
+                LEFT JOIN appointmentsubscribers USING(appointmentslotid)
                 WHERE userid = ?
             ';
         }
