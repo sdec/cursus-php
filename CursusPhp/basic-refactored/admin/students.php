@@ -24,6 +24,26 @@ if(userdata('accesslevel') >= ADMIN){
 $data['users'] = $users;
 $data['search'] = $search;
 
+function getRole($index){
+    switch ($index) {
+        case STUDENT:
+            return "Student";
+            break;
+        CASE LECTURER:
+            return "Lector";
+            break;
+        CASE ADVISOR:
+            return "Studieadviseur";
+            break;
+        CASE ADMIN:
+            return "Admin";
+            break;
+        default:
+            return "Error";
+            break;
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -47,12 +67,13 @@ $data['search'] = $search;
                             <td>StudNr</td>
                         <?php endif; ?>
                         <td>Email</td>
-                        <?php if(userdata('accesslevel') >= ADMIN): ?>
+                        <td>Type profiel</td>
+                        <!--<?php //if(userdata('accesslevel') >= ADMIN): ?>
                             <td>Ken rechten toe</td>
                             <td>Vertegenwoordig</td>
-                        <?php elseif(userdata('accesslevel') >= ADVISOR): ?>
+                        <?php //elseif(userdata('accesslevel') >= ADVISOR): ?>
                             <td>Vertegenwoordig</td>
-                        <?php endif; ?>
+                        <?php //endif; ?>-->
                     </tr>
                 </thead>
                 <tbody>
@@ -67,9 +88,10 @@ $data['search'] = $search;
                                 <td><?= $user['firstname'].' '.$user['lastname']; ?></td>
                                 <td><?= $user['username']; ?></td>
                                 <td>
-                                <a href="<?= 'mailto:'.$user['email'] ;?>"><?= $user['email'] ;?></a>
+                                    <a href="<?= 'mailto:'.$user['email'] ;?>"><?= $user['email'] ;?></a>
                                 </td>
-                                <?php if(userdata('accesslevel') >= ADMIN): ?>
+                                <td><?= getRole($user['accesslevel']); ?> </td>
+                                <!--<?php// if(userdata('accesslevel') >= ADMIN): ?>
                                     <td>
                                         <a href="<?= base_url() ?>admin/edit.php?userid=<?= $user['userid'] ?>">
                                             <span class="glyphicon glyphicon-edit"></span> 
@@ -80,13 +102,13 @@ $data['search'] = $search;
                                             <span class="glyphicon glyphicon-briefcase"></span> 
                                         </a>
                                     </td>
-                                <?php elseif(userdata('accesslevel') >= ADVISOR): ?>
+                                <?php //elseif(userdata('accesslevel') >= ADVISOR): ?>
                                     <td>
                                         <a href="<?= base_url() ?>admin/act_as.php?userid=<?= $user['userid'] ?>">
                                             <span class="glyphicon glyphicon-briefcase"></span> 
                                         </a>
                                     </td>
-                                <?php endif; ?>
+                                <?php //endif; ?> -->
                             </tr>
                         <?php } ?>
                     <?php } else { ?>
