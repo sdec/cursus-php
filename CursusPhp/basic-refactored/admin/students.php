@@ -35,7 +35,7 @@ $data['search'] = $search;
         <?php include_once partials_url() . 'navigation.php' ?>
         <div class="container">
             
-            <h1>Afspraken</h1>
+            <h1>Personen</h1>
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
@@ -46,6 +46,7 @@ $data['search'] = $search;
                             <td>StudNr</td>
                         <?php endif; ?>
                         <td>Naam</td>
+                        <td>Email</td>
                         <?php if(userdata('accesslevel') >= ADMIN): ?>
                             <td>Ken rechten toe aan deze user</td>
                             <td>Vertegenwoordig deze user</td>
@@ -65,6 +66,9 @@ $data['search'] = $search;
                                 </td>
                                 <td><?= $user['username']; ?></td>
                                 <td><?= $user['firstname'].' '.$user['lastname']; ?></td>
+                                <td>
+                                <a href="<?= 'mailto:'.$user['email'] ;?>"><?= $user['email'] ;?></a>
+                                </td>
                                 <?php if(userdata('accesslevel') >= ADMIN): ?>
                                     <td>
                                         <a href="<?= base_url() ?>admin/edit.php?userid=<?= $user['userid'] ?>">
@@ -86,7 +90,7 @@ $data['search'] = $search;
                             </tr>
                         <?php } ?>
                     <?php } else { ?>
-                        <tr><td colspan="6">Er zijn geen afspraken om te tonen.</td></tr>
+                        <tr><td colspan="6">Er zijn geen personen om te tonen.</td></tr>
                     <?php } ?>
                 </tbody>
             </table>
