@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS appointmentsubscribers;
 DROP TABLE IF EXISTS appointmentslots;
 DROP TABLE IF EXISTS appointments;
+DROP VIEW IF EXISTS students;
 DROP VIEW IF EXISTS administrators;
 DROP VIEW IF EXISTS studentadvisors;
 DROP VIEW IF EXISTS lecturers;
@@ -19,6 +20,11 @@ CREATE TABLE users (
     PRIMARY KEY(userid)
 
 ) ENGINE=InnoDB;
+
+CREATE VIEW students AS
+    SELECT *
+    FROM users
+    WHERE accesslevel = 0;
 
 CREATE VIEW lecturers AS
     SELECT *
