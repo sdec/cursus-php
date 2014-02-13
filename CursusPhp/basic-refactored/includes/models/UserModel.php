@@ -116,7 +116,7 @@ function searchStudents($search) {
     return (count($students) > 0) ? $students : FALSE;
 }
 
-function users() {
+function loadAllUsers() {
     $sql = "
         SELECT *
         FROM users";
@@ -149,4 +149,14 @@ function searchUsers($search) {
         array_push($users, $user);
     }
     return (count($users) > 0) ? $users : FALSE;
+}
+
+function deleteUser($userid){
+    $userid = sanitize($userid);
+    $sql = "
+        DELETE FROM users
+        WHERE userid = '".$userid."';
+    ";
+    mysqli_query(DB_Link(), $sql);
+    return mysqli_affected_rows(DB_Link()) > 0;
 }

@@ -6,9 +6,7 @@ require_once config_url() . 'sessions.php';
 require_once config_url() . 'database.php';
 require_once models_url() . 'UserModel.php';
 
-$user = ($_GET['username']) ? loadUser($_GET['username']) : loadUser(userdata('username'));
-
-var_dump($user);
+$user = (isset($_GET['username'])) ? loadUser($_GET['username']) : loadUser(userdata('username'));
 
 ?>
 <!DOCTYPE html>
@@ -44,6 +42,27 @@ var_dump($user);
                     <td><?= accessLevelName($user['accesslevel']);?></td>
                 </tr>
             </table>
+            
+            <?php if ($user->accesslevel < $this->session->userdata('user')->accesslevel) { ?>
+                <?php if ($this->session->userdata('user')->accesslevel >= ADVISOR) { ?>
+                    <hr />
+                    <a href="<?= base_url() ?>admin/act_as/<?= $user->username ?>" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-user"></span> 
+                        Handel in naam van deze gebruiker
+                    </a>
+                    <?php if ($this->session->userdata('user')->accesslevel >= ADMIN) { ?>
+
+                        <a href="<?= base_url() ?>admin/edituser/<?= $user->username ?>" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-edit"></span> 
+                            Wijzig gebruiker
+                        </a> 
+                        <a href="<?= base_url() ?>admin/deleteuser/<?= $user->username ?>" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-sign"></span> 
+                            Verwijder gebruiker
+                        </a>
+                    <?php } ?>
+                <?php } ?>
+            <?php } ?>
             
             <?php include_once partials_url() . 'message.php' ?>
         </div>
