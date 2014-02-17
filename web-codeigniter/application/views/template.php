@@ -64,7 +64,7 @@
             <?= $content ?>
             
             <?php if(strlen($message) > 0) { ?>
-                <div class="alert alert-info">
+                <div class="alert alert-info" id="message">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <?= $message ?>
                 </div>
