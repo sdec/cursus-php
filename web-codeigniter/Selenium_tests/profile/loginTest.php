@@ -54,8 +54,8 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
     function testLogin_Success() {
         $this->open("cursus-php/web-basic/profile/login.php");
         $this->waitForPageToLoad("20000");
-        $this->type("id=username", "MyUsername");
-        $this->type("id=password", "password");
+        $this->type("id=username", "elste");
+        $this->type("id=password", "1234");
         $this->click("name=submit");
         $this->waitForPageToLoad("20000");
         $this->verifyTextPresent("U bent nu ingelogd.");
