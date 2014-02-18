@@ -7,7 +7,7 @@
                     <input type="text" class="form-control" id="username" name="username" 
                            placeholder="Gebruikersnaam" maxlength="32" value="<?= set_value('username'); ?>" required>
                 </div>
-                <div class="col-lg-6" id="error-username">
+                <div class="col-lg-6">
                     <?= form_error('username', '<span class="text-danger">', '</span>'); ?>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                     <input type="password" class="form-control" id="password" name="password" 
                            placeholder="Paswoord" maxlength="128" value="<?= set_value('password'); ?>" required>
                 </div>
-                <div class="col-lg-6" id="error-password">
+                <div class="col-lg-6">
                     <?= form_error('password', '<span class="text-danger">', '</span>'); ?>
                 </div>
             </div>
