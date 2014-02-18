@@ -37,17 +37,6 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
         $this->verifyTextPresent("Foutieve gebruikersnaam/paswoord combinatie!");
     }
     
-    function testLogin_inputTooLong() {
-        $this->open("cursus-php/web-basic/profile/login.php");
-        $this->waitForPageToLoad("20000");
-        $this->type("id=username", "abcdefghijabcdefghijabcdefghijabcdefghij");
-        $this->type("id=password", "abcdefghijabcdefghijabcdefghijabcdefghij");
-        $this->click("name=submit");
-        $this->waitForPageToLoad("20000");
-        $this->assertTextPresent("U bent nu ingelogd."); //Our HTML limit should cut away all the overflowing chars
-        //We use assert instead of verify here because our next tests depends on us logging in sucessfully!
-    }
-    
     function testLogout_Success() {
         $this->open("cursus-php/web-basic/profile/login.php");
         $this->waitForPageToLoad("20000");
