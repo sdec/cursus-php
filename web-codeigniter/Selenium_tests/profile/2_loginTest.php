@@ -15,7 +15,7 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
     }
     
     function testLoginError_inputTooShort() {
-        $this->open("cursus-php/web-basic/profile/login.php");
+        $this->open("cursus-php/web-codeigniter/profile/login");
         $this->waitForPageToLoad("20000");
         $this->type("id=username", "123");
         $this->type("id=password", "123");
@@ -27,7 +27,7 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
     }
     
     function testLoginError_wrongUsernameAndPasswordCombination() {
-        $this->open("cursus-php/web-basic/profile/login.php");
+        $this->open("cursus-php/web-codeigniter/profile/login");
         $this->waitForPageToLoad("20000");
         $this->type("id=username", "1234");
         $this->type("id=password", "1234");
@@ -38,7 +38,7 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
     }
     
     function testLogin_inputTooLong() {
-        $this->open("cursus-php/web-basic/profile/login.php");
+        $this->open("cursus-php/web-codeigniter/profile/login");
         $this->waitForPageToLoad("20000");
         $this->type("id=username", "abcdefghijabcdefghijabcdefghijabcdefghij");
         $this->type("id=password", "abcdefghijabcdefghijabcdefghijabcdefghij");
@@ -49,7 +49,7 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
     }
     
     function testLogout_Success() {
-        $this->open("cursus-php/web-basic/profile/login.php");
+        $this->open("cursus-php/web-codeigniter/profile/login");
         $this->waitForPageToLoad("20000");
         $this->type("id=username", "pigee");
         $this->type("id=password", "1234");
@@ -63,7 +63,7 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
     }
     
     function testLogin_Success() {
-        $this->open("cursus-php/web-basic/profile/login.php");
+        $this->open("cursus-php/web-codeigniter/profile/login");
         $this->waitForPageToLoad("20000");
         $this->type("id=username", "MyUsername");
         $this->type("id=password", "password");
