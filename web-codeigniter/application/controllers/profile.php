@@ -103,7 +103,7 @@ class Profile extends CI_Controller {
             )
         );
         $this->form_validation->set_rules($rules);
-        $this->form_validation->set_message('is_unique', 'Deze %s bestaat bestaat al');
+        $this->form_validation->set_message('is_unique', 'Deze %s bestaat al');
         $this->form_validation->set_message('matches', 'Het %s en %s veld moeten hetzelfde zijn');
 
 
