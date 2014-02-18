@@ -22,7 +22,7 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
         $this->click("name=submit");
         $this->waitForPageToLoad("20000");
         $this->assertTitle("Log in - Afspraken planner"); //Page should not have switched!
-        $this->verifyTextPresent("Het gebuikersnaam veld moet minstens 4 karakters lang zijn");
+        $this->verifyTextPresent("Het gebruikersnaam veld moet minstens 4 karakters lang zijn");
         $this->verifyTextPresent("Het paswoord veld moet minstens 4 karakters lang zijn");
     }
     
@@ -56,7 +56,7 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
         $this->click("name=submit");
         $this->waitForPageToLoad("20000");
         $this->assertTextPresent("U bent nu ingelogd."); //Our HTML limit should cut away all the overflowing chars
-        $this->open("cursus-php/web-basic/profile/logout.php");
+        $this->open("cursus-php/web-basic/profile/logout");
         $this->waitForPageToLoad("20000");
         $this->assertTextPresent("U bent nu uitgelogd");
         //We use assert instead of verify here because our next test depends on us logging out sucessfully!
