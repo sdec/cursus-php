@@ -55,7 +55,7 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase {
         $this->type("id=password", "1234");
         $this->click("name=submit");
         $this->waitForPageToLoad("20000");
-        $this->assertTextPresent("U bent nu ingelogd."); //Our HTML limit should cut away all the overflowing chars
+        $this->assertTextPresent("U bent nu uitgelogd."); //Our HTML limit should cut away all the overflowing chars
         $this->open("cursus-php/web-basic/profile/logout.php");
         $this->waitForPageToLoad("20000");
         $this->assertTextPresent("U bent nu uitgelogd");
