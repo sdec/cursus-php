@@ -17,13 +17,13 @@ Onderwerpen:
 
 - OO
 - MVC
-- Frameworks
-- Testing
+- CodeIgniter & CakePHP
+- Unit testing & test automation
 - Debugging
 - Toledo integratie
 
 Basis website:
 
-Deze website vormt de rode draad doorheen het project en is beschikbaar op /PhpCursus/Basis website/
+Deze website vormt de rode draad doorheen het project. Alle websites zijn te vinden op http://www.sandec.net/afsprakenplanner
 
-![alt tag](http://puu.sh/6Iwnq.png)
+![alt tag](http://puu.sh/720xi.png)
