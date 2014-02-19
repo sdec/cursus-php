@@ -26,4 +26,4 @@ Basis website:
 
 Deze website vormt de rode draad doorheen het project. Alle websites zijn te vinden op http://www.sandec.net/afsprakenplanner
 
-![alt tag](http://puu.sh/720xi.png)
+![alt tag](http://www.puu.sh/720xi.png)
