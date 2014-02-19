@@ -1,4 +1,4 @@
-Eindwerk cursus PHP
+Eindwerk - Advanced PHP
 ==========
 
 GitHub repository voor het eindwerk omtrend een cursus PHP.
