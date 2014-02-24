@@ -12,6 +12,7 @@ define('SYSTEM_PATH', BASE_URL . 'system/');
 //require_once(SYSTEM_PATH . 'model/Message.php');
 //require_once(SYSTEM_PATH . 'view/viewHelper.php');
 require_once(SYSTEM_PATH . 'config/database.php');
+require_once(SYSTEM_PATH . 'helpers/database_helper.php');
 
 require_once(SYSTEM_PATH . 'model/Db.php');
 require_once models_url() . 'UserModel.php';
