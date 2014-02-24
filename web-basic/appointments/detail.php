@@ -44,18 +44,15 @@ if ($slots) {
             break;
         }
 
-        if ($appointment['chronological']) {
-            if (!$slots[$i]['subscriberid'] && $availableCount == 0) {
-                $slots[$i]['available'] = TRUE;
-                $availableCount++;
-            } else if (!$slots[$i]['subscriberid'] && $availableCount == 1) {
-                $slot['available'] = FALSE;
-            }
+        if (!$slots[$i]['subscriberid'] && $availableCount == 0 || !$appointment['chronological']) {
+            $slots[$i]['available'] = TRUE;
+            $availableCount++;
         } else {
-            $slot['available'] = TRUE;
+            $slots[$i]['available'] = FALSE;
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -181,9 +178,8 @@ if ($slots) {
                                                 <td>
                                                     <?php if (!$slot['subscriberid']) { ?>
                                                         <?php if ($appointment['started'] == FALSE && $subscribtion['subscribed'] == FALSE) { ?>
-                                                            <?php if (isset($slot['available']) && $slot['available'] == TRUE || $slot['lecturerid'] == userdata('userid')) { ?>
-                                                                <a class="text-success" href="<?= base_url() ?>appointments/subscribe.php?appointmentid=
-                                                                    <?= $appointment['appointmentid'] ?>&appointmentslotid=<?= $slot['appointmentslotid'] ?>">
+                                                            <?php if (@$slot['available'] == TRUE || $slot['lecturerid'] == userdata('userid')) { ?>
+                                                                <a class="text-success" href="<?= base_url() ?>appointments/subscribe.php?appointmentid=<?= $appointment['appointmentid'] ?>&appointmentslotid=<?= $slot['appointmentslotid'] ?>">
                                                                     <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
                                                                 </a>
                                                             <?php } else { ?>
