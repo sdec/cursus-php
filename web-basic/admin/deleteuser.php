@@ -1,7 +1,8 @@
 <?php define('BASE_URL', '../');
-require_once BASE_URL . 'includes/config/routes.php';
-require_once config_url() . 'sessions.php';
+require_once BASE_URL . 'includes/helpers/routes_helper.php';
+require_once helpers_url() . 'sessions_helper.php';
 require_once config_url() . 'database.php';
+require_once helpers_url() . 'database_helper.php';
 require_once models_url() . 'UserModel.php';
 require_once helpers_url() . 'form_helper.php';
 
