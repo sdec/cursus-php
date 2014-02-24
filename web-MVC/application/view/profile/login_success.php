@@ -1,3 +1,10 @@
+<?php
+
+define('BASE_URL', '../');
+require_once BASE_URL . 'includes/config/routes.php';
+require_once config_url() . 'sessions.php';
+
+?>
 <!DOCTYPE html>
 <html>
     <head>

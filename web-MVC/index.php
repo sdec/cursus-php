@@ -1,11 +1,11 @@
 <?php
 
 define('BASE_URL', './');
-require_once(BASE_URL . 'system/config/routes.php');
+require_once(BASE_URL . 'system/helpers/route_helper.php');
 
 // constanten ivm de paths
-define('APPLICATION_PATH', base_url() . 'application/');
-define('SYSTEM_PATH', base_url() . 'system/');
+define('APPLICATION_PATH', BASE_URL . 'application/');
+define('SYSTEM_PATH', BASE_URL . 'system/');
 
 
 // require before unserializing object from session
@@ -35,7 +35,7 @@ require_once(APPLICATION_PATH . 'controller/AdminController.php');*/
 
 session_start();
 
-require_once SYSTEM_PATH . 'config/sessions.php';
+require_once SYSTEM_PATH . 'helpers/session_helper.php';
 
 /*$frontController = new FrontController();
 $frontController->run();*/
