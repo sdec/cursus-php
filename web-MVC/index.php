@@ -1,8 +1,12 @@
 <?php
+
+define('BASE_URL', './');
+require_once(BASE_URL . 'system/config/routes.php');
+
 // constanten ivm de paths
-define('APPLICATION_PATH', 'afsprakenplanner/');
-define('SYSTEM_PATH', 'includes/');
-require_once(SYSTEM_PATH . 'config/routes.php');
+define('APPLICATION_PATH', base_url() . 'application/');
+define('SYSTEM_PATH', base_url() . 'system/');
+
 
 // require before unserializing object from session
 //require_once(SYSTEM_PATH . 'model/Message.php');
