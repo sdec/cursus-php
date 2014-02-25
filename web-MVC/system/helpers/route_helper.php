@@ -10,7 +10,7 @@ function base_url() {
 }
 
 function external_url() {
-    $app_path = '/cursus-php/CursusPhp/web-MVC/';
+    $app_path = '/cursus-php/web-MVC/';
     return 'http://' . $_SERVER['HTTP_HOST'] . $app_path;
 }
 
@@ -50,6 +50,6 @@ function views_url(){
 }
 
 function redirect($page) {
-    header('Location: ' . base_url() . $page);
+    header('Location: ' . external_url() . $page);
     die;
 }

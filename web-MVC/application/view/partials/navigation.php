@@ -26,9 +26,9 @@
                             <?= userdata('username') ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/view.php">Mijn profiel</a></li>
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/appointments.php">Mijn afspraken</a></li>
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/logout.php">Log uit</a></li>
+                            <li><a tabindex="-1" href="view.php">Mijn profiel</a></li>
+                            <li><a tabindex="-1" href="appointments.php">Mijn afspraken</a></li>
+                            <li><a tabindex="-1" href="logout.php">Log uit</a></li>
                         </ul>
                     <?php } else { ?>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
@@ -36,8 +36,8 @@
                             Profiel <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/register.php">Registreren</a></li>
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/login.php">Log in</a></li>
+                            <li><a tabindex="-1" href="register.php">Registreren</a></li>
+                            <li><a tabindex="-1" href="login.php">Log in</a></li>
                         </ul>
                     <?php } ?>
                 </li>
