@@ -31,7 +31,7 @@ class AppointmentsController extends Controller{
         global $data;
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment['appointmentid']){
-            message("Oops! We have detected an nonexisting appointmentid!", "warning");
+            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             redirect('');
         }
 
@@ -61,15 +61,11 @@ class AppointmentsController extends Controller{
                     break;
                 }
 
-                if ($appointment['chronological']) {
-                    if (!$slots[$i]['subscriberid'] && $availableCount == 0) {
-                        $slots[$i]['available'] = TRUE;
-                        $availableCount++;
-                    } else if (!$slots[$i]['subscriberid'] && $availableCount == 1) {
-                        $slot['available'] = FALSE;
-                    }
+                if (!$slots[$i]['subscriberid'] && $availableCount == 0 || !$appointment['chronological']) {
+                    $slots[$i]['available'] = TRUE;
+                    $availableCount++;
                 } else {
-                    $slot['available'] = TRUE;
+                    $slots[$i]['available'] = FALSE;
                 }
             }
         }
@@ -79,6 +75,61 @@ class AppointmentsController extends Controller{
         $data['subscription'] = $subscription;
         $this->render('detail');
     }
-       
+    
+    public function subscribe($appointmentid = -1, $slotid = -1){
+        if (!loggedin())
+            redirect('');
+
+        $appointmentid = isset($appointmentid) ? trim($appointmentid) : -1;
+        $appointmentslotid = isset($slotid) ? trim($slotid) : -1;
+
+        if ($appointmentid == -1 || $appointmentslotid == -1)
+            redirect('');
+
+        $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
+        if (!$appointment['appointmentid']){
+            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            $this->detail($appointmentid);
+            die();
+        }
+
+        if ($this->appointmentmodel->subscribeAppointment($appointmentslotid, userdata('userid'))) {
+            global $appointmentid;
+            $appointmentid = $appointment['appointmentid'];
+            $this->render('subscribe_success');
+            die();
+        } else {
+            message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
+        }
+        $this->detail($appointmentid);
+    }
+
+    public function unsubscribe($appointmentid = -1, $slotid = -1){
+        if (!loggedin())
+            redirect('');
+
+        $appointmentid = isset($appointmentid) ? trim($appointmentid) : -1;
+        $appointmentslotid = isset($slotid) ? trim($slotid) : -1;
+
+        if($appointmentid == -1 || $appointmentslotid == -1)
+            redirect('');
+
+        $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
+        if (!$appointment['appointmentid']){
+            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            $this->detail($appointmentid);
+            die();
+        }
+
+        if($this->appointmentmodel->unSubscribeAppointment($appointmentslotid, userdata('userid'))){
+            global $appointmentid;
+            $appointmentid = $appointment['appointmentid'];
+            $this->render('unsubscribe_success');
+            die();
+        } else {
+            message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
+        }
+        $this->detail($appointmentid);
+    }
 }
 ?>

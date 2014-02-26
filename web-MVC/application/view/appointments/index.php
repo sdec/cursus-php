@@ -28,7 +28,7 @@ global $data;
                         <?php foreach ($data['appointments'] as $appointment) { ?>
                             <tr>
                                 <td>
-                                    <a href="<?= base_url() ?>appointments/detail/appointmentid=<?= $appointment['appointmentid'] ?>">
+                                    <a href="<?= base_url() ?>appointments/detail/<?= $appointment['appointmentid'] ?>">
                                         <span class="glyphicon glyphicon-eye-open"></span> 
                                     </a>
                                 </td>

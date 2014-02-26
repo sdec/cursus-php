@@ -63,7 +63,7 @@ global $data;
                                 <?php } ?>
                                 <?php if(!$data['appointment']['started']) { ?>
                                 <p>
-                                    <a href="<?= base_url() ?>appointments/unsubscribe.php?appointmentid=<?= $data['appointment']['appointmentid'] ?>&subscribeslotid=<?= $data['subscription']['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                                    <a href="<?= external_url() ?>appointments/unsubscribe/<?= $data['appointment']['appointmentid'] ?>/<?= $data['subscription']['subscribeslotid'] ?>" class="btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
                                     </a>
                                 </p>
@@ -85,15 +85,15 @@ global $data;
                     </div>
                     <?php if (userdata('accesslevel') >= LECTURER) { ?>
                         <p>
-                            <a href="<?= base_url() ?>appointments/addtimeslots.php?appointmentid=<?= $data['appointment']['appointmentid'] ?>" class="btn btn-primary">
+                            <a href="<?= external_url() ?>appointments/addtimeslots/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-primary">
                                 <span class="glyphicon glyphicon-plus-sign"></span> 
                                 Voeg tijdsloten toe
                             </a> 
-                            <a href="<?= base_url() ?>appointments/edit.php?appointmentid=<?= $data['appointment']['appointmentid'] ?>" class="btn btn-primary">
+                            <a href="<?= external_url() ?>appointments/edit/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-primary">
                                 <span class="glyphicon glyphicon-edit"></span> 
                                 Wijzig afspraak
                             </a> 
-                            <a href="<?= base_url() ?>appointments/delete.php?appointmentid=<?= $data['appointment']['appointmentid'] ?>" class="btn btn-danger">
+                            <a href="<?= external_url() ?>appointments/delete/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove-sign"></span> 
                                 Verwijder afspraak
                             </a>
@@ -126,8 +126,8 @@ global $data;
                                                     <?php if (!$slot['subscriberid']) { ?>
                                                         <?php if ($data['appointment']['started'] == FALSE && $data['subscription']['subscribed'] == FALSE) { ?>
                                                             <?php if (isset($slot['available']) && $slot['available'] == TRUE || $slot['lecturerid'] == userdata('userid')) { ?>
-                                                                <a class="text-success" href="<?= base_url() ?>appointments/subscribe.php?appointmentid=
-                                                                    <?= $data['appointment']['appointmentid'] ?>&appointmentslotid=<?= $slot['appointmentslotid'] ?>">
+                                                                <a class="text-success" href="<?= external_url() ?>appointments/subscribe/
+                                                                    <?= $data['appointment']['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
                                                                     <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
                                                                 </a>
                                                             <?php } else { ?>
