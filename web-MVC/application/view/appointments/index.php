@@ -48,7 +48,7 @@ global $data;
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-3">
                     <?php if (userdata('accesslevel') >= LECTURER) { ?>
-                        <p><a href="<?= base_url() ?>appointments/create.php" class="btn btn-primary">Nieuwe afspraak</a></p>
+                        <p><a href="<?= base_url() ?>appointments/create" class="btn btn-primary">Nieuwe afspraak</a></p>
                     <?php } ?>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-9">

@@ -1,27 +1,5 @@
-<?php define('BASE_URL', '../');
-require_once BASE_URL . 'includes/config/routes.php';
-require_once config_url() . 'sessions.php';
-require_once config_url() . 'database.php';
-require_once models_url() . 'AppointmentModel.php';
-require_once models_url() . 'UserModel.php';
-
-if (!loggedin())
-    redirect('profile/login.php');
-
-if (userdata('accesslevel') < LECTURER)
-    redirect('appointments/view.php');
-
-if(!isset($_GET['appointmentid']))
-    redirect('');
-
-$appointment = loadAppointment($_GET['appointmentid']);
-if($appointment == FALSE)
-    redirect('');
-
-$appointment['date'] = date('d M Y', strtotime($appointment['start_timestamp']));
-$appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
-$appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
-
+<?php 
+global $data;
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,28 +16,28 @@ $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
             <table class="table table-hover table-striped table-vertical">
                 <tr>
                     <td>Startdatum</td>
-                    <td><?= $appointment['date'] ?></td>
+                    <td><?= $data['appointment']['date'] ?></td>
                 </tr>
                 <tr>
                     <td>Startuur</td>
-                    <td><?= $appointment['start'] ?></td>
+                    <td><?= $data['appointment']['start'] ?></td>
                 </tr>
                 <tr>
                     <td>Einduur</td>
-                    <td><?= $appointment['end'] ?></td>
+                    <td><?= $data['appointment']['end'] ?></td>
                 </tr>
                 <tr>
                     <td>Beschrijving</td>
-                    <td><?= $appointment['description'] ?></td>
+                    <td><?= $data['appointment']['description'] ?></td>
                 </tr>
                 <tr>
                     <td>Locatie</td>
-                    <td><?= $appointment['location'] ?></td>
+                    <td><?= $data['appointment']['location'] ?></td>
                 </tr>
                 <tr>
                     <td>Chronologie</td>
                     <td>
-                        <?php if($appointment['chronological']) { ?>
+                        <?php if($data['appointment']['chronological']) { ?>
                             Inschrijvingen verlopen verplicht in chronologische volgorde.
                         <?php } else { ?>
                             Inschrijvingen kunnen op elk tijdstip.
@@ -75,7 +53,7 @@ $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
                 </p>
             </div>
 
-            <p><a href="<?= base_url() ?>" class="btn btn-default">Terug</a></p>
+            <p><a href="<?= external_url() ?>" class="btn btn-default">Terug</a></p>
             <?php include_once partials_url() . 'message.php' ?>
         </div>
         <?php include_once partials_url() . 'scripts.php' ?>

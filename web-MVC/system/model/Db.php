@@ -51,7 +51,7 @@ class Db
         return $stmt;
     }
     
-    public function lastInsertId(){ $this->_db->lastInsertId();}
+    public function lastInsertId(){ return $this->_db->lastInsertId();}
 
     /* ORM functions (optional)
     public function queryAll($sql, $type, $arguments = array())

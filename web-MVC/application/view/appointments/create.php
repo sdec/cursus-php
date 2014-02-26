@@ -1,56 +1,5 @@
 <?php 
-define('BASE_URL', '../');
-require_once BASE_URL . 'includes/config/routes.php';
-require_once config_url() . 'sessions.php';
-require_once config_url() . 'database.php';
-require_once models_url() . 'UserModel.php';
-require_once models_url() . 'AppointmentModel.php';
-require_once helpers_url()  . 'form_helper.php';
 
-if (!loggedin())
-    redirect('profile/login.php');
-
-if (userdata('accesslevel') < LECTURER)
-    redirect('appointments/view.php');
-
-
-if(isset($_POST['submit'])) {
-    if(isset($_POST['date']) && isset($_POST['start']) && isset($_POST['end']) && isset($_POST['description']) && isset($_POST['location'])) {
-        
-        set_value('date', $_POST['date']);
-        set_value('start', $_POST['start']);
-        set_value('end', $_POST['end']);
-        set_value('description', $_POST['description']);
-        set_value('location', $_POST['location']);
-        set_value('chronological', isset($_POST['chronological']));
-        
-        if(isMinLength('description', 4) == FALSE)
-            set_error ('description', 'Het omschrijvingsveld moet minstens 4 karakters lang zijn');
-        
-        if(isMinLength('location', 3) == FALSE)
-            set_error ('location', 'Het locatieveld moet minstens 3 karakters lang zijn');
-        
-        if(isMaxLength('location', 32) == FALSE)
-            set_error ('location', 'Het locatieveld veld max maximum 32 karakters lang zijn');
-        
-        if(isMaxLength('description', 128) == FALSE) 
-                set_error ('description', 'Het omschrijvingsveld max maximum 128 karakters lang zijn');
-        
-        if(hasErrors() == FALSE) {
-            if($appointmentid = createAppointment(set_value('date').' '.set_value('start'), set_value('date').' '.set_value('end'), set_value('description'), set_value('location'), set_value('chronological'))) {
-                redirect('appointments/create_success.php?appointmentid='. $appointmentid);
-            } else {
-                message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
-            }
-        }
-    }
-} else {
-    // Set default form values
-    set_value('date', date('Y-m-d', time()));
-    set_value('start', '08:00');
-    set_value('end', '16:00');
-}
-    
 ?>
 <!DOCTYPE html>
 <html>
@@ -64,7 +13,7 @@ if(isset($_POST['submit'])) {
             <h1>Afspraak maken</h1>
 
             <div class="well">
-                <form method="POST" action="<?= base_url() ?>appointments/create.php" role="form" class="form-horizontal">
+                <form method="POST" role="form" class="form-horizontal">
                     <div class="form-group">
                         <label for="date" class="col-lg-2 control-label">Datum</label>
                         <div class="col-lg-4">
