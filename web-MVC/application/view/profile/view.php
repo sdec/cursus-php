@@ -1,14 +1,4 @@
-<?php
-
-define('BASE_URL', '../');
-require_once BASE_URL . 'includes/config/routes.php';
-require_once config_url() . 'sessions.php';
-require_once config_url() . 'database.php';
-require_once models_url() . 'UserModel.php';
-
-$user = (isset($_GET['username'])) ? loadUser($_GET['username']) : loadUser(userdata('username'));
-
-?>
+<?php global $user; ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -18,7 +8,6 @@ $user = (isset($_GET['username'])) ? loadUser($_GET['username']) : loadUser(user
     <body>
         <?php include_once partials_url() . 'navigation.php' ?>
         <div class="container">
-
             <h1>Profiel</h1>
             <table class="table table-hover table-striped table-vertical">
                 <tr>

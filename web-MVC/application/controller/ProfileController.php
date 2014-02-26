@@ -120,6 +120,12 @@ class ProfileController extends Controller{
         $this->render("register");
     }
     
+    public function view(){
+        global $user;
+        $user = (isset($_GET['username'])) ? $this->usermodel->loadUser($_GET['username']) : $this->usermodel->loadUser(userdata('username'));
+        $this->render('view');
+    }
+    
     public function logout(){
         if(!loggedin()) //Can't logout if you're not logged in
             redirect('index.php');
