@@ -350,5 +350,16 @@ class AppointmentsController extends Controller{
             message("Het tijdsslot werd successvol gedelete!", "success");
         $this->edit($appointmentid);
     }
+    
+    public function myAppointments(){
+        if(!loggedin())
+            redirect('');
+        
+        global $data;
+        $data['appointments'] = $this->appointmentmodel->loadAllAppointments(userdata('userid'));
+        $data['search'] = '';
+        
+        $this->render('index');
+    }
 }
 ?>

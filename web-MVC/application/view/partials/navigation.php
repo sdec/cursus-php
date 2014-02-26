@@ -26,7 +26,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
                             <li><a tabindex="-1" href="<?= external_url();?>profile/view">Mijn profiel</a></li>
-                            <li><a tabindex="-1" href="<?= external_url();?>profile/appointments">Mijn afspraken</a></li>
+                            <li><a tabindex="-1" href="<?= external_url();?>appointments/myAppointments">Mijn afspraken</a></li>
                             <li><a tabindex="-1" href="<?= external_url();?>profile/logout">Log uit</a></li>
                         </ul>
                     <?php } else { ?>
