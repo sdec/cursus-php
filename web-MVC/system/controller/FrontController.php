@@ -49,7 +49,9 @@ class FrontController
 
     private function setController($controller)
     {
-        $controller = ($controller) ? $controller : self::DEFAULT_CONTROLLER;
+        $controller = ($controller)
+                ? $controller
+                : $temp = (loggedIn()) ? self::DEFAULT_CONTROLLER_LOGGEDIN : self::DEFAULT_CONTROLLER;
 
         $controllerfile = APPLICATION_PATH . self::CONTROLLER_PATH . ucfirst(strtolower($controller)) . 'Controller' . '.php';
 

@@ -1,24 +1,5 @@
 <?php
-
-define('BASE_URL', './');
-require_once BASE_URL . 'includes/config/routes.php';
-require_once config_url()   . 'sessions.php';
-require_once config_url() . 'database.php';
-require_once models_url() . 'UserModel.php';
-require_once models_url() . 'AppointmentModel.php';
-
-if(!loggedin())
-    redirect('profile/login.php');
-
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-        
-$appointments = strlen($search) 
-    ? searchAppointments($search) 
-    : loadAllAppointments();
-        
-$data['appointments'] = $appointments;
-$data['search'] = $search;
-
+global $data;
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,8 +24,8 @@ $data['search'] = $search;
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ($appointments) { ?>
-                        <?php foreach ($appointments as $appointment) { ?>
+                    <?php if ($data['appointments']) { ?>
+                        <?php foreach ($data['appointments'] as $appointment) { ?>
                             <tr>
                                 <td>
                                     <a href="<?= base_url() ?>appointments/detail.php?appointmentid=<?= $appointment['appointmentid'] ?>">
@@ -71,10 +52,10 @@ $data['search'] = $search;
                     <?php } ?>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-9">
-                    <form class="form-horizontal" method="get" action="<?= base_url() ?>" role="form">
+                    <form class="form-horizontal" method="post" role="form">
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="search" name="search" 
+                                <input type="text" class="form-control" id="search" name="search" value="<?=$data['search'];?>"
                                        placeholder="Zoek afspraken op beschrijving, organisator, locatie, vakken, start & einddata, studenten, ..." />
                             </div>
                             <div class="col-sm-2">
@@ -86,10 +67,10 @@ $data['search'] = $search;
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <?php if (strlen($search)) { ?>
+                    <?php if (strlen($data['search'])) { ?>
                         <hr />
-                        <p>Er werden <strong><?= $appointments == FALSE ? 0 : count((array) $appointments) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $search ?>".</p>
-                        <a href="<?= base_url() ?>" class="btn btn-default">Terug</a>
+                        <p>Er werden <strong><?= $data['appointments'] == FALSE ? 0 : count((array) $data['appointments']) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $data['search'];?>".</p>
+                        <a href="<?= external_url() ?>" class="btn btn-default">Terug</a>
                     <?php } ?>
                 </div>
             </div>

@@ -2,15 +2,18 @@
 
 class Controller
 {
+    protected $controllername;
     /*protected $_template;
     protected $_loader;
     protected $_input;
     protected $_validator;
-    protected $_auth;
+    protected $_auth;*/
 
-    public function __construct()
+    public function __construct($controllername = 'profile')
     {
-        // Loader initialiseren
+        $this->controllername = $controllername;
+    }
+        /* Loader initialiseren
         $this->_loader = Loader::getInstance();
 
         // input class initialiseren
@@ -97,7 +100,7 @@ class Controller
     }*/
 
     protected function render($filename){
-        require_once(views_url() . "profile/$filename.php");
+        require_once(views_url() . "$this->controllername/$filename.php");
     }
     
 }

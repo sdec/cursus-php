@@ -1,18 +1,28 @@
 <?php
-    require_once helpers_url() . 'form_helper.php';
+require_once helpers_url() . 'form_helper.php';
+require_once models_url() . 'AppointmentMapper.php';
 
-class ProfileController extends Controller{
-    private $usermodel;
+class AppointmentsController extends Controller{
+    private $appointmentmodel;
     
     public function __construct() {
-        $this->usermodel = new User_Mapper();
+        parent::__construct('appointments');
+        $this->appointmentmodel = new Appointment_Mapper();
     }
     
     public function index(){
-        if(isset($_POST['submit']))
-            $this->login();
+        if(!loggedIn())
+            redirect('');
+        $search = isset($_POST['search']) ? $_POST['search'] : '';
+        $appointments = strlen($search) 
+            ? $this->appointmentmodel->searchAppointments($search) 
+            : $this->appointmentmodel->loadAllAppointments();
+
+        global $data;
+        $data['appointments'] = $appointments;
+        $data['search'] = $search;
         
-        $this->render("login");
+        $this->render("index");
     }
     
     public function login(){

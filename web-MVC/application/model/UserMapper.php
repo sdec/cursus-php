@@ -6,24 +6,11 @@ define('LECTURER', 1);
 define('ADVISOR', 2);
 define('ADMIN', 3);
 
-class User_Mapper
-{
+class User_Mapper {
     private $_db;
     
     public function __construct(){
         $this->_db = Db::getInstance();
-    }
-    
-    function sanitize($input) {
-        //global $link;
-        if (is_array($input)) {
-            $arr = array();
-            foreach ($input as $element) {
-          //      $arr[] = mysqli_real_escape_string($link, $element);
-            }
-            return $arr;
-        }
-        return $input;//mysqli_real_escape_string($link, $input);
     }
 
     function encryptPassword($password) {
@@ -41,7 +28,7 @@ class User_Mapper
            FROM users
            WHERE username = :username
            AND password = :hashedPassword
-       ";
+        ";
  
         $arguments = array(
             ':username' => $username,
@@ -71,7 +58,6 @@ class User_Mapper
     }
 
     function registerUser($username, $firstname, $lastname, $password, $email) {
-
         $hashedPassword = $this->encryptPassword($password);
 
         $sql = "
@@ -134,17 +120,16 @@ class User_Mapper
     }
 
     function searchUsers($search) {
-        $search = $this->sanitize($search);
-
+        $search = '%'.$search.'%'; //add substring query signs
         $sql = "
             SELECT *
             FROM users
             WHERE
-                username LIKE %:search%
-                OR firstname LIKE %:search%
-                OR lastname LIKE %:search%
-                OR email LIKE %:search%
-                OR CONCAT(firstname, ' ', lastname) LIKE %:search%
+                username LIKE :search
+                OR firstname LIKE :search
+                OR lastname LIKE :search
+                OR email LIKE :search
+                OR CONCAT(firstname, ' ', lastname) LIKE :search
 
             GROUP BY username";
         
@@ -161,7 +146,6 @@ class User_Mapper
     }
 
     function deleteUser($userid) {
-        $userid = $this->sanitize($userid);
         $sql = "
             DELETE FROM users
             WHERE userid = :userid;
