@@ -41,9 +41,7 @@ class User_Mapper
     function isCorrectCredentialsUser($username, $password) {
 
         $hashedPassword = encryptPassword($password);
-
-        //$sql = "INSERT INTO vehicles (color, brand) VALUES (:color, :brand);";
-        //http://stackoverflow.com/questions/767026/how-can-i-properly-use-a-pdo-object-for-a-select-query
+        
         $sql = "
             SELECT *
             FROM users
@@ -54,12 +52,8 @@ class User_Mapper
             ':username' => $username,
             ':hashedPassword' => $hashedPassword,
         );
-        $result = $this->_db->queryOne($sql, 'User', $arguments);
-        var_dump($result);
-        return ($result) ? true : false;
-        
-        //$result = mysqli_query(DB_Link(), $sql);
-        //return mysqli_num_rows($result) > 0;
+        $result = $this->_db->execute($sql, $arguments);
+        return $result->rowCount() > 0;
     }
 
     function registerUser($username, $firstname, $lastname, $password, $email) {

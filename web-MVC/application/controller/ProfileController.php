@@ -40,6 +40,11 @@ class ProfileController extends Controller{
                 if(hasErrors() == FALSE) {
 
                     if($this->usermodel->isCorrectCredentialsUser(set_value('username'), set_value('password'))) {
+                        
+                        echo '<pre>';
+                        print_r($this->usermodel->loadUser(set_value('username')));
+                        echo '</pre>';
+                        
                         set_userdata($this->usermodel->loadUser(set_value('username')));
                         $this->render('login_success');
                         die();
