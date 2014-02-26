@@ -1,73 +1,5 @@
 <?php 
-define('BASE_URL', '../');
-require_once BASE_URL . 'includes/config/routes.php';
-require_once config_url() . 'sessions.php';
-require_once config_url() . 'database.php';
-require_once models_url() . 'UserModel.php';
-require_once models_url() . 'AppointmentModel.php';
-require_once helpers_url()  . 'form_helper.php';
-
-if (!loggedin())
-    redirect('profile/login.php');
-
-if (userdata('accesslevel') < LECTURER)
-    redirect('appointments/view.php');
-
-if(!isset($_GET['appointmentid']))
-    redirect('');
-
-$appointment = loadAppointment($_GET['appointmentid']);
-if($appointment == FALSE)
-    redirect('');
-
-$slots = slots($appointment['appointmentid']);
-
-if(isset($_POST['submit'])) {
-    if(isset($_POST['date']) && isset($_POST['start']) && isset($_POST['end']) && isset($_POST['description']) && isset($_POST['location'])) {
-        
-        set_value('date', $_POST['date']);
-        set_value('start', $_POST['start']);
-        set_value('end', $_POST['end']);
-        set_value('description', $_POST['description']);
-        set_value('location', $_POST['location']);
-        set_value('chronological', isset($_POST['chronological']));
-        
-        if(isMinLength('description', 4) == FALSE)
-            set_error ('description', 'Het omschrijvingsveld moet minstens 4 karakters lang zijn');
-        
-        if(isMinLength('location', 3) == FALSE)
-            set_error ('location', 'Het locatieveld moet minstens 3 karakters lang zijn');
-        
-        if(isMaxLength('description', 128) == FALSE) 
-                set_error ('description', 'Het omschrijvingsveld max maximum 128 karakters lang zijn');
-        
-        if(isMaxLength('location', 32) == FALSE)
-            set_error ('location', 'Het locatieveld veld max maximum 32 karakters lang zijn');
-        
-        if(hasErrors() == FALSE) {
-            editAppointment($appointment['appointmentid'], 
-                    set_value('date').' '.set_value('start'), 
-                    set_value('date').' '.set_value('end'), 
-                    set_value('description'), set_value('location'), set_value('chronological'));
-            
-            redirect('appointments/edit_success.php?appointmentid='. $appointment['appointmentid']);
-        }
-    }
-} else {
-    
-    // Set default form values from database
-    $appointment['date'] = date('Y-m-d', strtotime($appointment['start_timestamp']));
-    $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
-    $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
-    
-    set_value('date', $appointment['date']);
-    set_value('start', $appointment['start']);
-    set_value('end', $appointment['end']);
-    set_value('description', $appointment['description']);
-    set_value('location', $appointment['location']);
-    set_value('chronological', $appointment['chronological']);
-}
-    
+global $data;
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,7 +14,7 @@ if(isset($_POST['submit'])) {
                 <div class="col-lg-6">
                     <h3>Wijzig afspraakdetails</h3>
                     <div class="well">
-                        <form method="POST" action="<?= base_url() ?>appointments/edit.php?appointmentid=<?= $appointment['appointmentid'] ?>" role="form" class="form-horizontal">
+                        <form method="POST" role="form" class="form-horizontal">
                             <div class="form-group">
                                 <label for="date" class="col-lg-2 control-label">Datum</label>
                                 <div class="col-lg-10">
@@ -135,7 +67,7 @@ if(isset($_POST['submit'])) {
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
-                                    <input type="checkbox" id="chronological" name="chronological" <?= $appointment['chronological'] ? 'checked="checked"' : '' ?>>
+                                    <input type="checkbox" id="chronological" name="chronological" <?= $data['appointment']['chronological'] ? 'checked="checked"' : '' ?>>
                                     Verplicht inschrijvingen in chronologische volgorde
                                 </div>
                                 <div class="col-lg-6">
@@ -152,7 +84,7 @@ if(isset($_POST['submit'])) {
                 </div>
                 <div class="col-lg-6">
                     <h3>Wijzig tijdsloten</h3>
-                    <?php if ($slots) { ?>
+                    <?php if ($data['slots']) { ?>
                         <table class="table table-hover table-striped">
                             <thead>
                                 <tr>
@@ -163,13 +95,13 @@ if(isset($_POST['submit'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($slots as $slot) { ?>
+                                <?php foreach ($data['slots'] as $slot) { ?>
                                     <tr>
                                         <td><?= $slot['lecturer'] ?></td>
                                         <td><?= $slot['start'] ?> - <?= $slot['end'] ?></td>
                                         <td><?= $slot['subscriber'] ?></td>
                                         <td>
-                                            <a href="<?= base_url() ?>appointments/deletetimeslot.php?appointmentid=<?= $appointment['appointmentid'] ?>&appointmentslotid=<?= $slot['appointmentslotid'] ?>">
+                                            <a href="<?= external_url() ?>appointments/deletetimeslot/<?= $data['appointment']['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
                                                 <span class="glyphicon glyphicon-remove-sign"></span> Verwijder
                                             </a>
                                         </td>
@@ -182,7 +114,7 @@ if(isset($_POST['submit'])) {
                     <?php } ?>
                 </div>
             </div>
-            <p><a href="<?= base_url() ?>appointments/detail.php?appointmentid=<?= $appointment['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
+            <p><a href="<?= external_url() ?>appointments/detail/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
             <?php include_once partials_url() . 'message.php' ?>
         </div>
         <?php include_once partials_url() . 'scripts.php' ?>

@@ -182,8 +182,8 @@ class AppointmentsController extends Controller{
         $this->render('create');
     }
     
-    public function delete($appointmentid = null){
-        if(!loggedin() || userdata('accesslevel') < LECTURER || !isset($appointmentid))
+    public function delete($appointmentid = -1){
+        if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1)
             redirect('');
 
         $appointment = $this->appointmentmodel->deleteAppointment($appointmentid);
@@ -196,5 +196,77 @@ class AppointmentsController extends Controller{
         }
         redirect('');
     }
+
+    public function edit($appointmentid = -1){
+        if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1)
+            redirect('');
+
+        $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
+        if (!$appointment['appointmentid']){
+            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            $this->detail($appointmentid);
+            die();
+        }
+
+        $slots = $this->appointmentmodel->slots($appointment['appointmentid']);
+
+        if(isset($_POST['submit'])) {
+            if(isset($_POST['date']) && isset($_POST['start']) && isset($_POST['end']) && isset($_POST['description']) && isset($_POST['location'])) {
+
+                set_value('date', $_POST['date']);
+                set_value('start', $_POST['start']);
+                set_value('end', $_POST['end']);
+                set_value('description', $_POST['description']);
+                set_value('location', $_POST['location']);
+                set_value('chronological', isset($_POST['chronological']));
+
+                if(isMinLength('description', 4) == FALSE)
+                    set_error ('description', 'Het omschrijvingsveld moet minstens 4 karakters lang zijn');
+
+                if(isMinLength('location', 3) == FALSE)
+                    set_error ('location', 'Het locatieveld moet minstens 3 karakters lang zijn');
+
+                if(isMaxLength('description', 128) == FALSE) 
+                    set_error ('description', 'Het omschrijvingsveld max maximum 128 karakters lang zijn');
+
+                if(isMaxLength('location', 32) == FALSE)
+                    set_error ('location', 'Het locatieveld veld max maximum 32 karakters lang zijn');
+
+                if(hasErrors() == FALSE) {
+                    $this->appointmentmodel->editAppointment($appointment['appointmentid'], 
+                        set_value('date').' '.set_value('start'), 
+                        set_value('date').' '.set_value('end'), 
+                        set_value('description'), set_value('location'), set_value('chronological'));
+                    global $data;
+                    $appointment = $this->appointmentmodel->loadAppointment($appointment['appointmentid']);
+                    $appointment['date'] = date('Y-m-d', strtotime($appointment['start_timestamp']));
+                    $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
+                    $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
+                    $data['appointment'] = $appointment;
+                    $this->render('edit_success');
+                    die();
+                }
+            }
+        } else {
+
+            // Set default form values from database
+            $appointment['date'] = date('Y-m-d', strtotime($appointment['start_timestamp']));
+            $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
+            $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
+
+            set_value('date', $appointment['date']);
+            set_value('start', $appointment['start']);
+            set_value('end', $appointment['end']);
+            set_value('description', $appointment['description']);
+            set_value('location', $appointment['location']);
+            set_value('chronological', $appointment['chronological']);
+        }
+        
+        global $data;
+        $data['slots'] = $slots;
+        $data['appointment'] = $appointment;
+        $this->render('edit');
+    }
+    
 }
 ?>
