@@ -14,7 +14,7 @@
             <?php if (loggedin()) { ?>
                 <?php if (userdata('accesslevel') >= LECTURER) { ?>
                     <ul class="nav navbar-nav">
-                        <li><a href="<?= base_url() ?>admin/users.php">Gebruikers</a></li>
+                        <li><a href="<?= base_url() ?>admin/users">Gebruikers</a></li>
                     </ul>
                 <?php } ?>
             <?php } ?>
@@ -26,9 +26,9 @@
                             <?= userdata('username') ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
-                            <li><a tabindex="-1" href="view.php">Mijn profiel</a></li>
-                            <li><a tabindex="-1" href="appointments.php">Mijn afspraken</a></li>
-                            <li><a tabindex="-1" href="logout.php">Log uit</a></li>
+                            <li><a tabindex="-1" href="profile/view">Mijn profiel</a></li>
+                            <li><a tabindex="-1" href="profile/appointments">Mijn afspraken</a></li>
+                            <li><a tabindex="-1" href="profile/logout">Log uit</a></li>
                         </ul>
                     <?php } else { ?>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
@@ -36,8 +36,8 @@
                             Profiel <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
-                            <li><a tabindex="-1" href="register.php">Registreren</a></li>
-                            <li><a tabindex="-1" href="login.php">Log in</a></li>
+                            <li><a tabindex="-1" href="profile/register">Registreren</a></li>
+                            <li><a tabindex="-1" href="profile/login">Log in</a></li>
                         </ul>
                     <?php } ?>
                 </li>

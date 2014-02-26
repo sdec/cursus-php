@@ -45,6 +45,10 @@ function models_url() {
     return base_url() . 'application/model/';
 }
 
+function systemmodel_url() {
+    return base_url() . 'system/model/';
+}
+
 function views_url(){
     return base_url() . 'application/view/';
 }

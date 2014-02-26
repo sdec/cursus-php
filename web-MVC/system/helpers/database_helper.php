@@ -1,11 +1,11 @@
 <?php
 
 function DB_Link() {
-    global $link;
-    return $link;
+    //global $link;
+    return Db::getInstance(); //$link;
 }
 
-function sanitize($input) {
+/*function sanitize($input) {
     global $link;
     if (is_array($input)) {
         $arr = array();
@@ -15,4 +15,4 @@ function sanitize($input) {
         return $arr;
     }
     return mysqli_real_escape_string($link, $input);
-}
+}*/

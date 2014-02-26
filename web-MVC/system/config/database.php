@@ -10,15 +10,16 @@ define('SQL_DB', 'cursusphp');
 //$link = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB) or die(mysql_error());
 
 
-$port = ':81';
+//$port = ':81';
 $db_config = array(
     'driver' => 'mysql',
     'username' => 'root',
     'password' => '',
     //'schema' => 'cursusphp', // verander dit in je eigen schema
     'dsn' => array(
-        'host' => '127.0.0.1'.$port,
         'dbname' => 'cursusphp', // verander dit in de db van je reeks
+        'host' => '127.0.0.1',
+        'port' => '3306',
     )
 );
 

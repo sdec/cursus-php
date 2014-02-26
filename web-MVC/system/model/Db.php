@@ -9,18 +9,18 @@ class Db
     {
 
         global $db_config;
-        $dsn = $db_config['driver'] . ':';
+        $dsn = $db_config['driver'] . ':'; //I.E. 'mysql:dbname=cursusphp;host=127.0.0.1;port=3306';
         foreach ($db_config['dsn'] as $key => $value) {
             $dsn .= $key . '=' . $value . ';';
         }
 
         try {
-            $this->_db = new PDO($dsn, $db_config['username'], $db_config['password']);
+            $this->_db = new PDO($dsn, $db_config['username'], $db_config['password']); //I.E. 'mysql:dbname=cursusphp;host=127.0.0.1:81';
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            if (($db_config['driver'] == 'pgsql') && isset($db_config['schema'])) {
+            /*if (($db_config['driver'] == 'pgsql') && isset($db_config['schema'])) {
                 $this->_db->query(sprintf("SET SEARCH_PATH TO %s", $db_config['schema']));
-            }
+            }*/
         } catch (PDOException $e) {
             error_log($e->getMessage());
         }
