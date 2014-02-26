@@ -181,5 +181,20 @@ class AppointmentsController extends Controller{
         }
         $this->render('create');
     }
+    
+    public function delete($appointmentid = null){
+        if(!loggedin() || userdata('accesslevel') < LECTURER || !isset($appointmentid))
+            redirect('');
+
+        $appointment = $this->appointmentmodel->deleteAppointment($appointmentid);
+        if($appointment == FALSE){
+            message("Onze excuses, er is *iets* mis gegaan met het deleten van afspraak met id $appointmentid!", "danger");
+            $this->detail($appointment);
+            die();
+        } else {
+            message("Uw afspraak werd succesvol geannuleerd!");
+        }
+        redirect('');
+    }
 }
 ?>
