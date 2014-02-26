@@ -51,6 +51,7 @@ class Db
         return $stmt;
     }
 
+    /* ORM functions (optional)
     public function queryAll($sql, $type, $arguments = array())
     {
         $stmt = $this->execute($sql, $arguments);
@@ -63,5 +64,5 @@ class Db
         $stmt = $this->execute($sql, $arguments);
 
         return $stmt->fetchObject($type);
-    }
+    }*/
 }

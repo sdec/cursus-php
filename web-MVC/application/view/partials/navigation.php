@@ -1,4 +1,3 @@
-<?php require_once models_url() . 'UserModel.php'; ?>
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -26,9 +25,9 @@
                             <?= userdata('username') ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
-                            <li><a tabindex="-1" href="profile/view">Mijn profiel</a></li>
-                            <li><a tabindex="-1" href="profile/appointments">Mijn afspraken</a></li>
-                            <li><a tabindex="-1" href="profile/logout">Log uit</a></li>
+                            <li><a tabindex="-1" href="<?= external_url();?>profile/view">Mijn profiel</a></li>
+                            <li><a tabindex="-1" href="<?= external_url();?>profile/appointments">Mijn afspraken</a></li>
+                            <li><a tabindex="-1" href="<?= external_url();?>profile/logout">Log uit</a></li>
                         </ul>
                     <?php } else { ?>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
@@ -36,8 +35,8 @@
                             Profiel <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
-                            <li><a tabindex="-1" href="profile/register">Registreren</a></li>
-                            <li><a tabindex="-1" href="profile/login">Log in</a></li>
+                            <li><a tabindex="-1" href="<?= external_url();?>profile/register">Registreren</a></li>
+                            <li><a tabindex="-1" href="<?= external_url();?>profile/login">Log in</a></li>
                         </ul>
                     <?php } ?>
                 </li>

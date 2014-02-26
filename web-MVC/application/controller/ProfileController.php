@@ -1,5 +1,4 @@
 <?php
-    require_once models_url()   . 'UserMapper.php';
     require_once helpers_url()  . 'form_helper.php';
 
 class ProfileController extends Controller{
