@@ -1,12 +1,12 @@
 <?php
-require_once('Db.php');
-require_once('Vehicle.php');
-define('STUDENT', 0);
+require_once(systemmodel_url() . 'Db.php');
+require_once('User.php');
+/*define('STUDENT', 0);
 define('LECTURER', 1);
 define('ADVISOR', 2);
-define('ADMIN', 3);
+define('ADMIN', 3);*/
 
-class Vehicle_Mapper
+class User_Mapper
 {
     private $_db;
     public static $accessLevels = array(
@@ -19,6 +19,18 @@ class Vehicle_Mapper
     public function __construct(){
         $this->_db = Db::getInstance();
     }
+    
+    function sanitize($input) {
+        //global $link;
+        if (is_array($input)) {
+            $arr = array();
+            foreach ($input as $element) {
+          //      $arr[] = mysqli_real_escape_string($link, $element);
+            }
+            return $arr;
+        }
+        return $input;//mysqli_real_escape_string($link, $input);
+    }
 
     function encryptPassword($password) {
         // We first uppercase the password to eliminate case
@@ -30,13 +42,24 @@ class Vehicle_Mapper
 
         $hashedPassword = encryptPassword($password);
 
+        //$sql = "INSERT INTO vehicles (color, brand) VALUES (:color, :brand);";
+        //http://stackoverflow.com/questions/767026/how-can-i-properly-use-a-pdo-object-for-a-select-query
         $sql = "
             SELECT *
             FROM users
-            WHERE username = '" . sanitize($username) . "' AND password = '" . $hashedPassword . "'
+            WHERE username = :username AND password = :hashedPassword
         ";
-        $result = mysqli_query(DB_Link(), $sql);
-        return mysqli_num_rows($result) > 0;
+
+        $arguments = array(
+            ':username' => $username,
+            ':hashedPassword' => $hashedPassword,
+        );
+        $result = $this->_db->queryOne($sql, 'User', $arguments);
+        var_dump($result);
+        return ($result) ? true : false;
+        
+        //$result = mysqli_query(DB_Link(), $sql);
+        //return mysqli_num_rows($result) > 0;
     }
 
     function registerUser($username, $firstname, $lastname, $password, $email) {
@@ -45,8 +68,8 @@ class Vehicle_Mapper
 
         $sql = "
             INSERT INTO users (username, firstname, lastname, password, email) 
-            VALUES ('" . sanitize($username) . "', '" . sanitize($firstname) . "', '" . sanitize($lastname) . "', 
-                '" . sanitize($hashedPassword) . "', '" . sanitize($email) . "');
+            VALUES ('" . $this->sanitize($username) . "', '" . $this->sanitize($firstname) . "', '" . $this->sanitize($lastname) . "', 
+                '" . $this->sanitize($hashedPassword) . "', '" . $this->sanitize($email) . "');
         ";
         mysqli_query(DB_Link(), $sql);
         return mysqli_affected_rows(DB_Link());
@@ -56,7 +79,7 @@ class Vehicle_Mapper
         $sql = "
             SELECT *
             FROM users
-            WHERE username LIKE '" . sanitize($username) . "'
+            WHERE username LIKE '" . $this->sanitize($username) . "'
         ";
         $result = mysqli_query(DB_Link(), $sql);
         return mysqli_num_rows($result) > 0 ? mysqli_fetch_assoc($result) : FALSE;
@@ -66,7 +89,7 @@ class Vehicle_Mapper
         $sql = "
             SELECT *
             FROM users
-            WHERE username LIKE '" . sanitize($username) . "'
+            WHERE username LIKE '" . $this->sanitize($username) . "'
         ";
         $result = mysqli_query(DB_Link(), $sql);
         return mysqli_num_rows($result) > 0;
@@ -104,7 +127,7 @@ class Vehicle_Mapper
     }
 
     function searchUsers($search) {
-        $search = sanitize($search);
+        $search = $this->sanitize($search);
 
         $sql = "
             SELECT *
@@ -127,7 +150,7 @@ class Vehicle_Mapper
     }
 
     function deleteUser($userid) {
-        $userid = sanitize($userid);
+        $userid = $this->sanitize($userid);
         $sql = "
             DELETE FROM users
             WHERE userid = '" . $userid . "';
@@ -139,9 +162,9 @@ class Vehicle_Mapper
     function editUser($userid, $username, $firstname, $lastname, $email, $accesslevel) {
         $sql = "
             UPDATE users
-            SET username = '" . sanitize($username) . "', firstname = '" . sanitize($firstname) . "', 
-                lastname = '" . sanitize($lastname) . "', email = '" . sanitize($email) . "', accesslevel = '" . sanitize($accesslevel) . "'
-            WHERE userid = '" . sanitize($userid) . "';
+            SET username = '" . $this->sanitize($username) . "', firstname = '" . $this->sanitize($firstname) . "', 
+                lastname = '" . $this->sanitize($lastname) . "', email = '" . $this->sanitize($email) . "', accesslevel = '" . $this->sanitize($accesslevel) . "'
+            WHERE userid = '" . $this->sanitize($userid) . "';
         ";
         mysqli_query(DB_Link(), $sql);
         return mysqli_affected_rows(DB_Link()) > 0;
@@ -152,8 +175,8 @@ class Vehicle_Mapper
         $sql = "INSERT INTO vehicles (color, brand) VALUES (:color, :brand);";
 
         $arguments = array(
-            $object->getColor(),
-            $object->getBrand()
+            $object->getUsername(),
+            $object->getFirstname()
         );
 
         return $this->_db->execute($sql, $arguments);
