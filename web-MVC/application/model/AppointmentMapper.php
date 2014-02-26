@@ -219,8 +219,9 @@ class Appointment_Mapper{
             $diff = strtotime($start_timestamp) + (strtotime(date('Y-m-d H:i:s', strtotime($interval_timestamp))) - strtotime(date('Y-m-d', strtotime($interval_timestamp))));
             $slotEnd = date('Y-m-d H:i:s', $diff);
             
-            array_push($batchData, "(:appointmentid, :lecturerid, :start_timestamp, :slotEnd".$counter.")");
+            array_push($batchData, "(:appointmentid, :lecturerid, :start".$counter.", :slotEnd".$counter.")");
             $arguments[(':slotEnd'.$counter)] = $slotEnd;
+            $arguments[(':start'.$counter)] = $start_timestamp;
             
             $start_timestamp = $slotEnd;
         }

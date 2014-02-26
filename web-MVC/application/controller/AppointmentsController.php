@@ -4,9 +4,11 @@ require_once models_url() . 'AppointmentMapper.php';
 
 class AppointmentsController extends Controller{
     private $appointmentmodel;
+    private $usermodel;
     
     public function __construct() {
         parent::__construct('appointments');
+        $this->usermodel = new User_Mapper();
         $this->appointmentmodel = new Appointment_Mapper();
     }
     
@@ -268,5 +270,85 @@ class AppointmentsController extends Controller{
         $this->render('edit');
     }
     
+    public function addtimeslots($appointmentid = -1){
+        if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1)
+            redirect('');
+
+        $lecturers = $this->usermodel->lecturers();
+        $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
+        if (!$appointment['appointmentid']){
+            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            $this->detail($appointmentid);
+            die();
+        }
+
+        if(isset($_POST['submit'])) {
+            if(isset($_POST['start']) && isset($_POST['end']) && isset($_POST['interval'])) {
+                $lecturerid = $_POST['lecturerid'];
+                set_value('start', $_POST['start']);
+                set_value('end', $_POST['end']);
+                set_value('interval', $_POST['interval']);
+
+                $start_timestamp = date('Y-m-d', strtotime($appointment['start_timestamp'])) . ' ' . set_value('start');
+                $end_timestamp = date('Y-m-d', strtotime($appointment['start_timestamp'])) . ' ' . set_value('end');
+                $interval_timestamp = date('Y-m-d', strtotime($appointment['start_timestamp'])) . ' ' . set_value('interval');
+
+                $start_end = strtotime($start_timestamp) + (strtotime(date('Y-m-d H:i:s', strtotime($interval_timestamp))) - strtotime(date('Y-m-d', strtotime($interval_timestamp))));
+                // First slot must not exceed the end of the appointment for this lecturer
+                if ($start_end <= strtotime($end_timestamp)) {
+
+                    // Starting hour must not lie before the starting point of the appointment
+                    if (strtotime($start_timestamp) >= strtotime($appointment['start_timestamp'])) {
+
+                        // Ending hour must not lie before the starting point of the appointment
+                        if (strtotime($end_timestamp) <= strtotime($appointment['end_timestamp'])) {
+
+                            if ($this->appointmentmodel->addTimeSlotsAppointment($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
+                                global $data;
+                                $data['appointmentid'] = $appointmentid;
+                                $this->render('addtimeslots_success');
+                                die();
+                            } else {
+                                message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
+                            }
+                        } else {
+                            message('Het einduur van de afspraken moet gelijk aan of vroeger zijn dan '
+                                    . date('H:i', strtotime($appointment['end_timestamp'])), 'danger');
+                        }
+                    } else {
+                        message('Het startuur van de afspraken moet gelijk aan of later zijn dan '
+                                . date('H:i', strtotime($appointment['start_timestamp'])), 'danger');
+                    }
+                } else {
+                    message('Het einde van uw eerste slot mag het einduur niet overschrijden', 'danger');
+                }
+            }
+        } else {
+            // Set default form values
+            set_value('start', date('H:i', strtotime($appointment['start_timestamp'])));
+            set_value('end', date('H:i', strtotime($appointment['end_timestamp'])));
+            set_value('interval', '00:15');
+        }
+        
+        global $data;
+        $data['lecturers'] = $lecturers;
+        $data['appointment'] = $appointment;
+        $this->render('addtimeslots');
+    }
+    
+    public function deletetimeslot($appointmentid = -1, $appointmentSlotid = -1){
+        if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1 || $appointmentSlotid == -1)
+            redirect('');
+        $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
+        if (!$appointment['appointmentid']){
+            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            $this->detail($appointmentid);
+            die();
+        }
+
+        if($this->appointmentmodel->deleteTimeSlotAppointment($appointmentSlotid))
+            message("Het tijdsslot werd successvol gedelete!", "success");
+        $this->edit($appointmentid);
+    }
 }
 ?>
