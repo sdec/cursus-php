@@ -7,13 +7,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<?= base_url() ?>">Afsprakenplanner</a>
+            <a class="navbar-brand" href="<?= external_url();?>">Afsprakenplanner</a>
         </div>
         <div class="collapse navbar-collapse">
             <?php if (loggedin()) { ?>
                 <?php if (userdata('accesslevel') >= LECTURER) { ?>
                     <ul class="nav navbar-nav">
-                        <li><a href="<?= base_url() ?>admin/users">Gebruikers</a></li>
+                        <li><a href="<?= external_url();?>admin/users">Gebruikers</a></li>
                     </ul>
                 <?php } ?>
             <?php } ?>

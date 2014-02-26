@@ -36,7 +36,7 @@ require_once(APPLICATION_PATH . 'controller/AdminController.php');*/
 session_start();
 
 require_once SYSTEM_PATH . 'helpers/session_helper.php';
-echo($_SERVER['HTTP_HOST']);
+
 $frontController = new FrontController();
 $frontController->run();
 

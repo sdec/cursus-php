@@ -39,7 +39,8 @@ class User_Mapper
         $sql = "
            SELECT *
            FROM users
-           WHERE username = :username AND password = :hashedPassword
+           WHERE username = :username
+           AND password = :hashedPassword
        ";
  
         $arguments = array(
@@ -125,11 +126,11 @@ class User_Mapper
             SELECT *
             FROM users
             WHERE
-                username LIKE '%$search%'
-                OR firstname LIKE '%$search%'
-                OR lastname LIKE '%$search%'
-                OR email LIKE '%$search%'
-                OR CONCAT(firstname, ' ', lastname) LIKE '%$search%'
+                username LIKE '%" . $search. "%'
+                OR firstname LIKE '%" . $search. "%'
+                OR lastname LIKE '%" . $search. "%'
+                OR email LIKE '%" . $search. "%'
+                OR CONCAT(firstname, ' ', lastname) LIKE '%" . $search . "%'
 
             GROUP BY username";
 
