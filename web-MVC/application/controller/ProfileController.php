@@ -1,5 +1,5 @@
 <?php
-    require_once helpers_url() . 'form_helper.php';
+require_once helpers_url() . 'form_helper.php';
 
 class ProfileController extends Controller{
     private $usermodel;
