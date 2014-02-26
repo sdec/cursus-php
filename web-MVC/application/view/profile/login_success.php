@@ -1,10 +1,3 @@
-<?php
-
-define('BASE_URL', '../');
-require_once BASE_URL . 'includes/config/routes.php';
-require_once config_url() . 'sessions.php';
-
-?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,7 +12,7 @@ require_once config_url() . 'sessions.php';
                     <?= userdata('lastname') ?> 
                     (<?= userdata('username') ?>)</h1>
             <p>U bent nu ingelogd.</p>
-            <p><a class="btn btn-primary" href="<?= base_url() ?>">Ok</a></p>
+            <p><a class="btn btn-primary" href="<?= external_url() ?>">Ok</a></p>
             
             <?php include_once partials_url() . 'message.php' ?>
         </div>

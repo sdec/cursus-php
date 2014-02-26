@@ -2,7 +2,8 @@
 
 class FrontController
 {
-    const DEFAULT_CONTROLLER = "Login";
+    const DEFAULT_CONTROLLER = "Profile";
+    const DEFAULT_CONTROLLER_LOGGEDIN = "Appointments";
     const DEFAULT_ACTION = "index";
     const CONTROLLER_PATH = 'controller/';
     const CONTROLLER_FILE = 'index.php';
@@ -11,23 +12,19 @@ class FrontController
     private $action = self::DEFAULT_ACTION;
     private $params = array();
 
-    //private $_loader;
-    //private $_controllerObject;
-
     public function __construct()
     {
-        $this->_loader = Loader::getInstance();
         $this->parseUri();
     }
 
     private function parseUri()
     {
         // strip the controllerfile out of the scriptname
-        $scriptPrefix = str_replace(self::CONTROLLER_FILE, '', $_SERVER['SCRIPT_NAME']);
+        $scriptprefix = str_replace(self::CONTROLLER_FILE, '', $_SERVER['SCRIPT_NAME']);
         $uri = str_replace(self::CONTROLLER_FILE, '', $_SERVER['REQUEST_URI']);
 
         // get the part of the uri, starting from the position after the scriptprefix
-        $path = substr($uri, strlen($scriptPrefix));
+        $path = substr($uri, strlen($scriptprefix));
 
         // strip non-alphanumeric characters out of the path
         $path = preg_replace('/[^a-zA-Z0-9]\//', "", $path);
@@ -53,10 +50,16 @@ class FrontController
     private function setController($controller)
     {
         $controller = ($controller) ? $controller : self::DEFAULT_CONTROLLER;
-        $this->controller = ucfirst(strtolower($controller)) . 'Controller';
 
-        // create an instance of the controller as an object
-        $this->_controllerObject = $this->_loader->getController($this->controller, self::DEFAULT_CONTROLLER);
+        $controllerfile = APPLICATION_PATH . self::CONTROLLER_PATH . ucfirst(strtolower($controller)) . 'Controller' . '.php';
+
+        // check if controller file exists
+        if (!file_exists($controllerfile)) {
+            die("Controller '$controller' could not be found.");
+        } else {
+            require_once($controllerfile);
+            $this->controller = $controller. 'Controller';
+        }
 
         return $this;
     }
@@ -93,8 +96,11 @@ class FrontController
             die("Action '$this->action' in class '$this->controller' expects $parameters mandatory parameter(s), you only provided " . count($this->params) . ".");
         }
 
+        // create an instance of the controller as an object
+        $controller = new $this->controller();
+
         // call the method based on $this->action and the params
-        call_user_func_array(array($this->_controllerObject, $this->action), $this->params);
+        call_user_func_array(array($controller, $this->action), $this->params);
     }
 
 }

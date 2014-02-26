@@ -37,7 +37,7 @@ class ProfileController extends Controller{
 
                     if(isCorrectCredentialsUser(set_value('username'), set_value('password'))) {
                         set_userdata(loadUser(set_value('username')));
-                        redirect('profile/login_success.php');
+                        redirect('profile/loginSuccess');
                     }
 
                     message('Foutieve gebruikersnaam/paswoord combinatie!', 'danger');
@@ -45,6 +45,10 @@ class ProfileController extends Controller{
             }
         }    
         $this->render("login");
+    }
+    
+    public function loginSuccess(){
+        $this->render("login_success");
     }
 }
 

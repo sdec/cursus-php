@@ -7,21 +7,27 @@ define('SQL_DB', 'cursusphp');
 
 
 // Start database connection
-$link = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB) or die(mysql_error());
+//$link = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB) or die(mysql_error());
 
-function DB_Link() {
-    global $link;
-    return $link;
-}
 
-function sanitize($input) {
-    global $link;
-    if (is_array($input)) {
-        $arr = array();
-        foreach ($input as $element) {
-            $arr[] = mysqli_real_escape_string($link, $element);
-        }
-        return $arr;
-    }
-    return mysqli_real_escape_string($link, $input);
-}
+$port = ':81';
+$db_config = array(
+    'driver' => 'mysql',
+    'username' => 'root',
+    'password' => '',
+    //'schema' => 'cursusphp', // verander dit in je eigen schema
+    'dsn' => array(
+        'host' => '127.0.0.1'.$port,
+        'dbname' => 'cursusphp', // verander dit in de db van je reeks
+    )
+);
+
+/*
+$dsn = 'mysql:dbname=testdb;host=127.0.0.1';
+$user = 'dbuser';
+$password = 'dbpass';
+try {
+    $dbh = new PDO($dsn, $user, $password);
+} catch (PDOException $e) {
+    echo 'Connection failed: ' . $e->getMessage();
+}*/

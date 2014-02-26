@@ -9,6 +9,11 @@ function base_url() {
     return BASE_URL;
 }
 
+function external_url() {
+    $app_path = '/cursus-php/web-MVC/';
+    return 'http://' . $_SERVER['HTTP_HOST'] . $app_path;
+}
+
 function getCurrentPath()
 {
     $rawpath =  substr($_SERVER['REQUEST_URI'], strlen(dirname($_SERVER['SCRIPT_NAME'])) + 1);
@@ -21,7 +26,7 @@ function getCurrentPath()
 }
 
 function assets_url() {
-    return '.' .base_url() . 'application/view/assets/';
+    return external_url() . 'application/view/assets/';
 }
 
 function partials_url() {
@@ -45,6 +50,6 @@ function views_url(){
 }
 
 function redirect($page) {
-    header('Location: ' . base_url() . $page);
+    header('Location: ' . external_url() . $page);
     die;
 }
