@@ -1,61 +1,5 @@
 <?php
-define('BASE_URL', '../');
-require_once BASE_URL . 'includes/config/routes.php';
-require_once config_url() . 'sessions.php';
-require_once config_url() . 'database.php';
-require_once models_url() . 'UserModel.php';
-require_once models_url() . 'AppointmentModel.php';
-
-if (!loggedin())
-    redirect('profile/login.php');
-
-$appointmentid = isset($_GET['appointmentid']) ? $_GET['appointmentid'] : 0;
-if($appointmentid == 0)
-    redirect('profile/login.php');
-
-$appointment = loadAppointment($appointmentid);
-
-if (!$appointment['appointmentid'])
-    redirect('');
-
-$appointment['date'] = date('d M Y', strtotime($appointment['start_timestamp']));
-$appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
-$appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
-
-$currentTime = time();
-$appointment['started'] = strtotime($appointment['start_timestamp']) <= $currentTime;
-$appointment['ended'] = strtotime($appointment['end_timestamp']) <= $currentTime;
-
-
-$slots = slots($appointmentid);
-
-$subscribtion['subscribed'] = FALSE;
-
-if ($slots) {
-    $availableCount = 0;
-    for($i = 0; $i < count($slots); $i++) {
-        if ($slots[$i]['subscriberid'] == userdata('userid')) {
-            $subscribtion['subscribed'] = TRUE;
-            $subscribtion['lecturerid'] = $slots[$i]['lecturerid'];
-            $subscribtion['lecturer'] = $slots[$i]['lecturer'];
-            $subscribtion['subscribestart'] = $slots[$i]['start'];
-            $subscribtion['subscribeend'] = $slots[$i]['end'];
-            $subscribtion['subscribeslotid'] = $slots[$i]['appointmentslotid'];
-            break;
-        }
-
-        if ($appointment['chronological']) {
-            if (!$slots[$i]['subscriberid'] && $availableCount == 0) {
-                $slots[$i]['available'] = TRUE;
-                $availableCount++;
-            } else if (!$slots[$i]['subscriberid'] && $availableCount == 1) {
-                $slot['available'] = FALSE;
-            }
-        } else {
-            $slot['available'] = TRUE;
-        }
-    }
-}
+global $data;
 ?>
 <!DOCTYPE html>
 <html>
@@ -77,27 +21,27 @@ if ($slots) {
                             <table class="table table-hover table-striped table-vertical">
                                 <tr>
                                     <td>Startdatum</td>
-                                    <td><?= $appointment['date'] ?></td>
+                                    <td><?= $data['appointment']['date'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Startuur</td>
-                                    <td><?= $appointment['start'] ?></td>
+                                    <td><?= $data['appointment']['start'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Einduur</td>
-                                    <td><?= $appointment['end'] ?></td>
+                                    <td><?= $data['appointment']['end'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Beschrijving</td>
-                                    <td><?= $appointment['description'] ?></td>
+                                    <td><?= $data['appointment']['description'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Locatie</td>
-                                    <td><?= $appointment['location'] ?></td>
+                                    <td><?= $data['appointment']['location'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Organisatoren</td>
-                                    <td><?= $appointment['lecturercount'] ?></td>
+                                    <td><?= $data['appointment']['lecturercount'] ?></td>
                                 </tr>
                             </table>
                         </div>
@@ -107,19 +51,19 @@ if ($slots) {
                             <div class="panel-title">Mijn inschrijving</div>
                         </div>
                         <div class="panel-body">
-                            <?php if ($subscribtion['subscribed']) { ?>
-                                <?php if ($subscribtion['lecturerid'] == userdata('userid')) { ?>
+                            <?php if ($data['subscription']['subscribed']) { ?>
+                                <?php if ($data['subscription']['lecturerid'] == userdata('userid')) { ?>
                                     <p>
-                                        U heeft aangegeven pauze te nemen van <strong><?= $subscribtion['subscribestart'] ?></strong> 
-                                        tot ongeveer <strong><?= $subscribtion['subscribeend'] ?></strong>.
+                                        U heeft aangegeven pauze te nemen van <strong><?= $data['subscription']['subscribestart'] ?></strong> 
+                                        tot ongeveer <strong><?= $data['subscription']['subscribeend'] ?></strong>.
                                     </p>
                                 <?php } else { ?>
-                                    <p>U bent ingeschreven voor een afspraak bij <strong><?= $subscribtion['lecturer'] ?></strong> om <strong><?= $subscribtion['subscribestart'] ?></strong>.  
-                                        Deze afspraak duurt ongeveer tot <strong><?= $subscribtion['subscribeend'] ?></strong>.</p>
+                                    <p>U bent ingeschreven voor een afspraak bij <strong><?= $data['subscription']['lecturer'] ?></strong> om <strong><?= $data['subscription']['subscribestart'] ?></strong>.  
+                                        Deze afspraak duurt ongeveer tot <strong><?= $data['subscription']['subscribeend'] ?></strong>.</p>
                                 <?php } ?>
-                                <?php if(!$appointment['started']) { ?>
+                                <?php if(!$data['appointment']['started']) { ?>
                                 <p>
-                                    <a href="<?= base_url() ?>appointments/unsubscribe.php?appointmentid=<?= $appointment['appointmentid'] ?>&subscribeslotid=<?= $subscribtion['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                                    <a href="<?= base_url() ?>appointments/unsubscribe.php?appointmentid=<?= $data['appointment']['appointmentid'] ?>&subscribeslotid=<?= $data['subscription']['subscribeslotid'] ?>" class="btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
                                     </a>
                                 </p>
@@ -127,9 +71,9 @@ if ($slots) {
                             <?php } else { ?>
                                 <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
                             <?php } ?>
-                            <?php if ($appointment['started']) { ?>
+                            <?php if ($data['appointment']['started']) { ?>
                                 <div class="alert alert-info">
-                                    <?php if ($appointment['ended']) { ?>
+                                    <?php if ($data['appointment']['ended']) { ?>
                                         Deze afspraak is verlopen. 
                                     <?php } else { ?>
                                         Deze afspraak is al begonnen. 
@@ -141,15 +85,15 @@ if ($slots) {
                     </div>
                     <?php if (userdata('accesslevel') >= LECTURER) { ?>
                         <p>
-                            <a href="<?= base_url() ?>appointments/addtimeslots.php?appointmentid=<?= $appointment['appointmentid'] ?>" class="btn btn-primary">
+                            <a href="<?= base_url() ?>appointments/addtimeslots.php?appointmentid=<?= $data['appointment']['appointmentid'] ?>" class="btn btn-primary">
                                 <span class="glyphicon glyphicon-plus-sign"></span> 
                                 Voeg tijdsloten toe
                             </a> 
-                            <a href="<?= base_url() ?>appointments/edit.php?appointmentid=<?= $appointment['appointmentid'] ?>" class="btn btn-primary">
+                            <a href="<?= base_url() ?>appointments/edit.php?appointmentid=<?= $data['appointment']['appointmentid'] ?>" class="btn btn-primary">
                                 <span class="glyphicon glyphicon-edit"></span> 
                                 Wijzig afspraak
                             </a> 
-                            <a href="<?= base_url() ?>appointments/delete.php?appointmentid=<?= $appointment['appointmentid'] ?>" class="btn btn-danger">
+                            <a href="<?= base_url() ?>appointments/delete.php?appointmentid=<?= $data['appointment']['appointmentid'] ?>" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove-sign"></span> 
                                 Verwijder afspraak
                             </a>
@@ -162,7 +106,7 @@ if ($slots) {
                             <div class="panel-title">Inschrijvingen</div>
                         </div>
                         <div class="panel-body">
-                            <?php if ($slots) { ?>
+                            <?php if ($data['slots']) { ?>
                                 <p>Selecteer een beschikbaar tijdslot om u in te schrijven.</p>
                                 <table class="table table-hover table-striped">
                                     <thead>
@@ -174,16 +118,16 @@ if ($slots) {
                                     </thead>
                                     <tbody>
                                         <?php $slotIndex = 0; ?>
-                                        <?php foreach ($slots as $slot) { ?>
+                                        <?php foreach ($data['slots'] as $slot) { ?>
                                             <tr>
                                                 <td><?= $slot['lecturer'] ?></td>
                                                 <td><?= $slot['start'] ?> - <?= $slot['end'] ?></td>
                                                 <td>
                                                     <?php if (!$slot['subscriberid']) { ?>
-                                                        <?php if ($appointment['started'] == FALSE && $subscribtion['subscribed'] == FALSE) { ?>
+                                                        <?php if ($data['appointment']['started'] == FALSE && $data['subscription']['subscribed'] == FALSE) { ?>
                                                             <?php if (isset($slot['available']) && $slot['available'] == TRUE || $slot['lecturerid'] == userdata('userid')) { ?>
                                                                 <a class="text-success" href="<?= base_url() ?>appointments/subscribe.php?appointmentid=
-                                                                    <?= $appointment['appointmentid'] ?>&appointmentslotid=<?= $slot['appointmentslotid'] ?>">
+                                                                    <?= $data['appointment']['appointmentid'] ?>&appointmentslotid=<?= $slot['appointmentslotid'] ?>">
                                                                     <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
                                                                 </a>
                                                             <?php } else { ?>

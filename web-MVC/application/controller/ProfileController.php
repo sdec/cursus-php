@@ -5,6 +5,7 @@ class ProfileController extends Controller{
     private $usermodel;
     
     public function __construct() {
+        parent::__construct('profile');
         $this->usermodel = new User_Mapper();
     }
     
@@ -120,9 +121,9 @@ class ProfileController extends Controller{
         $this->render("register");
     }
     
-    public function view(){
+    public function view($username = null){
         global $user;
-        $user = (isset($_GET['username'])) ? $this->usermodel->loadUser($_GET['username']) : $this->usermodel->loadUser(userdata('username'));
+        $user = (isset($username)) ? $this->usermodel->loadUser($username) : $this->usermodel->loadUser(userdata('username'));
         $this->render('view');
     }
     

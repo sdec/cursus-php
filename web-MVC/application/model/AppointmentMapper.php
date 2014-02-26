@@ -78,25 +78,39 @@ class Appointment_Mapper{
     function createAppointment($start_timestamp, $end_timestamp, $description, $location, $chronological) {
         $sql = "
             INSERT INTO appointments (start_timestamp, end_timestamp, description, location, chronological) 
-            VALUES ('" . sanitize($start_timestamp) . "', '" . sanitize($end_timestamp) . "', '" . sanitize($description) . "', 
-                '" . sanitize($location) . "', '" . sanitize($chronological) . "');
+            VALUES (:start_timestamp, :end_timestamp, :description, :location, :chronological);
         ";
-        mysqli_query(DB_Link(), $sql);
-        return mysqli_insert_id(DB_Link());
+        $arguments = array(
+            ':start_timestamp' => $start_timestamp,
+            ':end_timestamp' => $end_timestamp,
+            ':description' => $description,
+            ':location' => $location,
+            ':chronological' => $chronological,
+        );
+        $result = $this->_db->execute($sql, $arguments);
+        return $this->_db->lastInsertId();
     }
 
     function editAppointment($appointmentid, $start_timestamp, $end_timestamp, $description, $location, $chronological) {
-
         $sql = "
             UPDATE appointments 
-            SET start_timestamp = '" . sanitize($start_timestamp) . "', end_timestamp = '" . sanitize($end_timestamp) . "', 
-                description = '" . sanitize($description) . "', location = '" . sanitize($location) . "', 
-                    chronological = '" . sanitize($chronological) . "'
-            WHERE appointmentid = '" . $appointmentid . "';
+            SET start_timestamp = :start_timestamp,
+                end_timestamp = :end_timestamp, 
+                description = :description,
+                location = :location,
+                chronological = :location
+            WHERE appointmentid = :appointmentid;
         ";
-
-        mysqli_query(DB_Link(), $sql);
-        return mysqli_affected_rows(DB_Link()) > 0;
+        $arguments = array(
+            ':appointmentid' => $appointmentid,
+            ':start_timestamp' => $start_timestamp,
+            ':end_timestamp' => $end_timestamp,
+            ':description' => $description,
+            ':location' => $location,
+            ':chronological' => $chronological,
+        );
+        $result = $this->_db->execute($sql, $arguments);
+        return $result->rowCount() > 0;
     }
 
     function loadAppointment($appointmentid) {
@@ -113,12 +127,14 @@ class Appointment_Mapper{
             FROM appointments ap
                 LEFT JOIN appointmentslots aps USING(appointmentid)
 
-            WHERE appointmentid = '" . sanitize($appointmentid) . "'
+            WHERE appointmentid = :appointmentid
             ORDER BY start_timestamp DESC, end_timestamp DESC
         ";
-
-        $result = mysqli_query(DB_Link(), $sql);
-        return mysqli_num_rows($result) > 0 ? mysqli_fetch_assoc($result) : FALSE;
+        $arguments = array(
+            ':appointmentid' => $appointmentid,
+        );
+        $result = $this->_db->execute($sql, $arguments);
+        return $result->rowCount() > 0 ? $result->fetch(PDO::FETCH_ASSOC) : FALSE;
     }
 
     function slots($appointmentid) {
@@ -137,77 +153,93 @@ class Appointment_Mapper{
                 LEFT JOIN appointmentsubscribers subs ON aps.appointmentslotid = subs.appointmentslotid
                 LEFT JOIN users su ON subs.userid = su.userid
 
-            WHERE appointmentid = '" . sanitize($appointmentid) . "'
+            WHERE appointmentid = :appointmentid
             ORDER BY start_timestamp ASC, end_timestamp ASC, lecturer DESC
         ";
-
-        $result = mysqli_query(DB_Link(), $sql);
-        $slots = array();
-        while ($slot = mysqli_fetch_assoc($result)) {
-            array_push($slots, $slot);
-        }
+        $arguments = array(
+            ':appointmentid' => $appointmentid,
+        );
+        $result = $this->_db->execute($sql, $arguments);
+        $slots = $result->fetchAll(PDO::FETCH_ASSOC);
         return count($slots) > 0 ? $slots : FALSE;
     }
 
     function deleteAppointment($appointmentid) {
         $sql = "
             DELETE FROM appointments
-            WHERE appointmentid = '" . sanitize($appointmentid) . "';
+            WHERE appointmentid = :appointmentid;
         ";
-        mysqli_query(DB_Link(), $sql);
-        return mysqli_affected_rows(DB_Link()) > 0;
+        $arguments = array(
+            ':appointmentid' => $appointmentid,
+        );
+        $result = $this->_db->execute($sql, $arguments);
+        return $result->rowCount() > 0;
     }
 
     function subscribeAppointment($appointmentslotid, $userid) {
-        $appointmentslotid = sanitize($appointmentslotid);
-        $userid = sanitize($userid);
         $sql = "
             INSERT INTO appointmentsubscribers (appointmentslotid, userid)
-            VALUES('$appointmentslotid', '$userid');
+            VALUES(:appointmentslotid, :userid);
         ";
-        mysqli_query(DB_Link(), $sql);
-        return mysqli_affected_rows(DB_Link()) > 0;
+        $arguments = array(
+            ':appointmentslotid' => $appointmentslotid,
+            ':userid' => $userid,
+        );
+        $result = $this->_db->execute($sql, $arguments);
+        return $result->rowCount() > 0;
     }
 
     function unSubscribeAppointment($appointmentslotid, $userid) {
-        $appointmentslotid = sanitize($appointmentslotid);
-        $userid = sanitize($userid);
         $sql = "
             DELETE FROM appointmentsubscribers
-            WHERE appointmentslotid = '$appointmentslotid' 
-                AND userid = '$userid';
+            WHERE appointmentslotid = :appointmentslotid 
+                AND userid = :userid;
         ";
-        mysqli_query(DB_Link(), $sql);
-        return mysqli_affected_rows(DB_Link()) > 0;
+        $arguments = array(
+            ':appointmentslotid' => $appointmentslotid,
+            ':userid' => $userid,
+        );
+        $result = $this->_db->execute($sql, $arguments);
+        return $result->rowCount() > 0;
     }
 
     function addTimeSlotsAppointment($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) {
-
         $sql = "INSERT INTO appointmentslots (appointmentid, lecturerid, start_timestamp, end_timestamp) VALUES ";
+        $arguments = array(
+            ':appointmentid' => $appointmentid,
+            ':lecturerid' => $lecturerid,
+            ':start_timestamp' => $start_timestamp,
+        );
         $batchData = array();
 
+        $counter = 0;
         while (strtotime($start_timestamp) < strtotime($end_timestamp)) {
-
+            $counter += 1;
+            
             $diff = strtotime($start_timestamp) + (strtotime(date('Y-m-d H:i:s', strtotime($interval_timestamp))) - strtotime(date('Y-m-d', strtotime($interval_timestamp))));
             $slotEnd = date('Y-m-d H:i:s', $diff);
-
-            array_push($batchData, "('" . $appointmentid . "', '" . $lecturerid . "', '" . $start_timestamp . "', '" . $slotEnd . "')");
-
+            
+            array_push($batchData, "(:appointmentid, :lecturerid, :start_timestamp, :slotEnd".$counter.")");
+            $arguments[(':slotEnd'.$counter)] = $slotEnd;
+            
             $start_timestamp = $slotEnd;
         }
 
         $sql .= implode(',', $batchData) . ';';
-
-        mysqli_query(DB_Link(), $sql);
-        return mysqli_affected_rows(DB_Link()) > 0;
+        
+        $result = $this->_db->execute($sql, $arguments);
+        return $result->rowCount() > 0;
     }
 
     function deleteTimeSlotAppointment($appointmentslotid) {
         $sql = "
             DELETE FROM appointmentslots
-            WHERE appointmentslotid = '" . sanitize($appointmentslotid) . "';
+            WHERE appointmentslotid = :appointmentslotid;
         ";
-        mysqli_query(DB_Link(), $sql);
-        return mysqli_affected_rows(DB_Link()) > 0;
+        $arguments = array(
+            ':appointmentslotid' => $appointmentslotid,
+        );
+        $result = $this->_db->execute($sql, $arguments);
+        return $result->rowCount() > 0;
     }
 }
