@@ -72,25 +72,39 @@ class User_Mapper
 
     function registerUser($username, $firstname, $lastname, $password, $email) {
 
-        $hashedPassword = encryptPassword($password);
+        $hashedPassword = $this->encryptPassword($password);
 
         $sql = "
             INSERT INTO users (username, firstname, lastname, password, email) 
-            VALUES ('" . $this->sanitize($username) . "', '" . $this->sanitize($firstname) . "', '" . $this->sanitize($lastname) . "', 
-                '" . $this->sanitize($hashedPassword) . "', '" . $this->sanitize($email) . "');
+            VALUES (:username, :firstname, :lastname, :password, :email);
         ";
-        mysqli_query(DB_Link(), $sql);
-        return mysqli_affected_rows(DB_Link());
+        
+        $arguments = array(
+            ':username' => $username,
+            ':firstname' => $firstname,
+            ':lastname' => $lastname,
+            ':password' => $hashedPassword,
+            ':email' => $email,
+        );
+        
+        $result = $this->_db->execute($sql, $arguments);
+        echo($this->_db->lastInsertId());
+        return $result->rowCount() > 0 ? TRUE : FALSE;
     }
 
     function usernameExists($username) {
         $sql = "
             SELECT *
             FROM users
-            WHERE username LIKE '" . $this->sanitize($username) . "'
+            WHERE username LIKE :username
         ";
-        $result = mysqli_query(DB_Link(), $sql);
-        return mysqli_num_rows($result) > 0;
+        
+        $arguments = array(
+            ':username' => $username,
+        );
+        
+        $result = $this->_db->execute($sql, $arguments);
+        return $result->rowCount() > 0;
     }
 
     function lecturers() {

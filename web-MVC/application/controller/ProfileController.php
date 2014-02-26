@@ -109,8 +109,9 @@ class ProfileController extends Controller{
                 if(hasErrors() == FALSE) {
 
                     if($this->usermodel->usernameExists(set_value('username')) == FALSE) {
-                        registerUser(set_value('username'), set_value('firstname'), set_value('lastname'), set_value('password'), set_value('email'));
+                        $this->usermodel->registerUser(set_value('username'), set_value('firstname'), set_value('lastname'), set_value('password'), set_value('email'));
                         $this->render("register_success");
+                        die();
                     }
                     message('Deze gebruikersnaam bestaat al', 'danger');
                 }

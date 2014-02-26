@@ -10,7 +10,7 @@
 
             <h1>Registreren</h1>
             <div class="well">
-                <form method="POST" action="<?= base_url() ?>profile/register.php" role="form" class="form-horizontal">
+                <form method="POST" role="form" class="form-horizontal">
                     <fieldset>
                         <div class="form-group">
                             <label for="username" class="col-lg-2 control-label">Gebruikersnaam</label>
