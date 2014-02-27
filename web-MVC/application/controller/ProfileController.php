@@ -2,10 +2,12 @@
 
 class ProfileController extends Controller{
     private $usermodel;
+    private $appointmentmodel;
     
     public function __construct() {
         parent::__construct('profile');
         $this->usermodel = new User_Mapper();
+        $this->appointmentmodel = new Appointment_Mapper();
     }
     
     public function index(){
@@ -133,7 +135,7 @@ class ProfileController extends Controller{
         $this->render('logout_success');
     }
     
-    public function appointments($username = '') {
+    public function appointments($username = '', $search = '') {
         if (!loggedin())
             redirect('profile/login');
 
@@ -147,10 +149,13 @@ class ProfileController extends Controller{
         if($user == FALSE)
             redirect('');
 
-        $search = isset($_GET['search']) ? $_GET['search'] : '';
         $appointments = strlen($search) 
-            ? searchAppointments($search) 
-            : loadAllAppointments($user['userid']);
+            ? $this->appointmentmodel->searchAppointments($search) 
+            : $this->appointmentmodel->loadAllAppointments($user['userid']);
+        
+        $this->appointments = $appointments;
+        $this->search = $search;
+        $this->_template->render('profile/appointments');
 
     }
 }

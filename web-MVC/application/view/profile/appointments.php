@@ -12,8 +12,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ($appointments) { ?>
-                        <?php foreach ($appointments as $appointment) { ?>
+                    <?php if ($this->appointments) { ?>
+                        <?php foreach ($this->appointments as $appointment) { ?>
                             <tr>
                                 <td>
                                     <a href="<?= base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>">
@@ -40,7 +40,7 @@
                     <?php } ?>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-9">
-                    <form class="form-horizontal" method="get" action="<?= base_url() ?>profile/appointments.php" role="form">
+                    <form class="form-horizontal" method="get" action="<?= base_url() ?>profile/appointments/<?= userdata('username');?>/" role="form">
                         <div class="form-group">
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="search" name="search" 
@@ -55,9 +55,9 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <?php if (strlen($search)) { ?>
+                    <?php if (strlen($this->search)) { ?>
                         <hr />
-                        <p>Er werden <strong><?= $appointments == FALSE ? 0 : count((array) $appointments) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $search ?>".</p>
+                        <p>Er werden <strong><?= $this->appointments == FALSE ? 0 : count((array) $this->appointments) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $this->search ?>".</p>
                         <a href="<?= base_url() ?>profile/appointments.php" class="btn btn-default">Terug</a>
                     <?php } ?>
                 </div>
