@@ -61,7 +61,7 @@ class User_Mapper {
         );
 
         $result = $this->_db->execute($sql, $arguments);
-        return $result->rowCount() > 0 ? $result->fetch(PDO::FETCH_ASSOC) : FALSE;
+        return $result->rowCount() > 0 ? $result->fetch(PDO::FETCH_OBJ) : FALSE;
     }
 
     function registerUser($username, $firstname, $lastname, $password, $email) {
@@ -105,7 +105,7 @@ class User_Mapper {
             FROM lecturers
         ";
         $result = $this->_db->execute($sql);
-        $lecturers = $result->fetchAll(PDO::FETCH_ASSOC);
+        $lecturers = $result->fetchAll(PDO::FETCH_OBJ);
         /* while ($lecturer = mysqli_fetch_assoc($result)) {
           array_push($lecturers, $lecturer);
           } */
@@ -118,7 +118,7 @@ class User_Mapper {
             FROM users
         ";
         $result = $this->_db->execute($sql);
-        $users = $result->fetchAll(PDO::FETCH_ASSOC);
+        $users = $result->fetchAll(PDO::FETCH_OBJ);
         /* while ($user = mysqli_fetch_assoc($result)) {
           array_push($users, $user);
           } */
@@ -144,10 +144,7 @@ class User_Mapper {
         );
 
         $result = $this->_db->execute($sql, $arguments);
-        $users = $result->fetchAll(PDO::FETCH_ASSOC);
-        /* while ($user = mysqli_fetch_assoc($result)) {
-          array_push($users, $user);
-          } */
+        $users = $result->fetchAll(PDO::FETCH_OBJ);
         return (count($users) > 0) ? $users : FALSE;
     }
 

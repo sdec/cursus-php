@@ -33,7 +33,7 @@ class Appointment_Mapper{
             ':userid' => $userid,
         );
         $result = $this->_db->execute($sql, $arguments);
-        $appointments = $result->fetchAll(PDO::FETCH_ASSOC);
+        $appointments = $result->fetchAll(PDO::FETCH_OBJ);
         return (count($appointments) > 0) ? $appointments : FALSE;
     }
 
@@ -70,7 +70,7 @@ class Appointment_Mapper{
             ':search' => $search,
         );
         $result = $this->_db->execute($sql, $arguments);
-        $appointments = $result->fetchAll(PDO::FETCH_ASSOC);
+        $appointments = $result->fetchAll(PDO::FETCH_OBJ);
         return (count($appointments) > 0) ? $appointments : FALSE;
     }
 
@@ -133,7 +133,7 @@ class Appointment_Mapper{
             ':appointmentid' => $appointmentid,
         );
         $result = $this->_db->execute($sql, $arguments);
-        return $result->rowCount() > 0 ? $result->fetch(PDO::FETCH_ASSOC) : FALSE;
+        return $result->rowCount() > 0 ? $result->fetch(PDO::FETCH_OBJ) : FALSE;
     }
 
     function slots($appointmentid) {
@@ -159,7 +159,7 @@ class Appointment_Mapper{
             ':appointmentid' => $appointmentid,
         );
         $result = $this->_db->execute($sql, $arguments);
-        $slots = $result->fetchAll(PDO::FETCH_ASSOC);
+        $slots = $result->fetchAll(PDO::FETCH_OBJ);
         return count($slots) > 0 ? $slots : FALSE;
     }
 
