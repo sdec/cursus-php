@@ -148,7 +148,7 @@ class ProfileController extends Controller{
         $this->_template->render('profile/logout_success');
     }
     
-    public function appointments($username = '', $search = '') {
+    public function appointments($username = '') {
         if (!loggedin())
             redirect('profile/login');
 
@@ -161,7 +161,7 @@ class ProfileController extends Controller{
 
         if($user == FALSE)
             redirect('');
-
+        $search = isset($_POST['search']) ? $_POST['search'] : '';
         $appointments = strlen($search) 
             ? $this->appointmentmodel->searchAppointments($search) 
             : $this->appointmentmodel->loadAllAppointments($user['userid']);
