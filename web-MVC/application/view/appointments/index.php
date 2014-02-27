@@ -15,15 +15,15 @@
             <?php foreach ($this->appointments as $appointment) { ?>
                 <tr>
                     <td>
-                        <a href="<?= base_url() ?>appointments/detail/<?= $appointment['appointmentid'] ?>">
+                        <a href="<?= base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>">
                             <span class="glyphicon glyphicon-eye-open"></span> 
                         </a>
                     </td>
-                    <td><?= $appointment['date'] ?></td>
-                    <td><?= $appointment['start'] ?></td>
-                    <td><?= $appointment['end'] ?></td>
-                    <td><?= $appointment['description'] ?></td>
-                    <td><?= $appointment['location'] ?></td>
+                    <td><?= $appointment->date ?></td>
+                    <td><?= $appointment->start ?></td>
+                    <td><?= $appointment->end ?></td>
+                    <td><?= $appointment->description ?></td>
+                    <td><?= $appointment->location ?></td>
                 </tr>
             <?php } ?>
         <?php } else { ?>

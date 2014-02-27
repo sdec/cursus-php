@@ -56,7 +56,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-lg-10 col-lg-offset-2">
-                        <input type="checkbox" id="chronological" name="chronological" <?= $this->appointment['chronological'] ? 'checked="checked"' : '' ?>>
+                        <input type="checkbox" id="chronological" name="chronological" <?= $this->appointment->chronological ? 'checked="checked"' : '' ?>>
                         Verplicht inschrijvingen in chronologische volgorde
                     </div>
                     <div class="col-lg-6">
@@ -86,11 +86,11 @@
                 <tbody>
                     <?php foreach ($this->slots as $slot) { ?>
                         <tr>
-                            <td><?= $slot['lecturer'] ?></td>
-                            <td><?= $slot['start'] ?> - <?= $slot['end'] ?></td>
-                            <td><?= $slot['subscriber'] ?></td>
+                            <td><?= $slot->lecturer ?></td>
+                            <td><?= $slot->start ?> - <?= $slot->end ?></td>
+                            <td><?= $slot->subscriber ?></td>
                             <td>
-                                <a href="<?= base_url() ?>appointments/deletetimeslot/<?= $this->appointment['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
+                                <a href="<?= base_url() ?>appointments/deletetimeslot/<?= $this->appointment->appointmentid ?>/<?= $slot->appointmentslotid ?>">
                                     <span class="glyphicon glyphicon-remove-sign"></span> Verwijder
                                 </a>
                             </td>
@@ -103,4 +103,4 @@
         <?php } ?>
     </div>
 </div>
-<p><a href="<?= base_url() ?>appointments/detail/<?= $this->appointment['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
+<p><a href="<?= base_url() ?>appointments/detail/<?= $this->appointment->appointmentid ?>" class="btn btn-default">Terug</a></p>
