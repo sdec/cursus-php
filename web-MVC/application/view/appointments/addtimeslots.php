@@ -1,6 +1,3 @@
-<?php 
-global $data;
-?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,7 +14,7 @@ global $data;
                         <label for="lecturerid" class="col-lg-2 control-label">Organisator</label>
                         <div class="col-lg-4">
                             <select class="form-control" id="lecturerid" name="lecturerid" required>
-                                <?php foreach($data['lecturers'] as $lecturer) { ?>
+                                <?php foreach($this->data['lecturers'] as $lecturer) { ?>
                                     <option value="<?= $lecturer['userid']; ?>">
                                         <?= $lecturer['firstname']; ?> <?= $lecturer['lastname']; ?>
                                     </option>
@@ -58,7 +55,7 @@ global $data;
                     <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
                             <button type="submit" name="submit" class="btn btn-primary">Voeg tijdsloten toe</button> 
-                            <a href="<?= external_url() ?>appointments/detail/<?= $data['appointment']['appointmentid']; ?>" class="btn btn-default">Annuleer</a>
+                            <a href="<?= external_url() ?>appointments/detail/<?= $this->data['appointment']['appointmentid']; ?>" class="btn btn-default">Annuleer</a>
                         </div>
                     </div>
                 </form>

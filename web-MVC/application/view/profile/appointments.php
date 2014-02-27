@@ -9,7 +9,6 @@ require_once models_url() . 'AppointmentModel.php';
 if (!loggedin())
     redirect('profile/login.php');
 
-
 $user = null;
 if(isset($_GET['username']) && strlen($_GET['username'])) {
     $user = loadUser($_GET['username']);

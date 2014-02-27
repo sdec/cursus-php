@@ -1,6 +1,3 @@
-<?php
-global $data;
-?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,8 +21,8 @@ global $data;
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ($data['appointments']) { ?>
-                        <?php foreach ($data['appointments'] as $appointment) { ?>
+                    <?php if ($this->data['appointments']) { ?>
+                        <?php foreach ($this->data['appointments'] as $appointment) { ?>
                             <tr>
                                 <td>
                                     <a href="<?= base_url() ?>appointments/detail/<?= $appointment['appointmentid'] ?>">
@@ -55,7 +52,7 @@ global $data;
                     <form class="form-horizontal" method="post" role="form">
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="search" name="search" value="<?=$data['search'];?>"
+                                <input type="text" class="form-control" id="search" name="search" value="<?=$this->data['search'];?>"
                                        placeholder="Zoek afspraken op beschrijving, organisator, locatie, vakken, start & einddata, studenten, ..." />
                             </div>
                             <div class="col-sm-2">
@@ -67,9 +64,9 @@ global $data;
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <?php if (strlen($data['search'])) { ?>
+                    <?php if (strlen($this->data['search'])) { ?>
                         <hr />
-                        <p>Er werden <strong><?= $data['appointments'] == FALSE ? 0 : count((array) $data['appointments']) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $data['search'];?>".</p>
+                        <p>Er werden <strong><?= $this->data['appointments'] == FALSE ? 0 : count((array) $this->data['appointments']) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $this->data['search'];?>".</p>
                         <a href="<?= external_url() ?>" class="btn btn-default">Terug</a>
                     <?php } ?>
                 </div>

@@ -1,6 +1,3 @@
-<?php
-global $data;
-?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,27 +18,27 @@ global $data;
                             <table class="table table-hover table-striped table-vertical">
                                 <tr>
                                     <td>Startdatum</td>
-                                    <td><?= $data['appointment']['date'] ?></td>
+                                    <td><?= $this->data['appointment']['date'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Startuur</td>
-                                    <td><?= $data['appointment']['start'] ?></td>
+                                    <td><?= $this->data['appointment']['start'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Einduur</td>
-                                    <td><?= $data['appointment']['end'] ?></td>
+                                    <td><?= $this->data['appointment']['end'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Beschrijving</td>
-                                    <td><?= $data['appointment']['description'] ?></td>
+                                    <td><?= $this->data['appointment']['description'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Locatie</td>
-                                    <td><?= $data['appointment']['location'] ?></td>
+                                    <td><?= $this->data['appointment']['location'] ?></td>
                                 </tr>
                                 <tr>
                                     <td>Organisatoren</td>
-                                    <td><?= $data['appointment']['lecturercount'] ?></td>
+                                    <td><?= $this->data['appointment']['lecturercount'] ?></td>
                                 </tr>
                             </table>
                         </div>
@@ -51,19 +48,19 @@ global $data;
                             <div class="panel-title">Mijn inschrijving</div>
                         </div>
                         <div class="panel-body">
-                            <?php if ($data['subscription']['subscribed']) { ?>
-                                <?php if ($data['subscription']['lecturerid'] == userdata('userid')) { ?>
+                            <?php if ($this->data['subscription']['subscribed']) { ?>
+                                <?php if ($this->data['subscription']['lecturerid'] == userdata('userid')) { ?>
                                     <p>
-                                        U heeft aangegeven pauze te nemen van <strong><?= $data['subscription']['subscribestart'] ?></strong> 
-                                        tot ongeveer <strong><?= $data['subscription']['subscribeend'] ?></strong>.
+                                        U heeft aangegeven pauze te nemen van <strong><?= $this->data['subscription']['subscribestart'] ?></strong> 
+                                        tot ongeveer <strong><?= $this->data['subscription']['subscribeend'] ?></strong>.
                                     </p>
                                 <?php } else { ?>
-                                    <p>U bent ingeschreven voor een afspraak bij <strong><?= $data['subscription']['lecturer'] ?></strong> om <strong><?= $data['subscription']['subscribestart'] ?></strong>.  
-                                        Deze afspraak duurt ongeveer tot <strong><?= $data['subscription']['subscribeend'] ?></strong>.</p>
+                                    <p>U bent ingeschreven voor een afspraak bij <strong><?= $this->data['subscription']['lecturer'] ?></strong> om <strong><?= $data['subscription']['subscribestart'] ?></strong>.  
+                                        Deze afspraak duurt ongeveer tot <strong><?= $this->data['subscription']['subscribeend'] ?></strong>.</p>
                                 <?php } ?>
-                                <?php if(!$data['appointment']['started']) { ?>
+                                <?php if(!$this->data['appointment']['started']) { ?>
                                 <p>
-                                    <a href="<?= external_url() ?>appointments/unsubscribe/<?= $data['appointment']['appointmentid'] ?>/<?= $data['subscription']['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                                    <a href="<?= external_url() ?>appointments/unsubscribe/<?= $this->data['appointment']['appointmentid'] ?>/<?= $data['subscription']['subscribeslotid'] ?>" class="btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
                                     </a>
                                 </p>
@@ -71,9 +68,9 @@ global $data;
                             <?php } else { ?>
                                 <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
                             <?php } ?>
-                            <?php if ($data['appointment']['started']) { ?>
+                            <?php if ($this->data['appointment']['started']) { ?>
                                 <div class="alert alert-info">
-                                    <?php if ($data['appointment']['ended']) { ?>
+                                    <?php if ($this->data['appointment']['ended']) { ?>
                                         Deze afspraak is verlopen. 
                                     <?php } else { ?>
                                         Deze afspraak is al begonnen. 
@@ -85,15 +82,15 @@ global $data;
                     </div>
                     <?php if (userdata('accesslevel') >= LECTURER) { ?>
                         <p>
-                            <a href="<?= external_url() ?>appointments/addtimeslots/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-primary">
+                            <a href="<?= external_url() ?>appointments/addtimeslots/<?= $this->data['appointment']['appointmentid'] ?>" class="btn btn-primary">
                                 <span class="glyphicon glyphicon-plus-sign"></span> 
                                 Voeg tijdsloten toe
                             </a> 
-                            <a href="<?= external_url() ?>appointments/edit/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-primary">
+                            <a href="<?= external_url() ?>appointments/edit/<?= $this->data['appointment']['appointmentid'] ?>" class="btn btn-primary">
                                 <span class="glyphicon glyphicon-edit"></span> 
                                 Wijzig afspraak
                             </a> 
-                            <a href="<?= external_url() ?>appointments/delete/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-danger">
+                            <a href="<?= external_url() ?>appointments/delete/<?= $this->data['appointment']['appointmentid'] ?>" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove-sign"></span> 
                                 Verwijder afspraak
                             </a>
@@ -106,7 +103,7 @@ global $data;
                             <div class="panel-title">Inschrijvingen</div>
                         </div>
                         <div class="panel-body">
-                            <?php if ($data['slots']) { ?>
+                            <?php if ($this->data['slots']) { ?>
                                 <p>Selecteer een beschikbaar tijdslot om u in te schrijven.</p>
                                 <table class="table table-hover table-striped">
                                     <thead>
@@ -118,16 +115,16 @@ global $data;
                                     </thead>
                                     <tbody>
                                         <?php $slotIndex = 0; ?>
-                                        <?php foreach ($data['slots'] as $slot) { ?>
+                                        <?php foreach ($this->data['slots'] as $slot) { ?>
                                             <tr>
                                                 <td><?= $slot['lecturer'] ?></td>
                                                 <td><?= $slot['start'] ?> - <?= $slot['end'] ?></td>
                                                 <td>
                                                     <?php if (!$slot['subscriberid']) { ?>
-                                                        <?php if ($data['appointment']['started'] == FALSE && $data['subscription']['subscribed'] == FALSE) { ?>
+                                                        <?php if ($this->data['appointment']['started'] == FALSE && $this->data['subscription']['subscribed'] == FALSE) { ?>
                                                             <?php if (isset($slot['available']) && $slot['available'] == TRUE || $slot['lecturerid'] == userdata('userid')) { ?>
                                                                 <a class="text-success" href="<?= external_url() ?>appointments/subscribe/
-                                                                    <?= $data['appointment']['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
+                                                                    <?= $this->data['appointment']['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
                                                                     <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
                                                                 </a>
                                                             <?php } else { ?>

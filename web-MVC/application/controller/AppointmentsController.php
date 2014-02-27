@@ -20,9 +20,8 @@ class AppointmentsController extends Controller{
             ? $this->appointmentmodel->searchAppointments($search) 
             : $this->appointmentmodel->loadAllAppointments();
 
-        global $data;
-        $data['appointments'] = $appointments;
-        $data['search'] = $search;
+        $this->_template->data['appointments'] = $appointments;
+        $this->_template->data['search'] = $search;
         
         $this->render("index");
     }
@@ -30,7 +29,6 @@ class AppointmentsController extends Controller{
     public function detail($appointmentid = -1){
         if (!loggedin() || $appointmentid == -1)
             redirect('');
-        global $data;
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment['appointmentid']){
             message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
@@ -72,9 +70,9 @@ class AppointmentsController extends Controller{
             }
         }
         
-        $data['appointment'] = $appointment;
-        $data['slots'] = $slots;
-        $data['subscription'] = $subscription;
+        $this->_template->data['appointment'] = $appointment;
+        $this->_template->data['slots'] = $slots;
+        $this->_template->data['subscription'] = $subscription;
         $this->render('detail');
     }
     
@@ -96,8 +94,7 @@ class AppointmentsController extends Controller{
         }
 
         if ($this->appointmentmodel->subscribeAppointment($appointmentslotid, userdata('userid'))) {
-            global $appointmentid;
-            $appointmentid = $appointment['appointmentid'];
+            $this->_template->appointmentid = $appointment['appointmentid'];
             $this->render('subscribe_success');
             die();
         } else {
@@ -124,8 +121,7 @@ class AppointmentsController extends Controller{
         }
 
         if($this->appointmentmodel->unSubscribeAppointment($appointmentslotid, userdata('userid'))){
-            global $appointmentid;
-            $appointmentid = $appointment['appointmentid'];
+            $this->_template->appointmentid = $appointment['appointmentid'];
             $this->render('unsubscribe_success');
             die();
         } else {
@@ -166,8 +162,7 @@ class AppointmentsController extends Controller{
                         $appointment['date'] = date('d M Y', strtotime($appointment['start_timestamp']));
                         $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
                         $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
-                        global $data;
-                        $data['appointment'] = $appointment;
+                        $this->_template->data['appointment'] = $appointment;
                         $this->render('create_success');
                         die();
                     } else {
@@ -239,12 +234,11 @@ class AppointmentsController extends Controller{
                         set_value('date').' '.set_value('start'), 
                         set_value('date').' '.set_value('end'), 
                         set_value('description'), set_value('location'), set_value('chronological'));
-                    global $data;
                     $appointment = $this->appointmentmodel->loadAppointment($appointment['appointmentid']);
                     $appointment['date'] = date('Y-m-d', strtotime($appointment['start_timestamp']));
                     $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
                     $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
-                    $data['appointment'] = $appointment;
+                    $this->_template->data['appointment'] = $appointment;
                     $this->render('edit_success');
                     die();
                 }
@@ -264,10 +258,9 @@ class AppointmentsController extends Controller{
             set_value('chronological', $appointment['chronological']);
         }
         
-        global $data;
-        $data['slots'] = $slots;
-        $data['appointment'] = $appointment;
-        $this->render('edit');
+        $this->_template->data['slots'] = $slots;
+        $this->_template->data['appointment'] = $appointment;
+        $this->_template->this->render('edit');
     }
     
     public function addtimeslots($appointmentid = -1){
@@ -304,8 +297,7 @@ class AppointmentsController extends Controller{
                         if (strtotime($end_timestamp) <= strtotime($appointment['end_timestamp'])) {
 
                             if ($this->appointmentmodel->addTimeSlotsAppointment($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
-                                global $data;
-                                $data['appointmentid'] = $appointmentid;
+                                $this->_template->data['appointmentid'] = $appointmentid;
                                 $this->render('addtimeslots_success');
                                 die();
                             } else {
@@ -330,9 +322,8 @@ class AppointmentsController extends Controller{
             set_value('interval', '00:15');
         }
         
-        global $data;
-        $data['lecturers'] = $lecturers;
-        $data['appointment'] = $appointment;
+        $this->_template->data['lecturers'] = $lecturers;
+        $this->_template->data['appointment'] = $appointment;
         $this->render('addtimeslots');
     }
     
@@ -355,9 +346,8 @@ class AppointmentsController extends Controller{
         if(!loggedin())
             redirect('');
         
-        global $data;
-        $data['appointments'] = $this->appointmentmodel->loadAllAppointments(userdata('userid'));
-        $data['search'] = '';
+        $this->_template->data['appointments'] = $this->appointmentmodel->loadAllAppointments(userdata('userid'));
+        $this->_template->data['search'] = '';
         
         $this->render('index');
     }

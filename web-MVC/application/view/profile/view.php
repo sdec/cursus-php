@@ -1,4 +1,3 @@
-<?php global $user; ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,40 +11,40 @@
             <table class="table table-hover table-striped table-vertical">
                 <tr>
                     <td>Gebruikersnaam</td>
-                    <td><?= $user['username'];?></td>
+                    <td><?= $this->user['username'];?></td>
                 </tr>
                 <tr>
                     <td>Voornaam</td>
-                    <td><?= $user['firstname'];?></td>
+                    <td><?= $this->user['firstname'];?></td>
                 </tr>
                 <tr>
                     <td>Familienaam</td>
-                    <td><?= $user['lastname'];?></td>
+                    <td><?= $this->user['lastname'];?></td>
                 </tr>
                 <tr>
                     <td>Email adres</td>
-                    <td><a href="mailto:<?= $user['email'];?>"><?= $user['email'];?></a></td>
+                    <td><a href="mailto:<?= $this->user['email'];?>"><?= $this->user['email'];?></a></td>
                 </tr>
                 <tr>
                     <td>Type profiel</td>
-                    <td><?= accessLevelName($user['accesslevel']);?></td>
+                    <td><?= accessLevelName($this->user['accesslevel']);?></td>
                 </tr>
             </table>
             
-            <?php if ($user['accesslevel'] < userdata('accesslevel')) { ?>
+            <?php if ($this->user['accesslevel'] < userdata('accesslevel')) { ?>
                 <?php if (userdata('accesslevel') >= ADVISOR) { ?>
                     <hr />
-                    <a href="<?= external_url() ?>admin/act_as/<?= $user['username'];?>" class="btn btn-primary">
+                    <a href="<?= external_url() ?>admin/act_as/<?= $this->user['username'];?>" class="btn btn-primary">
                         <span class="glyphicon glyphicon-user"></span> 
                         Handel in naam van deze gebruiker
                     </a>
                     <?php if (userdata('accesslevel') >= ADMIN) { ?>
 
-                        <a href="<?= external_url() ?>admin/edituser/<?= $user['username'];?>" class="btn btn-primary">
+                        <a href="<?= external_url() ?>admin/edituser/<?= $this->user['username'];?>" class="btn btn-primary">
                             <span class="glyphicon glyphicon-edit"></span> 
                             Wijzig gebruiker
                         </a> 
-                        <a href="<?= external_url() ?>admin/deleteuser/<?= $user['userid'];?>" class="btn btn-danger">
+                        <a href="<?= external_url() ?>admin/deleteuser/<?= $this->user['userid'];?>" class="btn btn-danger">
                             <span class="glyphicon glyphicon-remove-sign"></span> 
                             Verwijder gebruiker
                         </a>
