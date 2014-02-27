@@ -8,7 +8,7 @@ function set_userdata($userdata) {
 }
 
 function userdata($field) {
-    return isset($_SESSION['user'][$field]) ? $_SESSION['user'][$field] : '';
+    return isset($_SESSION['user']->$field) ? $_SESSION['user']->$field : '';
 }
 
 function unset_userdata() {
