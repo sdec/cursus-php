@@ -6,6 +6,7 @@ class ProfileController extends Controller{
     public function __construct() {
         parent::__construct('profile');
         $this->usermodel = new User_Mapper();
+        $this->appointmentmodel = new Appointment_Mapper();
     }
     
     public function index(){
@@ -152,18 +153,21 @@ class ProfileController extends Controller{
 
         $user = null;
         if(strlen($username)) {
-            $user = loadUser($username);
+            $user = $this->usermodel->loadUser($username);
         } else {
             $user = $_SESSION['user'];
         }
 
         if($user == FALSE)
             redirect('');
-
-        $search = isset($_GET['search']) ? $_GET['search'] : '';
+        
+        $search = isset($_POST['search']) ? $_POST['search'] : '';
         $appointments = strlen($search) 
-            ? searchAppointments($search) 
-            : loadAllAppointments($user['userid']);
+            ? $this->appointmentmodel->searchAppointments($search) 
+            : $this->appointmentmodel->loadAllAppointments($user['userid']);
+        
+        $this->_template->appointments = $appointments;
+        $this->_template->search = $search;
         
         $this->_template->setPageTitle('Mijn afspraken');
         $this->_template->render('profile/appointments');
