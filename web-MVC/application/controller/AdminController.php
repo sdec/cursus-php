@@ -135,13 +135,14 @@ class AdminController extends Controller{
             set_value('lastname', $user['lastname']);
             set_value('email', $user['email']);
         }
-        global $data;
         $data['user'] = $user;
-        global $accessLevels;
-        for($i = 0; $i < count($accessLevels); $i++){
-            $data['accessLevels'][$i] = accessLevelName($i);
+        
+        for($i = 0; $i < count($this->usermodel->accessLevels); $i++){
+            $data['accessLevels'][$i] = $this->usermodel->accessLevelName($i);
         }
-        $this->render('edituser');
+        
+        $this->_template->data = $data;
+        $this->_template->render('edituser');
     }
 }
 

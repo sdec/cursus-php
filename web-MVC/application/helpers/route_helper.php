@@ -1,19 +1,5 @@
 <?php
 
-/** Path functions * */
-/*function base_url($uri = '') {
-    return str_replace('index.php', '', BASE_URL.$_SERVER['SCRIPT_NAME']) . $uri;
-}*/
-
-function base_url() {
-    return BASE_URL;
-}
-
-function external_url() {
-    $app_path = '/cursus-php/web-MVC/';
-    return 'http://' . $_SERVER['HTTP_HOST'] . $app_path;
-}
-
 function getCurrentPath()
 {
     $rawpath =  substr($_SERVER['REQUEST_URI'], strlen(dirname($_SERVER['SCRIPT_NAME'])) + 1);
@@ -25,8 +11,17 @@ function getCurrentPath()
     return $path;
 }
 
+function base_url() {
+    return BASE_URL;
+}
+
+function external_url() {
+    $app_path = '/cursus-php/web-MVC/';
+    return 'http://' . $_SERVER['HTTP_HOST'] . $app_path;
+}
+
 function assets_url() {
-    return external_url() . 'application/view/assets/';
+    return external_url() . 'assets/';
 }
 
 function partials_url() {
@@ -34,19 +29,15 @@ function partials_url() {
 }
 
 function config_url() {
-    return base_url() . 'system/config/';
+    return base_url() . 'application/config/';
 }
 
 function helpers_url() {
-    return base_url() . 'system/helpers/';
+    return base_url() . 'application/helpers/';
 }
 
 function models_url() {
     return base_url() . 'application/model/';
-}
-
-function systemmodel_url() {
-    return base_url() . 'system/model/';
 }
 
 function views_url(){

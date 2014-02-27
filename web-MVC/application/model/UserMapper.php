@@ -1,15 +1,23 @@
 <?php
+
 require_once(systemmodel_url() . 'Db.php');
-require_once('User.php');
 define('STUDENT', 0);
 define('LECTURER', 1);
 define('ADVISOR', 2);
 define('ADMIN', 3);
 
 class User_Mapper {
+
     private $_db;
+
+    public $accessLevels = array(
+        'Student',
+        'Lector',
+        'Studieadviseur',
+        'Beheerder'
+    );
     
-    public function __construct(){
+    public function __construct() {
         $this->_db = Db::getInstance();
     }
 
@@ -21,7 +29,7 @@ class User_Mapper {
 
     function isCorrectCredentialsUser($username, $password) {
         $hashedPassword = $this->encryptPassword($password);
-           
+
         //http://stackoverflow.com/questions/767026/how-can-i-properly-use-a-pdo-object-for-a-select-query
         $sql = "
            SELECT *
@@ -29,17 +37,17 @@ class User_Mapper {
            WHERE username = :username
            AND password = :hashedPassword
         ";
- 
+
         $arguments = array(
             ':username' => $username,
             ':hashedPassword' => $hashedPassword,
         );
         $result = $this->_db->execute($sql, $arguments);
         return $result->rowCount() > 0;
-        
-        /*$result = $this->_db->queryOne($sql, 'User', $arguments);
-        var_dump($result);
-        return ($result) ? true : false;*/
+
+        /* $result = $this->_db->queryOne($sql, 'User', $arguments);
+          var_dump($result);
+          return ($result) ? true : false; */
     }
 
     function loadUser($username) {
@@ -48,11 +56,11 @@ class User_Mapper {
             FROM users
             WHERE username LIKE :username
         ";
-        
+
         $arguments = array(
             ':username' => $username,
         );
-        
+
         $result = $this->_db->execute($sql, $arguments);
         return $result->rowCount() > 0 ? $result->fetch(PDO::FETCH_ASSOC) : FALSE;
     }
@@ -64,7 +72,7 @@ class User_Mapper {
             INSERT INTO users (username, firstname, lastname, password, email) 
             VALUES (:username, :firstname, :lastname, :password, :email);
         ";
-        
+
         $arguments = array(
             ':username' => $username,
             ':firstname' => $firstname,
@@ -72,7 +80,7 @@ class User_Mapper {
             ':password' => $hashedPassword,
             ':email' => $email,
         );
-        
+
         $result = $this->_db->execute($sql, $arguments);
         echo($this->_db->lastInsertId());
         return $result->rowCount() > 0 ? TRUE : FALSE;
@@ -84,11 +92,11 @@ class User_Mapper {
             FROM users
             WHERE username LIKE :username
         ";
-        
+
         $arguments = array(
             ':username' => $username,
         );
-        
+
         $result = $this->_db->execute($sql, $arguments);
         return $result->rowCount() > 0;
     }
@@ -100,9 +108,9 @@ class User_Mapper {
         ";
         $result = $this->_db->execute($sql);
         $lecturers = $result->fetchAll(PDO::FETCH_ASSOC);
-        /*while ($lecturer = mysqli_fetch_assoc($result)) {
-            array_push($lecturers, $lecturer);
-        }*/
+        /* while ($lecturer = mysqli_fetch_assoc($result)) {
+          array_push($lecturers, $lecturer);
+          } */
         return (count($lecturers) > 0) ? $lecturers : FALSE;
     }
 
@@ -113,14 +121,14 @@ class User_Mapper {
         ";
         $result = $this->_db->execute($sql);
         $users = $result->fetchAll(PDO::FETCH_ASSOC);
-        /*while ($user = mysqli_fetch_assoc($result)) {
-            array_push($users, $user);
-        }*/
+        /* while ($user = mysqli_fetch_assoc($result)) {
+          array_push($users, $user);
+          } */
         return (count($users) > 0) ? $users : FALSE;
     }
 
     function searchUsers($search) {
-        $search = '%'.$search.'%'; //add substring query signs
+        $search = '%' . $search . '%'; //add substring query signs
         $sql = "
             SELECT *
             FROM users
@@ -132,16 +140,16 @@ class User_Mapper {
                 OR CONCAT(firstname, ' ', lastname) LIKE :search
 
             GROUP BY username";
-        
+
         $arguments = array(
             ':search' => $search,
         );
-        
+
         $result = $this->_db->execute($sql, $arguments);
         $users = $result->fetchAll(PDO::FETCH_ASSOC);
-        /*while ($user = mysqli_fetch_assoc($result)) {
-            array_push($users, $user);
-        }*/
+        /* while ($user = mysqli_fetch_assoc($result)) {
+          array_push($users, $user);
+          } */
         return (count($users) > 0) ? $users : FALSE;
     }
 
@@ -176,41 +184,35 @@ class User_Mapper {
         return $result->rowCount() > 0;
     }
 
-    /*public function add($object)
-    {
-        $sql = "INSERT INTO vehicles (color, brand) VALUES (:color, :brand);";
+    /* public function add($object)
+      {
+      $sql = "INSERT INTO vehicles (color, brand) VALUES (:color, :brand);";
 
-        $arguments = array(
-            $object->getUsername(),
-            $object->getFirstname()
-        );
+      $arguments = array(
+      $object->getUsername(),
+      $object->getFirstname()
+      );
 
-        return $this->_db->execute($sql, $arguments);
+      return $this->_db->execute($sql, $arguments);
+      }
+
+      public function getAll()
+      {
+      $sql = "SELECT * FROM vehicles";
+
+      $data = $this->_db->query($sql);
+
+      $objects = array();
+      foreach ($data as $row) {
+      $object = new Vehicle($row['color'], $row['brand']);
+      $objects[] = $object;
+      }
+      return $objects;
+      } */
+
+    function accessLevelName($accessLevel) {
+        global $accessLevels;
+        return isset($accessLevels[$accessLevel]) ? $accessLevels[$accessLevel] : $accessLevels[0];
     }
 
-    public function getAll()
-    {
-        $sql = "SELECT * FROM vehicles";
-
-        $data = $this->_db->query($sql);
-
-        $objects = array();
-        foreach ($data as $row) {
-            $object = new Vehicle($row['color'], $row['brand']);
-            $objects[] = $object;
-        }
-        return $objects;
-    }*/
-}
-
-$accessLevels = array(
-    'Student',
-    'Lector',
-    'Studieadviseur',
-    'Beheerder'
-);
-    
-function accessLevelName($accessLevel) {
-    global $accessLevels;
-    return isset($accessLevels[$accessLevel]) ? $accessLevels[$accessLevel] : $accessLevels[0];
 }
