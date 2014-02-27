@@ -47,12 +47,12 @@
                             tot ongeveer <strong><?= $this->subscription['subscribeend'] ?></strong>.
                         </p>
                     <?php } else { ?>
-                        <p>U bent ingeschreven voor een afspraak bij <strong><?= $this->subscription['lecturer'] ?></strong> om <strong><?= $data['subscription']['subscribestart'] ?></strong>.  
+                        <p>U bent ingeschreven voor een afspraak bij <strong><?= $this->subscription['lecturer'] ?></strong> om <strong><?= $this->subscription['subscribestart'] ?></strong>.  
                             Deze afspraak duurt ongeveer tot <strong><?= $this->subscription['subscribeend'] ?></strong>.</p>
                     <?php } ?>
                     <?php if (!$this->appointment['started']) { ?>
                         <p>
-                            <a href="<?= base_url() ?>appointments/unsubscribe/<?= $this->appointment['appointmentid'] ?>/<?= $data['subscription']['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                            <a href="<?= base_url() ?>appointments/unsubscribe/<?= $this->appointment['appointmentid'] ?>/<?= $this->subscription['subscribeslotid'] ?>" class="btn btn-default btn-sm">
                                 <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
                             </a>
                         </p>

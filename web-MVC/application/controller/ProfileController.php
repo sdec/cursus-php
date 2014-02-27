@@ -134,7 +134,7 @@ class ProfileController extends Controller{
     
     public function view($username = null){
         $this->_template->user = (isset($username)) ? $this->usermodel->loadUser($username) : $this->usermodel->loadUser(userdata('username'));
-        
+        $this->_template->user->accesslevelname = $this->usermodel->accessLevelName($this->_template->user->accesslevel);
         $this->_template->setPageTitle('Profiel');
         $this->_template->render('profile/view');
     }
