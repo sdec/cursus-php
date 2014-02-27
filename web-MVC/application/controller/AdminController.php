@@ -16,10 +16,9 @@ class AdminController extends Controller{
     public function users(){
         if (!loggedin() || userdata('accesslevel') < LECTURER)
             redirect('');
-        global $data;
-        $data['search'] = isset($_POST['search']) ? $_POST['search'] : '';
+        $this->_template->data['search'] = isset($_POST['search']) ? $_POST['search'] : '';
 
-        $data['users'] = strlen($data['search']) ? $this->usermodel->searchUsers($data['search']) : $this->usermodel->loadAllUsers();
+        $data['users'] = strlen($this->_template->data['search']) ? $this->usermodel->searchUsers($this->_template->data['search']) : $this->usermodel->loadAllUsers();
         $this->render('users');
     }
     
@@ -135,13 +134,12 @@ class AdminController extends Controller{
             set_value('lastname', $user['lastname']);
             set_value('email', $user['email']);
         }
-        $data['user'] = $user;
+        $this->_template->data['user'] = $user;
         
         for($i = 0; $i < count($this->usermodel->accessLevels); $i++){
-            $data['accessLevels'][$i] = $this->usermodel->accessLevelName($i);
+            $this->_template->data['accessLevels'][$i] = $this->usermodel->accessLevelName($i);
         }
         
-        $this->_template->data = $data;
         $this->_template->render('edituser');
     }
 }

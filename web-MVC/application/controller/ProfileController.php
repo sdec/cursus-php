@@ -122,8 +122,7 @@ class ProfileController extends Controller{
     }
     
     public function view($username = null){
-        global $user;
-        $user = (isset($username)) ? $this->usermodel->loadUser($username) : $this->usermodel->loadUser(userdata('username'));
+        $this->_template->user = (isset($username)) ? $this->usermodel->loadUser($username) : $this->usermodel->loadUser(userdata('username'));
         $this->render('view');
     }
     

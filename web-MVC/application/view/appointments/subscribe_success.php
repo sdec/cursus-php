@@ -1,6 +1,3 @@
-<?php
-global $appointmentid;
-?>
 <!DOCTYPE html>
 <html>
     <head>

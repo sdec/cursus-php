@@ -1,6 +1,3 @@
-<?php 
-global $data;
-?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,28 +13,28 @@ global $data;
             <table class="table table-hover table-striped table-vertical">
                 <tr>
                     <td>Startdatum</td>
-                    <td><?= $data['appointment']['date'] ?></td>
+                    <td><?= $this->data['appointment']['date'] ?></td>
                 </tr>
                 <tr>
                     <td>Startuur</td>
-                    <td><?= $data['appointment']['start'] ?></td>
+                    <td><?= $this->data['appointment']['start'] ?></td>
                 </tr>
                 <tr>
                     <td>Einduur</td>
-                    <td><?= $data['appointment']['end'] ?></td>
+                    <td><?= $this->data['appointment']['end'] ?></td>
                 </tr>
                 <tr>
                     <td>Beschrijving</td>
-                    <td><?= $data['appointment']['description'] ?></td>
+                    <td><?= $this->data['appointment']['description'] ?></td>
                 </tr>
                 <tr>
                     <td>Locatie</td>
-                    <td><?= $data['appointment']['location'] ?></td>
+                    <td><?= $this->data['appointment']['location'] ?></td>
                 </tr>
                 <tr>
                     <td>Chronologie</td>
                     <td>
-                        <?php if($data['appointment']['chronological']) { ?>
+                        <?php if($this->data['appointment']['chronological']) { ?>
                             Inschrijvingen verlopen verplicht in chronologische volgorde.
                         <?php } else { ?>
                             Inschrijvingen kunnen op elk tijdstip.
@@ -46,7 +43,7 @@ global $data;
                 </tr>
             </table>
 
-            <p><a href="<?= base_url() ?>appointments/detail/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
+            <p><a href="<?= external_url() ?>appointments/detail/<?= $this->data['appointment']['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
             <?php include_once partials_url() . 'message.php' ?>
         </div>
         <?php include_once partials_url() . 'scripts.php' ?>

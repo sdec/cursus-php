@@ -1,4 +1,3 @@
-<?php global $user; ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,27 +11,27 @@
             <table class="table table-hover table-striped table-vertical">
                 <tr>
                     <td>Gebruikersnaam</td>
-                    <td><?= $user['username'];?></td>
+                    <td><?= $this->user['username'];?></td>
                 </tr>
                 <tr>
                     <td>Voornaam</td>
-                    <td><?= $user['firstname'];?></td>
+                    <td><?= $this->user['firstname'];?></td>
                 </tr>
                 <tr>
                     <td>Familienaam</td>
-                    <td><?= $user['lastname'];?></td>
+                    <td><?= $this->user['lastname'];?></td>
                 </tr>
                 <tr>
                     <td>Email adres</td>
-                    <td><a href="mailto:<?= $user['email'];?>"><?= $user['email'];?></a></td>
+                    <td><a href="mailto:<?= $this->user['email'];?>"><?= $this->user['email'];?></a></td>
                 </tr>
                 <tr>
                     <td>Type profiel</td>
-                    <td><?= accessLevelName($user['accesslevel']);?></td>
+                    <td><?= accessLevelName($this->user['accesslevel']);?></td>
                 </tr>
             </table>
             
-            <?php if ($user['accesslevel'] < userdata('accesslevel')) { ?>
+            <?php if ($this->user['accesslevel'] < userdata('accesslevel')) { ?>
                 <?php if (userdata('accesslevel') >= ADVISOR) { ?>
                     <hr />
                     <a href="<?= base_url() ?>admin/act_as/<?= $user['username'];?>" class="btn btn-primary">
