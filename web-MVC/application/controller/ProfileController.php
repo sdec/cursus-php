@@ -163,8 +163,11 @@ class ProfileController extends Controller{
             redirect('');
 
         $appointments = strlen($search) 
-            ? searchAppointments($search) 
-            : loadAllAppointments($user['userid']);
+            ? $this->appointmentmodel->searchAppointments($search) 
+            : $this->appointmentmodel->loadAllAppointments($user['userid']);
+        
+        $this->appointments = $appointments;
+        $this->search = $search;
         
         $this->_template->setPageTitle('Mijn afspraken');
         $this->_template->render('profile/appointments');
