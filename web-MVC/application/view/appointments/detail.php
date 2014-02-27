@@ -10,27 +10,27 @@
                 <table class="table table-hover table-striped table-vertical">
                     <tr>
                         <td>Startdatum</td>
-                        <td><?= $this->data['appointment']['date'] ?></td>
+                        <td><?= $this->appointment['date'] ?></td>
                     </tr>
                     <tr>
                         <td>Startuur</td>
-                        <td><?= $this->data['appointment']['start'] ?></td>
+                        <td><?= $this->appointment['start'] ?></td>
                     </tr>
                     <tr>
                         <td>Einduur</td>
-                        <td><?= $this->data['appointment']['end'] ?></td>
+                        <td><?= $this->appointment['end'] ?></td>
                     </tr>
                     <tr>
                         <td>Beschrijving</td>
-                        <td><?= $this->data['appointment']['description'] ?></td>
+                        <td><?= $this->appointment['description'] ?></td>
                     </tr>
                     <tr>
                         <td>Locatie</td>
-                        <td><?= $this->data['appointment']['location'] ?></td>
+                        <td><?= $this->appointment['location'] ?></td>
                     </tr>
                     <tr>
                         <td>Organisatoren</td>
-                        <td><?= $this->data['appointment']['lecturercount'] ?></td>
+                        <td><?= $this->appointment['lecturercount'] ?></td>
                     </tr>
                 </table>
             </div>
@@ -40,19 +40,19 @@
                 <div class="panel-title">Mijn inschrijving</div>
             </div>
             <div class="panel-body">
-                <?php if ($this->data['subscription']['subscribed']) { ?>
-                    <?php if ($this->data['subscription']['lecturerid'] == userdata('userid')) { ?>
+                <?php if ($this->subscription['subscribed']) { ?>
+                    <?php if ($this->subscription['lecturerid'] == userdata('userid')) { ?>
                         <p>
-                            U heeft aangegeven pauze te nemen van <strong><?= $this->data['subscription']['subscribestart'] ?></strong> 
-                            tot ongeveer <strong><?= $this->data['subscription']['subscribeend'] ?></strong>.
+                            U heeft aangegeven pauze te nemen van <strong><?= $this->subscription['subscribestart'] ?></strong> 
+                            tot ongeveer <strong><?= $this->subscription['subscribeend'] ?></strong>.
                         </p>
                     <?php } else { ?>
-                        <p>U bent ingeschreven voor een afspraak bij <strong><?= $this->data['subscription']['lecturer'] ?></strong> om <strong><?= $data['subscription']['subscribestart'] ?></strong>.  
-                            Deze afspraak duurt ongeveer tot <strong><?= $this->data['subscription']['subscribeend'] ?></strong>.</p>
+                        <p>U bent ingeschreven voor een afspraak bij <strong><?= $this->subscription['lecturer'] ?></strong> om <strong><?= $data['subscription']['subscribestart'] ?></strong>.  
+                            Deze afspraak duurt ongeveer tot <strong><?= $this->subscription['subscribeend'] ?></strong>.</p>
                     <?php } ?>
-                    <?php if (!$this->data['appointment']['started']) { ?>
+                    <?php if (!$this->appointment['started']) { ?>
                         <p>
-                            <a href="<?= base_url() ?>appointments/unsubscribe/<?= $this->data['appointment']['appointmentid'] ?>/<?= $data['subscription']['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                            <a href="<?= base_url() ?>appointments/unsubscribe/<?= $this->appointment['appointmentid'] ?>/<?= $data['subscription']['subscribeslotid'] ?>" class="btn btn-default btn-sm">
                                 <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
                             </a>
                         </p>
@@ -60,9 +60,9 @@
                 <?php } else { ?>
                     <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
                 <?php } ?>
-                <?php if ($this->data['appointment']['started']) { ?>
+                <?php if ($this->appointment['started']) { ?>
                     <div class="alert alert-info">
-                        <?php if ($this->data['appointment']['ended']) { ?>
+                        <?php if ($this->appointment['ended']) { ?>
                             Deze afspraak is verlopen. 
                         <?php } else { ?>
                             Deze afspraak is al begonnen. 
@@ -74,15 +74,15 @@
         </div>
         <?php if (userdata('accesslevel') >= LECTURER) { ?>
             <p>
-                <a href="<?= base_url() ?>appointments/addtimeslots/<?= $this->data['appointment']['appointmentid'] ?>" class="btn btn-primary">
+                <a href="<?= base_url() ?>appointments/addtimeslots/<?= $this->appointment['appointmentid'] ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-plus-sign"></span> 
                     Voeg tijdsloten toe
                 </a> 
-                <a href="<?= base_url() ?>appointments/edit/<?= $this->data['appointment']['appointmentid'] ?>" class="btn btn-primary">
+                <a href="<?= base_url() ?>appointments/edit/<?= $this->appointment['appointmentid'] ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-edit"></span> 
                     Wijzig afspraak
                 </a> 
-                <a href="<?= base_url() ?>appointments/delete/<?= $this->data['appointment']['appointmentid'] ?>" class="btn btn-danger">
+                <a href="<?= base_url() ?>appointments/delete/<?= $this->appointment['appointmentid'] ?>" class="btn btn-danger">
                     <span class="glyphicon glyphicon-remove-sign"></span> 
                     Verwijder afspraak
                 </a>
@@ -95,7 +95,7 @@
                 <div class="panel-title">Inschrijvingen</div>
             </div>
             <div class="panel-body">
-                <?php if ($this->data['slots']) { ?>
+                <?php if ($this->slots) { ?>
                     <p>Selecteer een beschikbaar tijdslot om u in te schrijven.</p>
                     <table class="table table-hover table-striped">
                         <thead>
@@ -107,16 +107,16 @@
                         </thead>
                         <tbody>
                             <?php $slotIndex = 0; ?>
-                            <?php foreach ($this->data['slots'] as $slot) { ?>
+                            <?php foreach ($this->slots as $slot) { ?>
                                 <tr>
                                     <td><?= $slot['lecturer'] ?></td>
                                     <td><?= $slot['start'] ?> - <?= $slot['end'] ?></td>
                                     <td>
                                         <?php if (!$slot['subscriberid']) { ?>
-                                            <?php if ($this->data['appointment']['started'] == FALSE && $this->data['subscription']['subscribed'] == FALSE) { ?>
+                                            <?php if ($this->appointment['started'] == FALSE && $this->subscription['subscribed'] == FALSE) { ?>
                                                 <?php if (isset($slot['available']) && $slot['available'] == TRUE || $slot['lecturerid'] == userdata('userid')) { ?>
                                                     <a class="text-success" href="<?= base_url() ?>appointments/subscribe/
-                                                       <?= $this->data['appointment']['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
+                                                       <?= $this->appointment['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
                                                         <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
                                                     </a>
                                                 <?php } else { ?>

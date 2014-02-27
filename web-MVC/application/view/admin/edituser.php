@@ -45,8 +45,8 @@
             <label for="accesslevel" class="col-lg-2 control-label">Profiel type</label>
             <div class="col-lg-4">
                 <select class="form-control" id="accesslevel" name="accesslevel" required>
-                    <?php foreach ($this->data['accessLevels'] as $accesslevel => $accessLevelname) { ?>
-                        <option value="<?= $accesslevel ?>" <?= $this->data['user']['accesslevel'] == $accesslevel ? 'selected' : '' ?>>
+                    <?php foreach ($this->accessLevels as $accesslevel => $accessLevelname) { ?>
+                        <option value="<?= $accesslevel ?>" <?= $this->user['accesslevel'] == $accesslevel ? 'selected' : '' ?>>
                             <?= $accessLevelname ?>
                         </option>
                     <?php } ?>
@@ -56,7 +56,7 @@
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
                 <button type="submit" name="submit" class="btn btn-primary">Wijzig gebruiker</button> 
-                <a href="<?= base_url() ?>profile/view/<?= $this->data['user']['username'] ?>" class="btn btn-default">Annuleer</a>
+                <a href="<?= base_url() ?>profile/view/<?= $this->user['username'] ?>" class="btn btn-default">Annuleer</a>
             </div>
         </div>
     </form>

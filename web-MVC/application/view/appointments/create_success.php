@@ -5,28 +5,28 @@
 <table class="table table-hover table-striped table-vertical">
     <tr>
         <td>Startdatum</td>
-        <td><?= $this->data['appointment']['date'] ?></td>
+        <td><?= $this->appointment['date'] ?></td>
     </tr>
     <tr>
         <td>Startuur</td>
-        <td><?= $this->data['appointment']['start'] ?></td>
+        <td><?= $this->appointment['start'] ?></td>
     </tr>
     <tr>
         <td>Einduur</td>
-        <td><?= $this->data['appointment']['end'] ?></td>
+        <td><?= $this->appointment['end'] ?></td>
     </tr>
     <tr>
         <td>Beschrijving</td>
-        <td><?= $this->data['appointment']['description'] ?></td>
+        <td><?= $this->appointment['description'] ?></td>
     </tr>
     <tr>
         <td>Locatie</td>
-        <td><?= $this->data['appointment']['location'] ?></td>
+        <td><?= $this->appointment['location'] ?></td>
     </tr>
     <tr>
         <td>Chronologie</td>
         <td>
-            <?php if ($this->data['appointment']['chronological']) { ?>
+            <?php if ($this->appointment['chronological']) { ?>
                 Inschrijvingen verlopen verplicht in chronologische volgorde.
             <?php } else { ?>
                 Inschrijvingen kunnen op elk tijdstip.

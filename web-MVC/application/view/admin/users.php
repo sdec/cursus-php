@@ -12,8 +12,8 @@
         </tr>
     </thead>
     <tbody>
-        <?php if ($this->data['users'] != FALSE) { ?>
-            <?php foreach ($this->data['users'] as $user) { ?>
+        <?php if ($this->users != FALSE) { ?>
+            <?php foreach ($this->users as $user) { ?>
                 <tr>
                     <td><a href="<?= base_url() ?>profile/view/<?= $user['username'] ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                     <td><?= ucfirst($user['firstname']) ?></td>
@@ -45,9 +45,9 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <?php if (strlen($this->data['search'])) { ?>
+        <?php if (strlen($this->search)) { ?>
             <hr />
-            <p>Er werden <strong><?= $this->data['users'] == FALSE ? 0 : count((array) $this->data['users']) ?></strong> gebruikers gevonden die voldoen aan uw zoekterm "<?= $this->data['search'] ?>".</p>
+            <p>Er werden <strong><?= $this->users == FALSE ? 0 : count((array) $this->users) ?></strong> gebruikers gevonden die voldoen aan uw zoekterm "<?= $this->search ?>".</p>
             <a href="<?= base_url() ?>admin/users" class="btn btn-default">Terug</a>
         <?php } ?>
     </div>
