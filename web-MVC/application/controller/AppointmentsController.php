@@ -14,7 +14,7 @@ class AppointmentsController extends Controller {
     
     public function index(){
         if(!loggedIn())
-            redirect('');
+            redirect('profile/login');
         
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $appointments = strlen($search) 
