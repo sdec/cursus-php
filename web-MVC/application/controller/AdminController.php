@@ -19,7 +19,7 @@ class AdminController extends Controller{
 
         $users = strlen($this->_template->search) ? $this->usermodel->searchUsers($this->_template->search) : $this->usermodel->loadAllUsers();
         for($i = 0 ; $i < count($users); $i++){
-            $users[$i]['accesslevelname'] = $this->usermodel->accessLevelName($users[$i]['accesslevel']);
+            $users[$i]->accesslevelname = $this->usermodel->accessLevelName($users[$i]->accesslevel);
         }
         $this->_template->users = $users;
         $this->_template->setPageTitle('Gebruikers');
@@ -34,8 +34,8 @@ class AdminController extends Controller{
         if ($user == FALSE)
             redirect('admin/users.php');
 
-        if ($user['accesslevel'] >= userdata('accesslevel'))
-            redirect('profile/view/' . $user['username']);
+        if ($user->accesslevel >= userdata('accesslevel'))
+            redirect('profile/view/' . $user->username);
 
         // Store my old session
         $_SESSION['act'] = $_SESSION['user'];
@@ -50,7 +50,7 @@ class AdminController extends Controller{
         if (!loggedin() || !isset($_SESSION['act']))
             redirect('');
 
-        $username = $_SESSION['act']['username'];
+        $username = $_SESSION['act']->username;
         unset_userdata();
         unset($_SESSION['act']);
 
@@ -120,8 +120,8 @@ class AdminController extends Controller{
                     set_error ('email', 'Het email veld moet een geldig email adres zijn');
 
                 if(hasErrors() == FALSE) {
-                    if($this->usermodel->usernameExists(set_value('username')) == FALSE || $user['username'] == set_value('username')) {
-                        $this->usermodel->editUser($user['userid'], 
+                    if($this->usermodel->usernameExists(set_value('username')) == FALSE || $user->username == set_value('username')) {
+                        $this->usermodel->editUser($user->userid, 
                                 set_value('username'), 
                                 set_value('firstname'),
                                 set_value('lastname'),
@@ -133,10 +133,10 @@ class AdminController extends Controller{
             }
         } else {
             // Set default form values from database
-            set_value('username', $user['username']);
-            set_value('firstname', $user['firstname']);
-            set_value('lastname', $user['lastname']);
-            set_value('email', $user['email']);
+            set_value('username', $user->username);
+            set_value('firstname', $user->firstname);
+            set_value('lastname', $user->lastname);
+            set_value('email', $user->email);
         }
         $this->_template->user = $user;
         

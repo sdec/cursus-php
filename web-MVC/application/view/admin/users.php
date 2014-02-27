@@ -15,12 +15,12 @@
         <?php if ($this->users != FALSE) { ?>
             <?php foreach ($this->users as $user) { ?>
                 <tr>
-                    <td><a href="<?= base_url() ?>profile/view/<?= $user['username'] ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
-                    <td><?= ucfirst($user['firstname']) ?></td>
-                    <td><?= ucfirst($user['lastname']) ?></td>
-                    <td><?= $user['username'] ?></td>
-                    <td><a href="mailto:<?= $user['email'] ?>"><?= $user['email'] ?></a></td>
-                    <td><?= $user['accesslevelname'] ?></td>
+                    <td><a href="<?= base_url() ?>profile/view/<?= $user->username ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                    <td><?= ucfirst($user->firstname) ?></td>
+                    <td><?= ucfirst($user->lastname) ?></td>
+                    <td><?= $user->username ?></td>
+                    <td><a href="mailto:<?= $user->email ?>"><?= $user->email ?></a></td>
+                    <td><?= $user->accesslevelname ?></td>
                 </tr>
             <?php } ?>
         <?php } else { ?>
