@@ -24,6 +24,7 @@ require_once(APPLICATION_PATH . 'config/database.php');
 // Helpers
 require_once(APPLICATION_PATH . 'helpers/route_helper.php');
 require_once(APPLICATION_PATH . 'helpers/session_helper.php');
+require_once(APPLICATION_PATH . 'helpers/databank_helper.php');
 require_once(APPLICATION_PATH . 'helpers/form_helper.php');
 
 // Models

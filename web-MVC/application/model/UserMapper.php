@@ -81,7 +81,7 @@ class User_Mapper {
         );
 
         $result = $this->_db->execute($sql, $arguments);
-        echo($this->_db->lastInsertId());
+        echo(getLastInsertId());
         return $result->rowCount() > 0 ? TRUE : FALSE;
     }
 
