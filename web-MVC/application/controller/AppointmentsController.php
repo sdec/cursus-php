@@ -1,6 +1,7 @@
 <?php
 
 class AppointmentsController extends Controller {
+    
     private $appointmentmodel;
     private $usermodel;
     
@@ -20,8 +21,8 @@ class AppointmentsController extends Controller {
             ? $this->appointmentmodel->searchAppointments($search) 
             : $this->appointmentmodel->loadAllAppointments();
 
-        $this->_template->data['appointments'] = $appointments;
-        $this->_template->data['search'] = $search;
+        $this->_template->appointments = $appointments;
+        $this->_template->search = $search;
         $this->_template->render("appointments/index");
     }
     
@@ -339,16 +340,6 @@ class AppointmentsController extends Controller {
         if($this->appointmentmodel->deleteTimeSlotAppointment($appointmentSlotid))
             message("Het tijdsslot werd successvol gedelete!", "success");
         $this->edit($appointmentid);
-    }
-    
-    public function myAppointments(){
-        if(!loggedin())
-            redirect('');
-        
-        $this->_template->data['appointments'] = $this->appointmentmodel->loadAllAppointments(userdata('userid'));
-        $this->_template->data['search'] = '';
-        
-        $this->render('index');
     }
 }
 ?>

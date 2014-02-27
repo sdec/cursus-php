@@ -132,6 +132,27 @@ class ProfileController extends Controller{
         unset_userdata('user');
         $this->render('logout_success');
     }
+    
+    public function appointments($username = '') {
+        if (!loggedin())
+            redirect('profile/login');
+
+        $user = null;
+        if(strlen($username)) {
+            $user = loadUser($username);
+        } else {
+            $user = $_SESSION['user'];
+        }
+
+        if($user == FALSE)
+            redirect('');
+
+        $search = isset($_GET['search']) ? $_GET['search'] : '';
+        $appointments = strlen($search) 
+            ? searchAppointments($search) 
+            : loadAllAppointments($user['userid']);
+
+    }
 }
 
 ?>

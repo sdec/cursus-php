@@ -1,40 +1,3 @@
-<?php
-define('BASE_URL', '../');
-require_once BASE_URL . 'includes/config/routes.php';
-require_once config_url() . 'sessions.php';
-require_once config_url() . 'database.php';
-require_once models_url() . 'UserModel.php';
-require_once models_url() . 'AppointmentModel.php';
-
-if (!loggedin())
-    redirect('profile/login.php');
-
-$user = null;
-if(isset($_GET['username']) && strlen($_GET['username'])) {
-    $user = loadUser($_GET['username']);
-} else {
-    $user = $_SESSION['user'];
-}
-        
-if($user == FALSE)
-    redirect('');
-        
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-$appointments = strlen($search) 
-    ? searchAppointments($search) 
-    : loadAllAppointments($user['userid']);
-
-?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Gebruikers - Afspraken planner</title>
-        <?php include_once partials_url() . 'header.php' ?>
-    </head>
-    <body>
-        <?php include_once partials_url() . 'navigation.php' ?>
-        <div class="container">
-
             <h1>Mijn afspraken</h1>
             <p>Afspraken waar u voor bent ingeschreven of waar u organisator van bent.</p>
             <table class="table table-hover table-striped">
@@ -99,9 +62,3 @@ $appointments = strlen($search)
                     <?php } ?>
                 </div>
             </div>
-
-            <?php include_once partials_url() . 'message.php' ?>
-        </div>
-        <?php include_once partials_url() . 'scripts.php' ?>
-    </body>
-</html>

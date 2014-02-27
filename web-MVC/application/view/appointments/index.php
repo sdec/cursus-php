@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Afspraken - Afspraken planner</title>
-        <?php include_once partials_url() . 'header.php' ?>
-    </head>
-    <body>
-        <?php include_once partials_url() . 'navigation.php' ?>
-        <div class="container">
-            
+
             <h1>Afspraken</h1>
             <table class="table table-hover table-striped">
                 <thead>
@@ -22,7 +13,7 @@
                 </thead>
                 <tbody>
                     <?php if ($this->data['appointments']) { ?>
-                        <?php foreach ($this->data['appointments'] as $appointment) { ?>
+                        <?php foreach ($this->appointments as $appointment) { ?>
                             <tr>
                                 <td>
                                     <a href="<?= base_url() ?>appointments/detail/<?= $appointment['appointmentid'] ?>">
@@ -66,14 +57,8 @@
                 <div class="col-lg-12">
                     <?php if (strlen($this->data['search'])) { ?>
                         <hr />
-                        <p>Er werden <strong><?= $this->data['appointments'] == FALSE ? 0 : count((array) $this->data['appointments']) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $this->data['search'];?>".</p>
+                        <p>Er werden <strong><?= $this->appointments == FALSE ? 0 : count((array) $this->data['appointments']) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $this->data['search'];?>".</p>
                         <a href="<?= base_url() ?>" class="btn btn-default">Terug</a>
                     <?php } ?>
                 </div>
             </div>
-            
-            <?php include_once partials_url() . 'message.php' ?>
-        </div>
-        <?php include_once partials_url() . 'scripts.php' ?>
-    </body>
-</html>
