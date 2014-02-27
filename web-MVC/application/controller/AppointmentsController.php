@@ -32,42 +32,42 @@ class AppointmentsController extends Controller {
         if (!loggedin() || $appointmentid == -1)
             redirect('profile/login');
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
-        if (!$appointment['appointmentid']){
+        if (!$appointment->appointmentid){
             message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             redirect('');
         }
 
-        $appointment['date'] = date('d M Y', strtotime($appointment['start_timestamp']));
-        $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
-        $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
+        $appointment->date = date('d M Y', strtotime($appointment->start_timestamp));
+        $appointment->start = date('H:i', strtotime($appointment->start_timestamp));
+        $appointment->end = date('H:i', strtotime($appointment->end_timestamp));
 
         $currentTime = time();
-        $appointment['started'] = strtotime($appointment['start_timestamp']) <= $currentTime;
-        $appointment['ended'] = strtotime($appointment['end_timestamp']) <= $currentTime;
+        $appointment->started = strtotime($appointment->start_timestamp) <= $currentTime;
+        $appointment->ended = strtotime($appointment->end_timestamp) <= $currentTime;
 
 
         $slots = $this->appointmentmodel->slots($appointmentid);
 
-        $subscription['subscribed'] = FALSE;
+        $subscription->subscribed = FALSE;
 
         if ($slots) {
             $availableCount = 0;
-            for($i = 0; $i < count($slots); $i++) {
-                if ($slots[$i]['subscriberid'] == userdata('userid')) {
-                    $subscription['subscribed'] = TRUE;
-                    $subscription['lecturerid'] = $slots[$i]['lecturerid'];
-                    $subscription['lecturer'] = $slots[$i]['lecturer'];
-                    $subscription['subscribestart'] = $slots[$i]['start'];
-                    $subscription['subscribeend'] = $slots[$i]['end'];
-                    $subscription['subscribeslotid'] = $slots[$i]['appointmentslotid'];
+            foreach($slots as $slot) {
+                if ($slot->subscriberid == userdata('userid')) {
+                    $subscription->subscribed = TRUE;
+                    $subscription->lecturerid = $slot->lecturerid;
+                    $subscription->lecturer = $slot->lecturer;
+                    $subscription->subscribestart = $slot->start;
+                    $subscription->subscribeend = $slot->end;
+                    $subscription->subscribeslotid = $slot->appointmentslotid;
                     break;
                 }
 
-                if (!$slots[$i]['subscriberid'] && $availableCount == 0 || !$appointment['chronological']) {
-                    $slots[$i]['available'] = TRUE;
+                if (!$slot->subscriberid && $availableCount == 0 || !$appointment->chronological) {
+                    $slot->available = TRUE;
                     $availableCount++;
                 } else {
-                    $slots[$i]['available'] = FALSE;
+                    $slot->available = FALSE;
                 }
             }
         }
@@ -91,14 +91,14 @@ class AppointmentsController extends Controller {
             redirect('');
 
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
-        if (!$appointment['appointmentid']){
+        if (!$appointment->appointmentid){
             message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
         }
 
         if ($this->appointmentmodel->subscribeAppointment($appointmentslotid, userdata('userid'))) {
-            $this->_template->appointmentid = $appointment['appointmentid'];
+            $this->_template->appointmentid = $appointment->appointmentid;
             
             $this->_template->setPageTitle('Ingeschreven');
             $this->_template->render('appointments/subscribe_success');
@@ -121,14 +121,14 @@ class AppointmentsController extends Controller {
             redirect('');
 
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
-        if (!$appointment['appointmentid']){
+        if (!$appointment->appointmentid){
             message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
         }
 
         if($this->appointmentmodel->unSubscribeAppointment($appointmentslotid, userdata('userid'))){
-            $this->_template->appointmentid = $appointment['appointmentid'];
+            $this->_template->appointmentid = $appointment->appointmentid;
             
             $this->_template->setPageTitle('Uitgeschreven');
             $this->_template->render('appointments/unsubscribe_success');
@@ -169,9 +169,9 @@ class AppointmentsController extends Controller {
                 if(hasErrors() == FALSE) {
                     if($appointmentid = $this->appointmentmodel->createAppointment(set_value('date').' '.set_value('start'), set_value('date').' '.set_value('end'), set_value('description'), set_value('location'), set_value('chronological'))) {
                         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
-                        $appointment['date'] = date('d M Y', strtotime($appointment['start_timestamp']));
-                        $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
-                        $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
+                        $appointment->date = date('d M Y', strtotime($appointment->start_timestamp));
+                        $appointment->start = date('H:i', strtotime($appointment->start_timestamp));
+                        $appointment->end = date('H:i', strtotime($appointment->end_timestamp));
                         $this->_template->appointment = $appointment;
                         
                         $this->_template->setPageTitle('Afspraak aanmaken');
@@ -214,13 +214,13 @@ class AppointmentsController extends Controller {
             redirect('profile/login');
 
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
-        if (!$appointment['appointmentid']){
+        if (!$appointment->appointmentid){
             message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
         }
 
-        $slots = $this->appointmentmodel->slots($appointment['appointmentid']);
+        $slots = $this->appointmentmodel->slots($appointment->appointmentid);
 
         if(isset($_POST['submit'])) {
             if(isset($_POST['date']) && isset($_POST['start']) && isset($_POST['end']) && isset($_POST['description']) && isset($_POST['location'])) {
@@ -245,14 +245,14 @@ class AppointmentsController extends Controller {
                     set_error ('location', 'Het locatieveld veld max maximum 32 karakters lang zijn');
 
                 if(hasErrors() == FALSE) {
-                    $this->appointmentmodel->editAppointment($appointment['appointmentid'], 
+                    $this->appointmentmodel->editAppointment($appointment->appointmentid, 
                         set_value('date').' '.set_value('start'), 
                         set_value('date').' '.set_value('end'), 
                         set_value('description'), set_value('location'), set_value('chronological'));
-                    $appointment = $this->appointmentmodel->loadAppointment($appointment['appointmentid']);
-                    $appointment['date'] = date('Y-m-d', strtotime($appointment['start_timestamp']));
-                    $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
-                    $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
+                    $appointment = $this->appointmentmodel->loadAppointment($appointment->appointmentid);
+                    $appointment->date = date('Y-m-d', strtotime($appointment->start_timestamp));
+                    $appointment->start = date('H:i', strtotime($appointment->start_timestamp));
+                    $appointment->end = date('H:i', strtotime($appointment->end_timestamp));
                     $this->_template->appointment = $appointment;
                     
                     $this->_template->setPageTitle('Afspraak wijzigen');
@@ -264,16 +264,16 @@ class AppointmentsController extends Controller {
         } else {
 
             // Set default form values from database
-            $appointment['date'] = date('Y-m-d', strtotime($appointment['start_timestamp']));
-            $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
-            $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
+            $appointment->date = date('Y-m-d', strtotime($appointment->start_timestamp));
+            $appointment->start = date('H:i', strtotime($appointment->start_timestamp));
+            $appointment->end = date('H:i', strtotime($appointment->end_timestamp));
 
-            set_value('date', $appointment['date']);
-            set_value('start', $appointment['start']);
-            set_value('end', $appointment['end']);
-            set_value('description', $appointment['description']);
-            set_value('location', $appointment['location']);
-            set_value('chronological', $appointment['chronological']);
+            set_value('date', $appointment->date);
+            set_value('start', $appointment->start);
+            set_value('end', $appointment->end);
+            set_value('description', $appointment->description);
+            set_value('location', $appointment->location);
+            set_value('chronological', $appointment->chronological);
         }
         
         $this->_template->slots = $slots;
@@ -291,7 +291,7 @@ class AppointmentsController extends Controller {
 
         $lecturers = $this->usermodel->lecturers();
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
-        if (!$appointment['appointmentid']){
+        if (!$appointment->appointmentid){
             message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
@@ -304,19 +304,19 @@ class AppointmentsController extends Controller {
                 set_value('end', $_POST['end']);
                 set_value('interval', $_POST['interval']);
 
-                $start_timestamp = date('Y-m-d', strtotime($appointment['start_timestamp'])) . ' ' . set_value('start');
-                $end_timestamp = date('Y-m-d', strtotime($appointment['start_timestamp'])) . ' ' . set_value('end');
-                $interval_timestamp = date('Y-m-d', strtotime($appointment['start_timestamp'])) . ' ' . set_value('interval');
+                $start_timestamp = date('Y-m-d', strtotime($appointment->start_timestamp)) . ' ' . set_value('start');
+                $end_timestamp = date('Y-m-d', strtotime($appointment->start_timestamp)) . ' ' . set_value('end');
+                $interval_timestamp = date('Y-m-d', strtotime($appointment->start_timestamp)) . ' ' . set_value('interval');
 
                 $start_end = strtotime($start_timestamp) + (strtotime(date('Y-m-d H:i:s', strtotime($interval_timestamp))) - strtotime(date('Y-m-d', strtotime($interval_timestamp))));
                 // First slot must not exceed the end of the appointment for this lecturer
                 if ($start_end <= strtotime($end_timestamp)) {
 
                     // Starting hour must not lie before the starting point of the appointment
-                    if (strtotime($start_timestamp) >= strtotime($appointment['start_timestamp'])) {
+                    if (strtotime($start_timestamp) >= strtotime($appointment->start_timestamp)) {
 
                         // Ending hour must not lie before the starting point of the appointment
-                        if (strtotime($end_timestamp) <= strtotime($appointment['end_timestamp'])) {
+                        if (strtotime($end_timestamp) <= strtotime($appointment->end_timestamp)) {
 
                             if ($this->appointmentmodel->addTimeSlotsAppointment($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
                                 $this->_template->appointmentid = $appointmentid;
@@ -330,11 +330,11 @@ class AppointmentsController extends Controller {
                             }
                         } else {
                             message('Het einduur van de afspraken moet gelijk aan of vroeger zijn dan '
-                                    . date('H:i', strtotime($appointment['end_timestamp'])), 'danger');
+                                    . date('H:i', strtotime($appointment->end_timestamp)), 'danger');
                         }
                     } else {
                         message('Het startuur van de afspraken moet gelijk aan of later zijn dan '
-                                . date('H:i', strtotime($appointment['start_timestamp'])), 'danger');
+                                . date('H:i', strtotime($appointment->start_timestamp)), 'danger');
                     }
                 } else {
                     message('Het einde van uw eerste slot mag het einduur niet overschrijden', 'danger');
@@ -342,8 +342,8 @@ class AppointmentsController extends Controller {
             }
         } else {
             // Set default form values
-            set_value('start', date('H:i', strtotime($appointment['start_timestamp'])));
-            set_value('end', date('H:i', strtotime($appointment['end_timestamp'])));
+            set_value('start', date('H:i', strtotime($appointment->start_timestamp)));
+            set_value('end', date('H:i', strtotime($appointment->end_timestamp)));
             set_value('interval', '00:15');
         }
         
@@ -358,7 +358,7 @@ class AppointmentsController extends Controller {
         if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1 || $appointmentSlotid == -1)
             redirect('profile/login');
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
-        if (!$appointment['appointmentid']){
+        if (!$appointment->appointmentid){
             message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
