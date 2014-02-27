@@ -30,13 +30,13 @@
             <span class="glyphicon glyphicon-user"></span> 
             Handel in naam van deze gebruiker
         </a>
-        <?php if (userdata('user')->accesslevel >= ADMIN) { ?>
+        <?php if (userdata('accesslevel') >= ADMIN) { ?>
 
             <a href="<?= base_url() ?>admin/edituser/<?= $this->user->username ?>" class="btn btn-primary">
                 <span class="glyphicon glyphicon-edit"></span> 
                 Wijzig gebruiker
             </a> 
-            <a href="<?= base_url() ?>admin/deleteuser/<?= $this->user->username ?>" class="btn btn-danger">
+            <a href="<?= base_url() ?>admin/deleteuser/<?= $this->user->userid ?>" class="btn btn-danger">
                 <span class="glyphicon glyphicon-remove-sign"></span> 
                 Verwijder gebruiker
             </a>

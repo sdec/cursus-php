@@ -47,7 +47,8 @@ class AppointmentsController extends Controller {
 
 
         $slots = $this->appointmentmodel->slots($appointmentid);
-
+        
+        $subscription = new StdClass;
         $subscription->subscribed = FALSE;
 
         if ($slots) {

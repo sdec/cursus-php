@@ -139,11 +139,11 @@ class AdminController extends Controller{
             set_value('email', $user->email);
         }
         $this->_template->user = $user;
-        
+        $accessLevels = array();
         for($i = 0; $i < count($this->usermodel->accessLevels); $i++){
-            $this->_template->accessLevels[$i] = $this->usermodel->accessLevelName($i);
+            $accessLevels[$i] = $this->usermodel->accessLevelName($i);
         }
-        
+        $this->_template->accessLevels = $accessLevels;
         $this->_template->setPageTitle('Wijzig gebruiker');
         $this->_template->render('admin/edituser');
     }
