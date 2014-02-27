@@ -74,7 +74,74 @@ class AdminController extends Controller{
     }
     
     public function edituser($username = ''){
-        
+        if (!loggedin())
+            redirect('');
+
+        if (userdata('accesslevel') < ADMIN){
+            message("Enkel admins mogen gebruikers rechten toekennen!", "info");
+            redirect('admin/users');
+        }
+
+        if($username == '')
+            redirect('admin/users');
+
+        $user = $this->usermodel->loadUser($username);
+        if($user == FALSE)
+            redirect('');
+
+        if(isset($_POST['submit'])) {
+            if(isset($_POST['username']) && isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['email'])) {
+
+                set_value('username', $_POST['username']);
+                set_value('firstname', $_POST['firstname']);
+                set_value('lastname', $_POST['lastname']);
+                set_value('email', $_POST['email']);
+                set_value('accesslevel', $_POST['accesslevel']);
+
+                if(isMinLength('username', 4) == FALSE)
+                    set_error ('username', 'Het gebuikersnaam veld moet minstens 4 karakters lang zijn');
+                if(isMaxLength('username', 32) == FALSE)
+                    set_error ('username', 'Het gebuikersnaam veld max maximum 32 karakters lang zijn');
+
+                if(isMinLength('firstname', 2) == FALSE)
+                    set_error ('firstname', 'Het voornaam veld moet minstens 2 karakters lang zijn');
+                if(isMaxLength('firstname', 32) == FALSE)
+                    set_error ('firstname', 'Het voornaam veld max maximum 32 karakters lang zijn');
+
+                if(isMinLength('lastname', 2) == FALSE)
+                    set_error ('lastname', 'Het familienaam veld moet minstens 2 karakters lang zijn');
+                if(isMaxLength('lastname', 32) == FALSE)
+                    set_error ('lastname', 'Het familienaam veld max maximum 32 karakters lang zijn');
+
+                if(isValidEmail(set_value('email')) == FALSE)
+                    set_error ('email', 'Het email veld moet een geldig email adres zijn');
+
+                if(hasErrors() == FALSE) {
+                    if($this->usermodel->usernameExists(set_value('username')) == FALSE || $user['username'] == set_value('username')) {
+                        $this->usermodel->editUser($user['userid'], 
+                                set_value('username'), 
+                                set_value('firstname'),
+                                set_value('lastname'),
+                                set_value('email'),
+                                set_value('accesslevel'));
+                        redirect('profile/view/'. set_value('username'));
+                    }
+                }
+            }
+        } else {
+            // Set default form values from database
+            set_value('username', $user['username']);
+            set_value('firstname', $user['firstname']);
+            set_value('lastname', $user['lastname']);
+            set_value('email', $user['email']);
+        }
+        global $data;
+        $data['user'] = $user;
+        global $accessLevels;
+        for($i = 0; $i < count($accessLevels); $i++){
+            $data['accessLevels'][$i] = accessLevelName($i);
+        }
+        $this->render('edituser');
     }
 }
 
