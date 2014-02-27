@@ -1,5 +1,4 @@
 <?php
-require_once helpers_url() . 'form_helper.php';
 
 class AdminController extends Controller{
     private $usermodel;

@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-
 // Paths
 define('BASE_URL', '/cursus-php/web-MVC/');
 define('APPLICATION_PATH', 'application/');

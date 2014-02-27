@@ -1,13 +1,12 @@
 <?php
-require_once helpers_url() . 'form_helper.php';
-require_once models_url() . 'AppointmentMapper.php';
 
-class AppointmentsController extends Controller{
+class AppointmentsController extends Controller {
     private $appointmentmodel;
     private $usermodel;
     
     public function __construct() {
-        parent::__construct('appointments');
+        parent::__construct();
+        
         $this->usermodel = new User_Mapper();
         $this->appointmentmodel = new Appointment_Mapper();
     }
@@ -23,8 +22,7 @@ class AppointmentsController extends Controller{
 
         $this->_template->data['appointments'] = $appointments;
         $this->_template->data['search'] = $search;
-        
-        $this->render("index");
+        $this->_template->render("appointments/index");
     }
     
     public function detail($appointmentid = -1){
