@@ -72,9 +72,9 @@ class AppointmentsController extends Controller {
             }
         }
         
-        $this->_template->data['appointment'] = $appointment;
-        $this->_template->data['slots'] = $slots;
-        $this->_template->data['subscription'] = $subscription;
+        $this->_template->appointment = $appointment;
+        $this->_template->slots = $slots;
+        $this->_template->subscription = $subscription;
         
         $this->_template->setPageTitle('Afspraak detail');
         $this->_template->render('appointments/detail');
@@ -103,7 +103,7 @@ class AppointmentsController extends Controller {
             $this->_template->setPageTitle('Ingeschreven');
             $this->_template->render('appointments/subscribe_success');
             
-            die;
+            die();
         } else {
             message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
         }
@@ -133,7 +133,7 @@ class AppointmentsController extends Controller {
             $this->_template->setPageTitle('Uitgeschreven');
             $this->_template->render('appointments/unsubscribe_success');
             
-            die;
+            die();
         } else {
             message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
         }
@@ -172,7 +172,7 @@ class AppointmentsController extends Controller {
                         $appointment['date'] = date('d M Y', strtotime($appointment['start_timestamp']));
                         $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
                         $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
-                        $this->_template->data['appointment'] = $appointment;
+                        $this->_template->appointment = $appointment;
                         
                         $this->_template->setPageTitle('Afspraak aanmaken');
                         $this->_template->render('appointments/create_success');
@@ -253,7 +253,7 @@ class AppointmentsController extends Controller {
                     $appointment['date'] = date('Y-m-d', strtotime($appointment['start_timestamp']));
                     $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
                     $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
-                    $this->_template->data['appointment'] = $appointment;
+                    $this->_template->appointment = $appointment;
                     
                     $this->_template->setPageTitle('Afspraak wijzigen');
                     $this->_template->render('appointments/edit_success');
@@ -276,8 +276,8 @@ class AppointmentsController extends Controller {
             set_value('chronological', $appointment['chronological']);
         }
         
-        $this->_template->data['slots'] = $slots;
-        $this->_template->data['appointment'] = $appointment;
+        $this->_template->slots = $slots;
+        $this->_template->appointment = $appointment;
         
         $this->_template->setPageTitle('Afspraak wijzigen');
         $this->_template->render('appointments/edit');
@@ -319,7 +319,7 @@ class AppointmentsController extends Controller {
                         if (strtotime($end_timestamp) <= strtotime($appointment['end_timestamp'])) {
 
                             if ($this->appointmentmodel->addTimeSlotsAppointment($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
-                                $this->_template->data['appointmentid'] = $appointmentid;
+                                $this->_template->appointmentid = $appointmentid;
                                 
                                 $this->_template->setPageTitle('Tijdsloten toevoegen');
                                 $this->_template->render('appointments/addtimeslots_success');
@@ -347,8 +347,8 @@ class AppointmentsController extends Controller {
             set_value('interval', '00:15');
         }
         
-        $this->_template->data['lecturers'] = $lecturers;
-        $this->_template->data['appointment'] = $appointment;
+        $this->_template->lecturers = $lecturers;
+        $this->_template->appointment = $appointment;
         
         $this->_template->setPageTitle('Tijdsloten toevoegen');
         $this->_template->render('appointments/addtimeslots');

@@ -11,7 +11,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php if ($this->data['appointments']) { ?>
+        <?php if ($this->appointments) { ?>
             <?php foreach ($this->appointments as $appointment) { ?>
                 <tr>
                     <td>
@@ -42,7 +42,7 @@
         <form class="form-horizontal" method="post" role="form">
             <div class="form-group">
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="search" name="search" value="<?= $this->data['search']; ?>"
+                    <input type="text" class="form-control" id="search" name="search" value="<?= $this->search; ?>"
                            placeholder="Zoek afspraken op beschrijving, organisator, locatie, vakken, start & einddata, studenten, ..." />
                 </div>
                 <div class="col-sm-2">
@@ -54,9 +54,9 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <?php if (strlen($this->data['search'])) { ?>
+        <?php if (strlen($this->search)) { ?>
             <hr />
-            <p>Er werden <strong><?= $this->appointments == FALSE ? 0 : count((array) $this->data['appointments']) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $this->data['search']; ?>".</p>
+            <p>Er werden <strong><?= $this->appointments == FALSE ? 0 : count((array) $this->appointments) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $this->search; ?>".</p>
             <a href="<?= base_url() ?>" class="btn btn-default">Terug</a>
         <?php } ?>
     </div>
