@@ -14,7 +14,8 @@ class ProfileController extends Controller{
         if(isset($_POST['submit']))
             $this->login();
         
-        $this->_template->render("profile/login");
+        $this->_template->setPageTitle('Log in');
+        $this->_template->render('profile/login');
     }
     
     public function login(){
@@ -43,15 +44,20 @@ class ProfileController extends Controller{
                     if($this->usermodel->isCorrectCredentialsUser(set_value('username'), set_value('password'))) {
                         
                         set_userdata($this->usermodel->loadUser(set_value('username')));
-                        $this->render('login_success');
-                        die();
+                        
+                        $this->_template->setPageTitle('Log in');
+                        $this->_template->render('profile/login_success');
+                        
+                        die;
                     }
 
                     message('Foutieve gebruikersnaam/paswoord combinatie!', 'danger');
                 }
             }
         }    
-        $this->_template->render("profile/login");
+        
+        $this->_template->setPageTitle('Log in');
+        $this->_template->render('profile/login');
     }
     
     public function register(){
@@ -112,19 +118,25 @@ class ProfileController extends Controller{
 
                     if($this->usermodel->usernameExists(set_value('username')) == FALSE) {
                         $this->usermodel->registerUser(set_value('username'), set_value('firstname'), set_value('lastname'), set_value('password'), set_value('email'));
-                        $this->render("register_success");
-                        die();
+                        
+                        $this->_template->setPageTitle('Registreren');
+                        $this->_template->render('profile/register_success');
+                        
+                        die;
                     }
                     message('Deze gebruikersnaam bestaat al', 'danger');
                 }
             }
         }
-        $this->render("register");
+        $this->_template->setPageTitle('Registreren');
+        $this->_template->render('profile/register');
     }
     
     public function view($username = null){
         $this->_template->user = (isset($username)) ? $this->usermodel->loadUser($username) : $this->usermodel->loadUser(userdata('username'));
-        $this->render('view');
+        
+        $this->_template->setPageTitle('Profiel');
+        $this->_template->render('profile/view');
     }
     
     public function logout(){
@@ -132,7 +144,8 @@ class ProfileController extends Controller{
             redirect('index.php');
 
         unset_userdata('user');
-        $this->render('logout_success');
+        $this->_template->setPageTitle('uitloggen');
+        $this->_template->render('profile/logout_success');
     }
     
     public function appointments($username = '', $search = '') {
@@ -150,11 +163,10 @@ class ProfileController extends Controller{
             redirect('');
 
         $appointments = strlen($search) 
-            ? $this->appointmentmodel->searchAppointments($search) 
-            : $this->appointmentmodel->loadAllAppointments($user['userid']);
+            ? searchAppointments($search) 
+            : loadAllAppointments($user['userid']);
         
-        $this->appointments = $appointments;
-        $this->search = $search;
+        $this->_template->setPageTitle('Mijn afspraken');
         $this->_template->render('profile/appointments');
 
     }

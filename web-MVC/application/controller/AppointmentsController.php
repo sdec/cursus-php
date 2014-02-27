@@ -23,7 +23,9 @@ class AppointmentsController extends Controller {
 
         $this->_template->appointments = $appointments;
         $this->_template->search = $search;
-        $this->_template->render("appointments/index");
+        
+        $this->_template->setPageTitle('Afspraken');
+        $this->_template->render('appointments/index');
     }
     
     public function detail($appointmentid = -1){
@@ -73,7 +75,9 @@ class AppointmentsController extends Controller {
         $this->_template->data['appointment'] = $appointment;
         $this->_template->data['slots'] = $slots;
         $this->_template->data['subscription'] = $subscription;
-        $this->render('detail');
+        
+        $this->_template->setPageTitle('Afspraak detail');
+        $this->_template->render('appointments/detail');
     }
     
     public function subscribe($appointmentid = -1, $slotid = -1){
@@ -95,8 +99,11 @@ class AppointmentsController extends Controller {
 
         if ($this->appointmentmodel->subscribeAppointment($appointmentslotid, userdata('userid'))) {
             $this->_template->appointmentid = $appointment['appointmentid'];
-            $this->render('subscribe_success');
-            die();
+            
+            $this->_template->setPageTitle('Ingeschreven');
+            $this->_template->render('appointments/subscribe_success');
+            
+            die;
         } else {
             message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
         }
@@ -122,8 +129,11 @@ class AppointmentsController extends Controller {
 
         if($this->appointmentmodel->unSubscribeAppointment($appointmentslotid, userdata('userid'))){
             $this->_template->appointmentid = $appointment['appointmentid'];
-            $this->render('unsubscribe_success');
-            die();
+            
+            $this->_template->setPageTitle('Uitgeschreven');
+            $this->_template->render('appointments/unsubscribe_success');
+            
+            die;
         } else {
             message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
         }
@@ -163,8 +173,11 @@ class AppointmentsController extends Controller {
                         $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
                         $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
                         $this->_template->data['appointment'] = $appointment;
-                        $this->render('create_success');
-                        die();
+                        
+                        $this->_template->setPageTitle('Afspraak aanmaken');
+                        $this->_template->render('appointments/create_success');
+                        
+                        die;
                     } else {
                         message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
                     }
@@ -176,7 +189,9 @@ class AppointmentsController extends Controller {
             set_value('start', '08:00');
             set_value('end', '16:00');
         }
-        $this->render('create');
+        
+        $this->_template->setPageTitle('Afspraak aanmaken');
+        $this->_template->render('appointments/create');
     }
     
     public function delete($appointmentid = -1){
@@ -239,8 +254,11 @@ class AppointmentsController extends Controller {
                     $appointment['start'] = date('H:i', strtotime($appointment['start_timestamp']));
                     $appointment['end'] = date('H:i', strtotime($appointment['end_timestamp']));
                     $this->_template->data['appointment'] = $appointment;
-                    $this->render('edit_success');
-                    die();
+                    
+                    $this->_template->setPageTitle('Afspraak wijzigen');
+                    $this->_template->render('appointments/edit_success');
+                    
+                    die;
                 }
             }
         } else {
@@ -260,7 +278,11 @@ class AppointmentsController extends Controller {
         
         $this->_template->data['slots'] = $slots;
         $this->_template->data['appointment'] = $appointment;
-        $this->_template->this->render('edit');
+        
+        $this->_template->setPageTitle('Afspraak wijzigen');
+        $this->_template->render('appointments/edit');
+                    
+        die;
     }
     
     public function addtimeslots($appointmentid = -1){
@@ -298,8 +320,11 @@ class AppointmentsController extends Controller {
 
                             if ($this->appointmentmodel->addTimeSlotsAppointment($appointmentid, $lecturerid, $start_timestamp, $end_timestamp, $interval_timestamp) == TRUE) {
                                 $this->_template->data['appointmentid'] = $appointmentid;
-                                $this->render('addtimeslots_success');
-                                die();
+                                
+                                $this->_template->setPageTitle('Tijdsloten toevoegen');
+                                $this->_template->render('appointments/addtimeslots_success');
+                                
+                                die;
                             } else {
                                 message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
                             }
@@ -324,7 +349,9 @@ class AppointmentsController extends Controller {
         
         $this->_template->data['lecturers'] = $lecturers;
         $this->_template->data['appointment'] = $appointment;
-        $this->render('addtimeslots');
+        
+        $this->_template->setPageTitle('Tijdsloten toevoegen');
+        $this->_template->render('appointments/addtimeslots');
     }
     
     public function deletetimeslot($appointmentid = -1, $appointmentSlotid = -1){

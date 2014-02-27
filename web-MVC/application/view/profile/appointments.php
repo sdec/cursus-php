@@ -33,11 +33,18 @@
                 </tbody>
             </table>
 
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <?php if (userdata('accesslevel') >= LECTURER) { ?>
-                        <p><a href="<?= base_url() ?>appointments/create.php" class="btn btn-primary">Nieuwe afspraak</a></p>
-                    <?php } ?>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-3">
+        <?php if (userdata('accesslevel') >= LECTURER) { ?>
+            <p><a href="<?= base_url() ?>appointments/create" class="btn btn-primary">Nieuwe afspraak</a></p>
+        <?php } ?>
+    </div>
+    <div class="col-lg-9 col-md-9 col-sm-9">
+        <form class="form-horizontal" method="get" action="<?= base_url() ?>profile/appointments" role="form">
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="search" name="search" 
+                           placeholder="Zoek afspraken op beschrijving, organisator, locatie, vakken, start & einddata, studenten, ..." />
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-9">
                     <form class="form-horizontal" method="get" action="<?= base_url() ?>profile/appointments/<?= userdata('username');?>/" role="form">

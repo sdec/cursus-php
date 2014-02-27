@@ -15,5 +15,5 @@
         <strong><?= userdata('firstname') ?> 
             <?= userdata('lastname') ?> (<?= userdata('username') ?>)</strong>.
     </p>
-    <p><a class="btn btn-default" href="<?= base_url() ?>admin/stopact_as.php">Terug naar eigen profiel</a></p>
+    <p><a class="btn btn-default" href="<?= base_url() ?>admin/stopact_as">Terug naar eigen profiel</a></p>
 <?php } ?>
