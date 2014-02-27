@@ -50,18 +50,8 @@ class Db
 
         return $stmt;
     }
-
-    public function queryAll($sql, $type, $arguments = array())
-    {
-        $stmt = $this->execute($sql, $arguments);
-
-        return $stmt->fetchAll(PDO::FETCH_CLASS, $type);
-    }
-
-    public function queryOne($sql, $type, $arguments = array())
-    {
-        $stmt = $this->execute($sql, $arguments);
-
-        return $stmt->fetchObject($type);
+    
+    public function getLastInsertId() {
+        return $this->_db->lastInsertId();
     }
 }
