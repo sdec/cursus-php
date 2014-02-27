@@ -65,7 +65,7 @@
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
                                     <button type="submit" name="submit" class="btn btn-primary">Wijzig gebruiker</button> 
-                                    <a href="<?= external_url() ?>profile/view/<?= $this->data['user']['username'] ?>" class="btn btn-default">Annuleer</a>
+                                    <a href="<?= base_url() ?>profile/view/<?= $this->data['user']['username'] ?>" class="btn btn-default">Annuleer</a>
                                 </div>
                             </div>
                     </form>

@@ -67,7 +67,7 @@
                     <?php if (strlen($this->data['search'])) { ?>
                         <hr />
                         <p>Er werden <strong><?= $this->data['appointments'] == FALSE ? 0 : count((array) $this->data['appointments']) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $this->data['search'];?>".</p>
-                        <a href="<?= external_url() ?>" class="btn btn-default">Terug</a>
+                        <a href="<?= base_url() ?>" class="btn btn-default">Terug</a>
                     <?php } ?>
                 </div>
             </div>

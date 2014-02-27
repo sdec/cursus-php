@@ -43,7 +43,7 @@
                 </tr>
             </table>
 
-            <p><a href="<?= external_url() ?>appointments/detail/<?= $this->data['appointment']['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
+            <p><a href="<?= base_url() ?>appointments/detail/<?= $this->data['appointment']['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
             <?php include_once partials_url() . 'message.php' ?>
         </div>
         <?php include_once partials_url() . 'scripts.php' ?>

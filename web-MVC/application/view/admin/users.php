@@ -57,7 +57,7 @@
                     <?php if (strlen($this->data['search'])) { ?>
                         <hr />
                         <p>Er werden <strong><?= $this->data['users'] == FALSE ? 0 : count((array) $this->data['users']) ?></strong> gebruikers gevonden die voldoen aan uw zoekterm "<?= $this->data['search'] ?>".</p>
-                        <a href="<?= external_url() ?>admin/users" class="btn btn-default">Terug</a>
+                        <a href="<?= base_url() ?>admin/users" class="btn btn-default">Terug</a>
                     <?php } ?>
                 </div>
             </div>
