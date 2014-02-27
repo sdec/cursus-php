@@ -87,7 +87,7 @@ class Appointment_Mapper{
             ':chronological' => $chronological,
         );
         $result = $this->_db->execute($sql, $arguments);
-        return $this->_db->lastInsertId();
+        return getLastInsertId();
     }
 
     function editAppointment($appointmentid, $start_timestamp, $end_timestamp, $description, $location, $chronological) {

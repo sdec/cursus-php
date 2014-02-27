@@ -5,7 +5,7 @@ class ProfileController extends Controller{
     private $appointmentmodel;
     
     public function __construct() {
-        parent::__construct('profile');
+        parent::__construct();
         $this->usermodel = new User_Mapper();
         $this->appointmentmodel = new Appointment_Mapper();
     }

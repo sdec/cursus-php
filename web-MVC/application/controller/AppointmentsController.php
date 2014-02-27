@@ -30,7 +30,7 @@ class AppointmentsController extends Controller {
     
     public function detail($appointmentid = -1){
         if (!loggedin() || $appointmentid == -1)
-            redirect('');
+            redirect('profile/login');
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment['appointmentid']){
             message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
@@ -82,7 +82,7 @@ class AppointmentsController extends Controller {
     
     public function subscribe($appointmentid = -1, $slotid = -1){
         if (!loggedin())
-            redirect('');
+            redirect('profile/login');
 
         $appointmentid = isset($appointmentid) ? trim($appointmentid) : -1;
         $appointmentslotid = isset($slotid) ? trim($slotid) : -1;
@@ -112,7 +112,7 @@ class AppointmentsController extends Controller {
 
     public function unsubscribe($appointmentid = -1, $slotid = -1){
         if (!loggedin())
-            redirect('');
+            redirect('profile/login');
 
         $appointmentid = isset($appointmentid) ? trim($appointmentid) : -1;
         $appointmentslotid = isset($slotid) ? trim($slotid) : -1;
@@ -142,7 +142,7 @@ class AppointmentsController extends Controller {
     
     public function create(){
         if (!loggedin() || userdata('accesslevel') < LECTURER)
-            redirect('');
+            redirect('profile/login');
 
         if(isset($_POST['submit'])) {
             if(isset($_POST['date']) && isset($_POST['start']) && isset($_POST['end']) && isset($_POST['description']) && isset($_POST['location'])) {
@@ -196,7 +196,7 @@ class AppointmentsController extends Controller {
     
     public function delete($appointmentid = -1){
         if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1)
-            redirect('');
+            redirect('profile/login');
 
         $appointment = $this->appointmentmodel->deleteAppointment($appointmentid);
         if($appointment == FALSE){
@@ -211,7 +211,7 @@ class AppointmentsController extends Controller {
 
     public function edit($appointmentid = -1){
         if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1)
-            redirect('');
+            redirect('profile/login');
 
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment['appointmentid']){
@@ -287,7 +287,7 @@ class AppointmentsController extends Controller {
     
     public function addtimeslots($appointmentid = -1){
         if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1)
-            redirect('');
+            redirect('profile/login');
 
         $lecturers = $this->usermodel->lecturers();
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
@@ -356,7 +356,7 @@ class AppointmentsController extends Controller {
     
     public function deletetimeslot($appointmentid = -1, $appointmentSlotid = -1){
         if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1 || $appointmentSlotid == -1)
-            redirect('');
+            redirect('profile/login');
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment['appointmentid']){
             message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
