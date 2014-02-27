@@ -17,8 +17,11 @@ class AdminController extends Controller{
             redirect('');
         $this->_template->search = isset($_POST['search']) ? $_POST['search'] : '';
 
-        $this->_template->users = strlen($this->_template->search) ? $this->usermodel->searchUsers($this->_template->search) : $this->usermodel->loadAllUsers();
-        
+        $users = strlen($this->_template->search) ? $this->usermodel->searchUsers($this->_template->search) : $this->usermodel->loadAllUsers();
+        for($i = 0 ; $i < count($users); $i++){
+            $users[$i]['accesslevelname'] = $this->usermodel->accessLevelName($users[$i]['accesslevel']);
+        }
+        $this->_template->users = $users;
         $this->_template->setPageTitle('Gebruikers');
         $this->_template->render('admin/users');
     }

@@ -20,7 +20,7 @@
                     <td><?= ucfirst($user['lastname']) ?></td>
                     <td><?= $user['username'] ?></td>
                     <td><a href="mailto:<?= $user['email'] ?>"><?= $user['email'] ?></a></td>
-                    <td><?= accessLevelName($user['accesslevel']) ?></td>
+                    <td><?= $user['accesslevelname'] ?></td>
                 </tr>
             <?php } ?>
         <?php } else { ?>

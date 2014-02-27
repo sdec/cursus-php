@@ -210,8 +210,7 @@ class User_Mapper {
       } */
 
     function accessLevelName($accessLevel) {
-        global $accessLevels;
-        return isset($accessLevels[$accessLevel]) ? $accessLevels[$accessLevel] : $accessLevels[0];
+        return isset($this->accessLevels[$accessLevel]) ? $this->accessLevels[$accessLevel] : $this->accessLevels[0];
     }
 
 }
