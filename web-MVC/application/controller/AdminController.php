@@ -18,7 +18,9 @@ class AdminController extends Controller{
         $this->_template->data['search'] = isset($_POST['search']) ? $_POST['search'] : '';
 
         $data['users'] = strlen($this->_template->data['search']) ? $this->usermodel->searchUsers($this->_template->data['search']) : $this->usermodel->loadAllUsers();
-        $this->render('users');
+        
+        $this->_template->setPageTitle('Gebruikers');
+        $this->_template->render('admin/users');
     }
     
     public function act_as($username = ''){
@@ -139,7 +141,8 @@ class AdminController extends Controller{
             $this->_template->data['accessLevels'][$i] = $this->usermodel->accessLevelName($i);
         }
         
-        $this->_template->render('edituser');
+        $this->_template->setPageTitle('Wijzig gebruiker');
+        $this->_template->render('admin/edituser');
     }
 }
 

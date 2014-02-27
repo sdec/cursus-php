@@ -78,7 +78,7 @@ class Template
 
     public function getPagetitle()
     {
-        return $this->pagetitle;
+        return $this->pagetitle . ' - ' . SITE_NAME;
     }
 
     public function setStatusMessage($statusMessage)

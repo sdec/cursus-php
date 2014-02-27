@@ -1,5 +1,8 @@
 <?php
 
+// Website name
+define('SITE_NAME', 'Afspraken planner');
+
 // Paths
 define('BASE_URL', '/cursus-php/web-MVC/');
 define('APPLICATION_PATH', 'application/');
