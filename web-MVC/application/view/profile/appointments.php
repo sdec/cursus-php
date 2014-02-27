@@ -42,12 +42,19 @@
     <div class="col-lg-9 col-md-9 col-sm-9">
         <form class="form-horizontal" method="post" action="<?= base_url() ?>profile/appointments" role="form">
             <div class="form-group">
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="search" name="search" 
-                           placeholder="Zoek afspraken op beschrijving, organisator, locatie, vakken, start & einddata, studenten, ..." />
-                </div>
-                <div class="col-sm-2">
-                    <input type="submit" class="form-control btn btn-primary" value="Zoek" />
+                <div class="col-lg-9 col-md-9 col-sm-9">
+                    <form class="form-horizontal" method="post" role="form">
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="search" name="search" 
+                                       placeholder="Zoek afspraken op beschrijving, organisator, locatie, vakken, start & einddata, studenten, ..."
+                                       value="<?=$this->search;?>"/>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="submit" class="form-control btn btn-primary" value="Zoek" />
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </form>

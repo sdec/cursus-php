@@ -2,6 +2,7 @@
 
 class ProfileController extends Controller{
     private $usermodel;
+    private $appointmentmodel;
     
     public function __construct() {
         parent::__construct('profile');
