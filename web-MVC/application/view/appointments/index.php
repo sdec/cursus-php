@@ -70,7 +70,7 @@ global $data;
                     <?php if (strlen($data['search'])) { ?>
                         <hr />
                         <p>Er werden <strong><?= $data['appointments'] == FALSE ? 0 : count((array) $data['appointments']) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $data['search'];?>".</p>
-                        <a href="<?= external_url() ?>" class="btn btn-default">Terug</a>
+                        <a href="<?= base_url() ?>" class="btn btn-default">Terug</a>
                     <?php } ?>
                 </div>
             </div>

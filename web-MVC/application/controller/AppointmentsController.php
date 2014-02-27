@@ -15,6 +15,7 @@ class AppointmentsController extends Controller{
     public function index(){
         if(!loggedIn())
             redirect('');
+        
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $appointments = strlen($search) 
             ? $this->appointmentmodel->searchAppointments($search) 

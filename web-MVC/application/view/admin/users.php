@@ -27,7 +27,7 @@ global $data;
                     <?php if($data['users'] != FALSE) { ?>
                         <?php foreach($data['users'] as $user) { ?>
                             <tr>
-                                <td><a href="<?= external_url() ?>profile/view/<?= $user['username'] ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                                <td><a href="<?= base_url() ?>profile/view/<?= $user['username'] ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                                 <td><?= ucfirst($user['firstname']) ?></td>
                                 <td><?= ucfirst($user['lastname']) ?></td>
                                 <td><?= $user['username'] ?></td>
@@ -60,7 +60,7 @@ global $data;
                     <?php if (strlen($data['search'])) { ?>
                         <hr />
                         <p>Er werden <strong><?= $data['users'] == FALSE ? 0 : count((array) $data['users']) ?></strong> gebruikers gevonden die voldoen aan uw zoekterm "<?= $data['search'] ?>".</p>
-                        <a href="<?= external_url() ?>admin/users" class="btn btn-default">Terug</a>
+                        <a href="<?= base_url() ?>admin/users" class="btn btn-default">Terug</a>
                     <?php } ?>
                 </div>
             </div>

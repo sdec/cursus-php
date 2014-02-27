@@ -2,7 +2,7 @@
 
 class FrontController
 {
-    const DEFAULT_CONTROLLER = "Home";
+    const DEFAULT_CONTROLLER = "Appointments";
     const DEFAULT_ACTION = "index";
     const CONTROLLER_PATH = 'controller/';
     const CONTROLLER_FILE = 'index.php';

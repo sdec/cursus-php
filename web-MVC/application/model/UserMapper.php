@@ -1,6 +1,5 @@
 <?php
 
-require_once(systemmodel_url() . 'Db.php');
 define('STUDENT', 0);
 define('LECTURER', 1);
 define('ADVISOR', 2);

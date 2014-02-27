@@ -71,11 +71,11 @@ class Loader
     private function _getFile($name, $path)
     {
         $file = APPLICATION_PATH . $path . $this->_addExtension($name);
-
         if (file_exists($file)) {
             return $file;
         } else {
             error_log("File not found: $file");
+            echo "File not found: $file";
             exit;
         }
     }

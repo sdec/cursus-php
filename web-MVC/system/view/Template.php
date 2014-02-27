@@ -4,7 +4,6 @@ class Template
     protected $data = array();
     protected $content = array();
     protected $partials = array();
-    protected $_auth;
     protected $layoutfile;
     private $_styles = array();
     private $pagetitle;
@@ -12,13 +11,11 @@ class Template
     private $fieldMessages = array();
 
     // on instantiation: check the layoutfile
-    public function __construct($layout = 'default')
+    public function __construct($layout = 'template')
     {
         // Loader initialiseren
         $this->_loader = Loader::getInstance();
         $this->layoutfile = $this->_loader->getLayout($layout);
-
-        $this->_auth = Auth::getInstance();
     }
 
     // render the main content of the site
@@ -117,15 +114,6 @@ class Template
         return $status;
     }
 
-    public function setStyle($style, $reset = false)
-    {
-        if ($reset) {
-            $this->_styles = array();
-        }
-
-        $this->_styles[] = $style;
-    }
-
     // automatic getter and setter, remapping every value to the protected attribute
     // read more about this on www.php.net/manual/en/language.oop5.overloading.php
     public function __set($name, $value)
@@ -140,20 +128,6 @@ class Template
             return $this->data[$name];
         }
         return false;
-    }
-
-    protected function _getCurrentUser()
-    {
-        return $this->_auth->getCurrentUser();
-    }
-
-    protected function _checkIfUserHasRequiredAccessLevel($requiredAccessLevel)
-    {
-        if ($this->_getCurrentUser()) {
-            return ($this->_auth->getUserAccessLevel() >= $requiredAccessLevel);
-        } else {
-            return false;
-        }
     }
 }
 

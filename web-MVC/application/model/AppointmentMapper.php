@@ -1,5 +1,4 @@
 <?php
-require_once(systemmodel_url() . 'Db.php');
 
 class Appointment_Mapper{
     private $_db;

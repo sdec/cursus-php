@@ -53,7 +53,7 @@ global $data;
                 </p>
             </div>
 
-            <p><a href="<?= external_url() ?>" class="btn btn-default">Terug</a></p>
+            <p><a href="<?= base_url() ?>" class="btn btn-default">Terug</a></p>
             <?php include_once partials_url() . 'message.php' ?>
         </div>
         <?php include_once partials_url() . 'scripts.php' ?>

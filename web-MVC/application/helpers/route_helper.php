@@ -1,50 +1,35 @@
 <?php
 
-function getCurrentPath()
-{
-    $rawpath =  substr($_SERVER['REQUEST_URI'], strlen(dirname($_SERVER['SCRIPT_NAME'])) + 1);
-    $trimmedpath = trim($rawpath, '/');
-
-    // if no scriptfile in de request_uri, we assume index.php is called
-    $path = ($trimmedpath) ? $trimmedpath : 'index.php';
-
-    return $path;
-}
-
 function base_url() {
     return BASE_URL;
 }
 
-function external_url() {
-    $app_path = '/cursus-php/web-MVC/';
-    return 'http://' . $_SERVER['HTTP_HOST'] . $app_path;
-}
-
 function assets_url() {
-    return external_url() . 'assets/';
+    return base_url() . 'assets/';
 }
 
 function partials_url() {
-    return base_url() . 'application/view/partials/';
+    return APPLICATION_PATH . 'view/partials/';
 }
 
 function config_url() {
-    return base_url() . 'application/config/';
+    return APPLICATION_PATH . 'config/';
 }
 
 function helpers_url() {
-    return base_url() . 'application/helpers/';
+    return APPLICATION_PATH . 'helpers/';
 }
 
 function models_url() {
-    return base_url() . 'application/model/';
+    return APPLICATION_PATH . 'model/';
 }
 
 function views_url(){
-    return base_url() . 'application/view/';
+    return APPLICATION_PATH . 'view/';
 }
 
-function redirect($page) {
-    header('Location: ' . external_url() . $page);
-    die;
+function redirect($location)
+{
+    header('location: ' . BASE_URL . $location);
+    exit;
 }

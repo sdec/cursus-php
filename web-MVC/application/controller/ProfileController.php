@@ -13,7 +13,7 @@ class ProfileController extends Controller{
         if(isset($_POST['submit']))
             $this->login();
         
-        $this->render("login");
+        $this->_template->render("profile/login");
     }
     
     public function login(){
@@ -50,7 +50,7 @@ class ProfileController extends Controller{
                 }
             }
         }    
-        $this->render("login");
+        $this->_template->render("profile/login");
     }
     
     public function register(){

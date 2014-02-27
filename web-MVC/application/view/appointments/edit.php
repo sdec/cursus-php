@@ -101,7 +101,7 @@ global $data;
                                         <td><?= $slot['start'] ?> - <?= $slot['end'] ?></td>
                                         <td><?= $slot['subscriber'] ?></td>
                                         <td>
-                                            <a href="<?= external_url() ?>appointments/deletetimeslot/<?= $data['appointment']['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
+                                            <a href="<?= base_url() ?>appointments/deletetimeslot/<?= $data['appointment']['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
                                                 <span class="glyphicon glyphicon-remove-sign"></span> Verwijder
                                             </a>
                                         </td>
@@ -114,7 +114,7 @@ global $data;
                     <?php } ?>
                 </div>
             </div>
-            <p><a href="<?= external_url() ?>appointments/detail/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
+            <p><a href="<?= base_url() ?>appointments/detail/<?= $data['appointment']['appointmentid'] ?>" class="btn btn-default">Terug</a></p>
             <?php include_once partials_url() . 'message.php' ?>
         </div>
         <?php include_once partials_url() . 'scripts.php' ?>
