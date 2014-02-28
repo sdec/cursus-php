@@ -9,6 +9,7 @@ class Template
     private $pagetitle;
     private $statusMessage;
     private $fieldMessages = array();
+    private $_form;
 
     // on instantiation: check the layoutfile
     public function __construct($layout = 'template')
@@ -16,6 +17,7 @@ class Template
         // Loader initialiseren
         $this->_loader = Loader::getInstance();
         $this->layoutfile = $this->_loader->getLayout($layout);
+        $this->_form = new FormHelper();
     }
 
     // render the main content of the site

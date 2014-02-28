@@ -13,7 +13,7 @@ class Controller
 
         // input class initialiseren
         $this->_input = new Input();
-
+        
         $this->_template = new Template();
         
         $this->_template->setPartial('header');

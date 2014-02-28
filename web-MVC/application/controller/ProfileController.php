@@ -21,29 +21,29 @@ class ProfileController extends Controller{
     public function login(){
         if(isset($_POST['submit'])) {
             if(isset($_POST['username']) && isset($_POST['password'])) {
-                set_value('username', $_POST['username']);
-                set_value('password', $_POST['password']);
+                $this->_template->_form->set_value('username', $_POST['username']);
+                $this->_template->_form->set_value('password', $_POST['password']);
 
-                if(isMinLength('username', 4) == FALSE)
+                if($this->_template->_form->isMinLength('username', 4) == FALSE)
                     set_error ('username', 'Het gebuikersnaam veld moet minstens 4 karakters lang zijn');
 
-                if(isMinLength('password', 4) == FALSE)
+                if($this->_template->_form->isMinLength('password', 4) == FALSE)
                     set_error ('password', 'Het paswoord veld moet minstens 4 karakters lang zijn');
 
-                if(isMaxLength('username', 32) == FALSE)
+                if($this->_template->_form->isMaxLength('username', 32) == FALSE)
                     set_error ('username', 'Het gebuikersnaam veld max maximum 32 karakters lang zijn');
 
-                if(isMaxLength('password', 128) == FALSE)
+                if($this->_template->_form->isMaxLength('password', 128) == FALSE)
                     set_error ('password', 'Het paswoord veld max maximum 128 karakters lang zijn');
 
-                if(isAlphaNumeric('username') == FALSE)
+                if($this->_template->_form->isAlphaNumeric('username') == FALSE)
                     set_error ('username', 'De gebruikersnaam mag enkel alfanumerieke karakters bevatten');
 
-                if(hasErrors() == FALSE) {
+                if($this->_template->_form->hasErrors() == FALSE) {
 
-                    if($this->usermodel->isCorrectCredentialsUser(set_value('username'), set_value('password'))) {
+                    if($this->usermodel->isCorrectCredentialsUser($this->_template->_form->set_value('username'), $this->_template->_form->set_value('password'))) {
                         
-                        SessionHelper::set_userdata($this->usermodel->loadUser(set_value('username')));
+                        SessionHelper::set_userdata($this->usermodel->loadUser($this->_template->_form->set_value('username')));
                         
                         $this->_template->setPageTitle('Log in');
                         $this->_template->render('profile/login_success');
@@ -62,62 +62,62 @@ class ProfileController extends Controller{
     
     public function register(){
         if(SessionHelper::loggedin()) //User already logged in, no need to register
-            redirect('index.php');
+            RouteHelper::redirect('index.php');
 
         if(isset($_POST['submit'])) {
             if(isset($_POST['username']) && isset($_POST['password'])) {
 
-                set_value('username', $_POST['username']);
-                set_value('firstname', $_POST['firstname']);
-                set_value('lastname', $_POST['lastname']);
-                set_value('password', $_POST['password']);
-                set_value('passwordConfirm', $_POST['passwordConfirm']);
-                set_value('email', $_POST['email']);
+                $this->_template->_form->set_value('username', $_POST['username']);
+                $this->_template->_form->set_value('firstname', $_POST['firstname']);
+                $this->_template->_form->set_value('lastname', $_POST['lastname']);
+                $this->_template->_form->set_value('password', $_POST['password']);
+                $this->_template->_form->set_value('passwordConfirm', $_POST['passwordConfirm']);
+                $this->_template->_form->set_value('email', $_POST['email']);
 
-                if(isMinLength('username', 4) == FALSE)
+                if($this->_template->_form->isMinLength('username', 4) == FALSE)
                     set_error ('username', 'Het gebuikersnaam veld moet minstens 4 karakters lang zijn');
 
-                if(isMinLength('firstname', 2) == FALSE)
+                if($this->_template->_form->isMinLength('firstname', 2) == FALSE)
                     set_error ('firstname', 'Het voornaam veld moet minstens 2 karakters lang zijn');
 
-                if(isMinLength('lastname', 2) == FALSE)
+                if($this->_template->_form->isMinLength('lastname', 2) == FALSE)
                     set_error ('lastname', 'Het familienaam veld moet minstens 2 karakters lang zijn');
 
-                if(isMinLength('password', 4) == FALSE)
+                if($this->_template->_form->isMinLength('password', 4) == FALSE)
                     set_error ('password', 'Het paswoord veld moet minstens 4 karakters lang zijn');
 
-                if(isMaxLength('username', 32) == FALSE)
+                if($this->_template->_form->isMaxLength('username', 32) == FALSE)
                     set_error ('username', 'Het gebuikersnaam veld max maximum 32 karakters lang zijn');
 
-                if(isMaxLength('firstname', 32) == FALSE)
+                if($this->_template->_form->isMaxLength('firstname', 32) == FALSE)
                     set_error ('firstname', 'Het voornaam veld max maximum 32 karakters lang zijn');
 
-                if(isMaxLength('lastname', 32) == FALSE)
+                if($this->_template->_form->isMaxLength('lastname', 32) == FALSE)
                     set_error ('lastname', 'Het familienaam veld max maximum 32 karakters lang zijn');
 
-                if(isMaxLength('password', 128) == FALSE)
+                if($this->_template->_form->isMaxLength('password', 128) == FALSE)
                     set_error ('password', 'Het paswoord veld max maximum 128 karakters lang zijn');
 
-                if(isAlphaNumeric('username') == FALSE)
+                if($this->_template->_form->isAlphaNumeric('username') == FALSE)
                     set_error ('username', 'De gebruikersnaam mag enkel alfanumerieke karakters bevatten');
 
-                if(isAlphaNumeric('firstname') == FALSE)
+                if($this->_template->_form->isAlphaNumeric('firstname') == FALSE)
                     set_error ('firstname', 'De voornaam mag enkel alfanumerieke karakters bevatten');
 
-                if(isAlphaNumeric('lastname') == FALSE)
+                if($this->_template->_form->isAlphaNumeric('lastname') == FALSE)
                     set_error ('lastname', 'De familienaam mag enkel alfanumerieke karakters bevatten');
 
-                if(set_value('password') !== set_value('passwordConfirm'))
+                if($this->_template->_form->set_value('password') !== $this->_template->_form->set_value('passwordConfirm'))
                     set_error ('passwordConfirm', 'Het paswoord & paswoord confirmatie veld moeten hetzelfde zijn');
 
-                if(isValidEmail(set_value('email')) == FALSE)
+                if($this->_template->_form->isValidEmail($this->_template->_form->set_value('email')) == FALSE)
                     set_error ('email', 'Het email veld moet een geldig email adres zijn');
 
 
-                if(hasErrors() == FALSE) {
+                if($this->_template->_form->hasErrors() == FALSE) {
 
-                    if($this->usermodel->usernameExists(set_value('username')) == FALSE) {
-                        $this->usermodel->registerUser(set_value('username'), set_value('firstname'), set_value('lastname'), set_value('password'), set_value('email'));
+                    if($this->usermodel->usernameExists($this->_template->_form->set_value('username')) == FALSE) {
+                        $this->usermodel->registerUser($this->_template->_form->set_value('username'), $this->_template->_form->set_value('firstname'), $this->_template->_form->set_value('lastname'), $this->_template->_form->set_value('password'), $this->_template->_form->set_value('email'));
                         
                         $this->_template->setPageTitle('Registreren');
                         $this->_template->render('profile/register_success');
@@ -141,7 +141,7 @@ class ProfileController extends Controller{
     
     public function logout(){
         if(!SessionHelper::loggedin()) //Can't logout if you're not logged in
-            redirect('index.php');
+            RouteHelper::redirect('index.php');
 
         SessionHelper::unset_userdata('user');
         $this->_template->setPageTitle('uitloggen');
@@ -150,7 +150,7 @@ class ProfileController extends Controller{
     
     public function appointments($username = '') {
         if (!SessionHelper::loggedin())
-            redirect('profile/login');
+            RouteHelper::redirect('profile/login');
 
         $user = null;
         if(strlen($username)) {
@@ -160,7 +160,7 @@ class ProfileController extends Controller{
         }
 
         if($user == FALSE)
-            redirect('');
+            RouteHelper::redirect('');
         
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $appointments = strlen($search) 
