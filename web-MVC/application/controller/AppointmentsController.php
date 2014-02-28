@@ -13,7 +13,7 @@ class AppointmentsController extends Controller {
     }
     
     public function index(){
-        if(!loggedIn())
+        if(!SessionHelper::loggedin())
             redirect('profile/login');
         
         $search = isset($_POST['search']) ? $_POST['search'] : '';
@@ -29,7 +29,7 @@ class AppointmentsController extends Controller {
     }
     
     public function detail($appointmentid = -1){
-        if (!loggedin() || $appointmentid == -1)
+        if (!SessionHelper::loggedin() || $appointmentid == -1)
             redirect('profile/login');
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment->appointmentid){
@@ -54,7 +54,7 @@ class AppointmentsController extends Controller {
         if ($slots) {
             $availableCount = 0;
             foreach($slots as $slot) {
-                if ($slot->subscriberid == userdata('userid')) {
+                if ($slot->subscriberid == SessionHelper::userdata('userid')) {
                     $subscription->subscribed = TRUE;
                     $subscription->lecturerid = $slot->lecturerid;
                     $subscription->lecturer = $slot->lecturer;
@@ -82,7 +82,7 @@ class AppointmentsController extends Controller {
     }
     
     public function subscribe($appointmentid = -1, $slotid = -1){
-        if (!loggedin())
+        if (!SessionHelper::loggedin())
             redirect('profile/login');
 
         $appointmentid = isset($appointmentid) ? trim($appointmentid) : -1;
@@ -98,7 +98,7 @@ class AppointmentsController extends Controller {
             die();
         }
 
-        if ($this->appointmentmodel->subscribeAppointment($appointmentslotid, userdata('userid'))) {
+        if ($this->appointmentmodel->subscribeAppointment($appointmentslotid, SessionHelper::userdata('userid'))) {
             $this->_template->appointmentid = $appointment->appointmentid;
             
             $this->_template->setPageTitle('Ingeschreven');
@@ -112,7 +112,7 @@ class AppointmentsController extends Controller {
     }
 
     public function unsubscribe($appointmentid = -1, $slotid = -1){
-        if (!loggedin())
+        if (!SessionHelper::loggedin())
             redirect('profile/login');
 
         $appointmentid = isset($appointmentid) ? trim($appointmentid) : -1;
@@ -128,7 +128,7 @@ class AppointmentsController extends Controller {
             die();
         }
 
-        if($this->appointmentmodel->unSubscribeAppointment($appointmentslotid, userdata('userid'))){
+        if($this->appointmentmodel->unSubscribeAppointment($appointmentslotid, SessionHelper::userdata('userid'))){
             $this->_template->appointmentid = $appointment->appointmentid;
             
             $this->_template->setPageTitle('Uitgeschreven');
@@ -142,7 +142,7 @@ class AppointmentsController extends Controller {
     }
     
     public function create(){
-        if (!loggedin() || userdata('accesslevel') < LECTURER)
+        if (!SessionHelper::loggedin() || SessionHelper::userdata('accesslevel') < LECTURER)
             redirect('profile/login');
 
         if(isset($_POST['submit'])) {
@@ -196,7 +196,7 @@ class AppointmentsController extends Controller {
     }
     
     public function delete($appointmentid = -1){
-        if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1)
+        if(!SessionHelper::loggedin() || SessionHelper::userdata('accesslevel') < LECTURER || $appointmentid == -1)
             redirect('profile/login');
 
         $appointment = $this->appointmentmodel->deleteAppointment($appointmentid);
@@ -211,7 +211,7 @@ class AppointmentsController extends Controller {
     }
 
     public function edit($appointmentid = -1){
-        if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1)
+        if(!SessionHelper::loggedin() || SessionHelper::userdata('accesslevel') < LECTURER || $appointmentid == -1)
             redirect('profile/login');
 
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
@@ -287,7 +287,7 @@ class AppointmentsController extends Controller {
     }
     
     public function addtimeslots($appointmentid = -1){
-        if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1)
+        if(!SessionHelper::loggedin() || SessionHelper::userdata('accesslevel') < LECTURER || $appointmentid == -1)
             redirect('profile/login');
 
         $lecturers = $this->usermodel->lecturers();
@@ -356,7 +356,7 @@ class AppointmentsController extends Controller {
     }
     
     public function deletetimeslot($appointmentid = -1, $appointmentSlotid = -1){
-        if(!loggedin() || userdata('accesslevel') < LECTURER || $appointmentid == -1 || $appointmentSlotid == -1)
+        if(!SessionHelper::loggedin() || SessionHelper::userdata('accesslevel') < LECTURER || $appointmentid == -1 || $appointmentSlotid == -1)
             redirect('profile/login');
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment->appointmentid){

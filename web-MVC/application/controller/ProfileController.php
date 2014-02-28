@@ -43,7 +43,7 @@ class ProfileController extends Controller{
 
                     if($this->usermodel->isCorrectCredentialsUser(set_value('username'), set_value('password'))) {
                         
-                        set_userdata($this->usermodel->loadUser(set_value('username')));
+                        SessionHelper::set_userdata($this->usermodel->loadUser(set_value('username')));
                         
                         $this->_template->setPageTitle('Log in');
                         $this->_template->render('profile/login_success');
@@ -61,7 +61,7 @@ class ProfileController extends Controller{
     }
     
     public function register(){
-        if(loggedin()) //User already logged in, no need to register
+        if(SessionHelper::loggedin()) //User already logged in, no need to register
             redirect('index.php');
 
         if(isset($_POST['submit'])) {
@@ -133,23 +133,23 @@ class ProfileController extends Controller{
     }
     
     public function view($username = null){
-        $this->_template->user = (isset($username)) ? $this->usermodel->loadUser($username) : $this->usermodel->loadUser(userdata('username'));
+        $this->_template->user = (isset($username)) ? $this->usermodel->loadUser($username) : $this->usermodel->loadUser(SessionHelper::userdata('username'));
         $this->_template->user->accesslevelname = $this->usermodel->accessLevelName($this->_template->user->accesslevel);
         $this->_template->setPageTitle('Profiel');
         $this->_template->render('profile/view');
     }
     
     public function logout(){
-        if(!loggedin()) //Can't logout if you're not logged in
+        if(!SessionHelper::loggedin()) //Can't logout if you're not logged in
             redirect('index.php');
 
-        unset_userdata('user');
+        SessionHelper::unset_userdata('user');
         $this->_template->setPageTitle('uitloggen');
         $this->_template->render('profile/logout_success');
     }
     
     public function appointments($username = '') {
-        if (!loggedin())
+        if (!SessionHelper::loggedin())
             redirect('profile/login');
 
         $user = null;

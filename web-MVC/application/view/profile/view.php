@@ -1,5 +1,5 @@
 <h1>
-    <?= userdata('userid') == $this->user->userid ? 'Mijn profiel' : 'Profiel van ' . $this->user->firstname . ' ' . $this->user->lastname ?>
+    <?= SessionHelper::userdata('userid') == $this->user->userid ? 'Mijn profiel' : 'Profiel van ' . $this->user->firstname . ' ' . $this->user->lastname ?>
 </h1>
 <table class="table table-hover table-striped table-vertical">
     <tr>
@@ -23,14 +23,14 @@
         <td><?= $this->user->accesslevelname;?></td>
     </tr>
 </table>
-<?php if ($this->user->accesslevel < userdata('accesslevel')) { ?>
-    <?php if (userdata('accesslevel') >= ADVISOR) { ?>
+<?php if ($this->user->accesslevel < SessionHelper::userdata('accesslevel')) { ?>
+    <?php if (SessionHelper::userdata('accesslevel') >= ADVISOR) { ?>
         <hr />
         <a href="<?= base_url() ?>admin/act_as/<?= $this->user->username ?>" class="btn btn-primary">
             <span class="glyphicon glyphicon-user"></span> 
             Handel in naam van deze gebruiker
         </a>
-        <?php if (userdata('accesslevel') >= ADMIN) { ?>
+        <?php if (SessionHelper::userdata('accesslevel') >= ADMIN) { ?>
 
             <a href="<?= base_url() ?>admin/edituser/<?= $this->user->username ?>" class="btn btn-primary">
                 <span class="glyphicon glyphicon-edit"></span> 

@@ -13,7 +13,7 @@ class AdminController extends Controller{
     }
     
     public function users(){
-        if (!loggedin() || userdata('accesslevel') < LECTURER)
+        if (!SessionHelper::loggedin() || SessionHelper::userdata('accesslevel') < LECTURER)
             redirect('');
         $this->_template->search = isset($_POST['search']) ? $_POST['search'] : '';
 
@@ -27,42 +27,42 @@ class AdminController extends Controller{
     }
     
     public function act_as($username = ''){
-        if (!loggedin() || userdata('accesslevel') < LECTURER)
+        if (!SessionHelper::loggedin() || SessionHelper::userdata('accesslevel') < LECTURER)
             redirect('');
         
         $user = $this->usermodel->loadUser($username);
         if ($user == FALSE)
             redirect('admin/users.php');
 
-        if ($user->accesslevel >= userdata('accesslevel'))
+        if ($user->accesslevel >= SessionHelper::userdata('accesslevel'))
             redirect('profile/view/' . $user->username);
 
         // Store my old session
         $_SESSION['act'] = $_SESSION['user'];
 
         // Set the new session
-        set_userdata($user);
+        SessionHelper::set_userdata($user);
 
         redirect('');
     }
     
     public function stopact_as(){
-        if (!loggedin() || !isset($_SESSION['act']))
+        if (!SessionHelper::loggedin() || !isset($_SESSION['act']))
             redirect('');
 
         $username = $_SESSION['act']->username;
-        unset_userdata();
+        SessionHelper::unset_userdata();
         unset($_SESSION['act']);
 
-        set_userdata($this->usermodel->loadUser($username));
+        SessionHelper::set_userdata($this->usermodel->loadUser($username));
         redirect('');
     }
     
     public function deleteuser($userid = -1){
-        if (!loggedin() || $userid == -1)
+        if (!SessionHelper::loggedin() || $userid == -1)
             redirect('');
         
-        if (userdata('accesslevel') < ADMIN){
+        if (SessionHelper::userdata('accesslevel') < ADMIN){
             message("Enkel admins mogen gebruikers deleten!", "info");
             redirect('');
         }
@@ -77,10 +77,10 @@ class AdminController extends Controller{
     }
     
     public function edituser($username = ''){
-        if (!loggedin())
+        if (!SessionHelper::loggedin())
             redirect('');
 
-        if (userdata('accesslevel') < ADMIN){
+        if (SessionHelper::userdata('accesslevel') < ADMIN){
             message("Enkel admins mogen gebruikers rechten toekennen!", "info");
             redirect('admin/users');
         }

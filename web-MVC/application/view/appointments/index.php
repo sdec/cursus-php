@@ -34,7 +34,7 @@
 
 <div class="row">
     <div class="col-lg-3 col-md-3 col-sm-3">
-        <?php if (userdata('accesslevel') >= LECTURER) { ?>
+        <?php if (SessionHelper::userdata('accesslevel') >= LECTURER) { ?>
             <p><a href="<?= base_url() ?>appointments/create" class="btn btn-primary">Nieuwe afspraak</a></p>
         <?php } ?>
     </div>

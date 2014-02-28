@@ -41,7 +41,7 @@
             </div>
             <div class="panel-body">
                 <?php if ($this->subscription->subscribed) { ?>
-                    <?php if ($this->subscription->lecturerid == userdata('userid')) { ?>
+                    <?php if ($this->subscription->lecturerid == SessionHelper::userdata('userid')) { ?>
                         <p>
                             U heeft aangegeven pauze te nemen van <strong><?= $this->subscription->subscribestart ?></strong> 
                             tot ongeveer <strong><?= $this->subscription->subscribeend ?></strong>.
@@ -72,7 +72,7 @@
                 <?php } ?>
             </div>
         </div>
-        <?php if (userdata('accesslevel') >= LECTURER) { ?>
+        <?php if (SessionHelper::userdata('accesslevel') >= LECTURER) { ?>
             <p>
                 <a href="<?= base_url() ?>appointments/addtimeslots/<?= $this->appointment->appointmentid ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-plus-sign"></span> 
@@ -114,7 +114,7 @@
                                     <td>
                                         <?php if (!$slot->subscriberid) { ?>
                                             <?php if ($this->appointment->started == FALSE && $this->subscription->subscribed == FALSE) { ?>
-                                                <?php if (isset($slot->available) && $slot->available == TRUE || $slot->lecturerid == userdata('userid')) { ?>
+                                                <?php if (isset($slot->available) && $slot->available == TRUE || $slot->lecturerid == SessionHelper::userdata('userid')) { ?>
                                                     <a class="text-success" href="<?= base_url() ?>appointments/subscribe/
                                                        <?= $this->appointment->appointmentid ?>/<?= $slot->appointmentslotid ?>">
                                                         <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
@@ -128,7 +128,7 @@
                                                 <span class="text-info">
                                                     <span class="glyphicon glyphicon-pause"></span> Pauze
                                                 </span>
-                                            <?php } else if ($slot->subscriberid == userdata('userid')) { ?>
+                                            <?php } else if ($slot->subscriberid == SessionHelper::userdata('userid')) { ?>
                                                 <span class="text-success">
                                                     <span class="glyphicon glyphicon-ok-sign"></span> Ingeschreven
                                                 </span>
