@@ -1,35 +1,39 @@
 <?php
 
-function base_url() {
-    return BASE_URL;
-}
+class RouteHelper{
 
-function assets_url() {
-    return base_url() . 'assets/';
-}
+    public static function base_url() {
+        return BASE_URL;
+    }
 
-function partials_url() {
-    return APPLICATION_PATH . 'view/partials/';
-}
+    public static function assets_url() {
+        return RouteHelper::base_url() . 'assets/';
+    }
 
-function config_url() {
-    return APPLICATION_PATH . 'config/';
-}
+    public static function partials_url() {
+        return APPLICATION_PATH . 'view/partials/';
+    }
 
-function helpers_url() {
-    return APPLICATION_PATH . 'helpers/';
-}
+    public static function config_url() {
+        return APPLICATION_PATH . 'config/';
+    }
 
-function models_url() {
-    return APPLICATION_PATH . 'model/';
-}
+    public static function helpers_url() {
+        return APPLICATION_PATH . 'helpers/';
+    }
 
-function views_url(){
-    return APPLICATION_PATH . 'view/';
-}
+    public static function models_url() {
+        return APPLICATION_PATH . 'model/';
+    }
 
-function redirect($location)
-{
-    header('location: ' . BASE_URL . $location);
-    exit;
+    public static function views_url(){
+        return APPLICATION_PATH . 'view/';
+    }
+
+    public static function redirect($location)
+    {
+        header('location: ' . BASE_URL . $location);
+        exit;
+    }
+
 }

@@ -52,7 +52,7 @@
                     <?php } ?>
                     <?php if (!$this->appointment->started) { ?>
                         <p>
-                            <a href="<?= base_url() ?>appointments/unsubscribe/<?= $this->appointment->appointmentid ?>/<?= $this->subscription->subscribeslotid ?>" class="btn btn-default btn-sm">
+                            <a href="<?= RouteHelper::base_url() ?>appointments/unsubscribe/<?= $this->appointment->appointmentid ?>/<?= $this->subscription->subscribeslotid ?>" class="btn btn-default btn-sm">
                                 <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
                             </a>
                         </p>
@@ -74,15 +74,15 @@
         </div>
         <?php if (SessionHelper::userdata('accesslevel') >= LECTURER) { ?>
             <p>
-                <a href="<?= base_url() ?>appointments/addtimeslots/<?= $this->appointment->appointmentid ?>" class="btn btn-primary">
+                <a href="<?= RouteHelper::base_url() ?>appointments/addtimeslots/<?= $this->appointment->appointmentid ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-plus-sign"></span> 
                     Voeg tijdsloten toe
                 </a> 
-                <a href="<?= base_url() ?>appointments/edit/<?= $this->appointment->appointmentid ?>" class="btn btn-primary">
+                <a href="<?= RouteHelper::base_url() ?>appointments/edit/<?= $this->appointment->appointmentid ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-edit"></span> 
                     Wijzig afspraak
                 </a> 
-                <a href="<?= base_url() ?>appointments/delete/<?= $this->appointment->appointmentid ?>" class="btn btn-danger">
+                <a href="<?= RouteHelper::base_url() ?>appointments/delete/<?= $this->appointment->appointmentid ?>" class="btn btn-danger">
                     <span class="glyphicon glyphicon-remove-sign"></span> 
                     Verwijder afspraak
                 </a>
@@ -115,7 +115,7 @@
                                         <?php if (!$slot->subscriberid) { ?>
                                             <?php if ($this->appointment->started == FALSE && $this->subscription->subscribed == FALSE) { ?>
                                                 <?php if (isset($slot->available) && $slot->available == TRUE || $slot->lecturerid == SessionHelper::userdata('userid')) { ?>
-                                                    <a class="text-success" href="<?= base_url() ?>appointments/subscribe/
+                                                    <a class="text-success" href="<?= RouteHelper::base_url() ?>appointments/subscribe/
                                                        <?= $this->appointment->appointmentid ?>/<?= $slot->appointmentslotid ?>">
                                                         <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
                                                     </a>

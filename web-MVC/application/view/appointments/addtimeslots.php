@@ -46,7 +46,7 @@
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
                 <button type="submit" name="submit" class="btn btn-primary">Voeg tijdsloten toe</button> 
-                <a href="<?= base_url() ?>appointments/detail/<?= $this->appointment->appointmentid; ?>" class="btn btn-default">Annuleer</a>
+                <a href="<?= RouteHelper::base_url() ?>appointments/detail/<?= $this->appointment->appointmentid; ?>" class="btn btn-default">Annuleer</a>
             </div>
         </div>
     </form>

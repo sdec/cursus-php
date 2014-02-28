@@ -66,7 +66,7 @@
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
                 <button type="submit" name="submit" class="btn btn-primary">Maak afspraak</button> 
-                <a href="<?= base_url() ?>" class="btn btn-default">Annuleer</a>
+                <a href="<?= RouteHelper::base_url() ?>" class="btn btn-default">Annuleer</a>
             </div>
         </div>
     </form>

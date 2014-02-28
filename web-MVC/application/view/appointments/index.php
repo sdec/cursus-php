@@ -15,7 +15,7 @@
             <?php foreach ($this->appointments as $appointment) { ?>
                 <tr>
                     <td>
-                        <a href="<?= base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>">
+                        <a href="<?= RouteHelper::base_url() ?>appointments/detail/<?= $appointment->appointmentid ?>">
                             <span class="glyphicon glyphicon-eye-open"></span> 
                         </a>
                     </td>
@@ -35,7 +35,7 @@
 <div class="row">
     <div class="col-lg-3 col-md-3 col-sm-3">
         <?php if (SessionHelper::userdata('accesslevel') >= LECTURER) { ?>
-            <p><a href="<?= base_url() ?>appointments/create" class="btn btn-primary">Nieuwe afspraak</a></p>
+            <p><a href="<?= RouteHelper::base_url() ?>appointments/create" class="btn btn-primary">Nieuwe afspraak</a></p>
         <?php } ?>
     </div>
     <div class="col-lg-9 col-md-9 col-sm-9">
@@ -57,7 +57,7 @@
         <?php if (strlen($this->search)) { ?>
             <hr />
             <p>Er werden <strong><?= $this->appointments == FALSE ? 0 : count((array) $this->appointments) ?></strong> afspraken gevonden die voldoen aan uw zoekterm "<?= $this->search; ?>".</p>
-            <a href="<?= base_url() ?>" class="btn btn-default">Terug</a>
+            <a href="<?= RouteHelper::base_url() ?>" class="btn btn-default">Terug</a>
         <?php } ?>
     </div>
 </div>

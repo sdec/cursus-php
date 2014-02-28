@@ -42,4 +42,4 @@
     </p>
 </div>
 
-<p><a href="<?= base_url() ?>" class="btn btn-default">Terug</a></p>
+<p><a href="<?= RouteHelper::base_url() ?>" class="btn btn-default">Terug</a></p>

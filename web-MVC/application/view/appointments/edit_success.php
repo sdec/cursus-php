@@ -35,4 +35,4 @@
     </tr>
 </table>
 
-<p><a href="<?= base_url() ?>appointments/detail/<?= $this->appointment->appointmentid ?>" class="btn btn-default">Terug</a></p>
+<p><a href="<?= RouteHelper::base_url() ?>appointments/detail/<?= $this->appointment->appointmentid ?>" class="btn btn-default">Terug</a></p>

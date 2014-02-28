@@ -90,7 +90,7 @@
                             <td><?= $slot->start ?> - <?= $slot->end ?></td>
                             <td><?= $slot->subscriber ?></td>
                             <td>
-                                <a href="<?= base_url() ?>appointments/deletetimeslot/<?= $this->appointment->appointmentid ?>/<?= $slot->appointmentslotid ?>">
+                                <a href="<?= RouteHelper::base_url() ?>appointments/deletetimeslot/<?= $this->appointment->appointmentid ?>/<?= $slot->appointmentslotid ?>">
                                     <span class="glyphicon glyphicon-remove-sign"></span> Verwijder
                                 </a>
                             </td>
@@ -103,4 +103,4 @@
         <?php } ?>
     </div>
 </div>
-<p><a href="<?= base_url() ?>appointments/detail/<?= $this->appointment->appointmentid ?>" class="btn btn-default">Terug</a></p>
+<p><a href="<?= RouteHelper::base_url() ?>appointments/detail/<?= $this->appointment->appointmentid ?>" class="btn btn-default">Terug</a></p>
