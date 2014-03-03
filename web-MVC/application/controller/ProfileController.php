@@ -11,7 +11,7 @@ class ProfileController extends Controller{
     }
     
     public function index(){
-        if(isset($_POST['submit']))
+        if($this->_input->post('submit') == '')
             $this->login();
         
         $this->_template->setPageTitle('Log in');
@@ -19,10 +19,10 @@ class ProfileController extends Controller{
     }
     
     public function login(){
-        if(isset($_POST['submit'])) {
-            if(isset($_POST['username']) && isset($_POST['password'])) {
-                $this->_template->_form->set_value('username', $_POST['username']);
-                $this->_template->_form->set_value('password', $_POST['password']);
+        if($this->_input->post('submit') == '') {
+            if($this->_input->post('username') && $this->_input->post('password')) {
+                $this->_template->_form->set_value('username', $this->_input->post('username'));
+                $this->_template->_form->set_value('password', $this->_input->post('password'));
 
                 if($this->_template->_form->isMinLength('username', 4) == FALSE)
                     set_error ('username', 'Het gebuikersnaam veld moet minstens 4 karakters lang zijn');
@@ -51,7 +51,7 @@ class ProfileController extends Controller{
                         die;
                     }
 
-                    message('Foutieve gebruikersnaam/paswoord combinatie!', 'danger');
+                    FormHelper::message('Foutieve gebruikersnaam/paswoord combinatie!', 'danger');
                 }
             }
         }    
@@ -64,15 +64,15 @@ class ProfileController extends Controller{
         if(SessionHelper::loggedin()) //User already logged in, no need to register
             RouteHelper::redirect('index.php');
 
-        if(isset($_POST['submit'])) {
-            if(isset($_POST['username']) && isset($_POST['password'])) {
+        if($this->_input->post('submit') == '') {
+            if($this->_input->post('username') && $this->_input->post('password')) {
 
-                $this->_template->_form->set_value('username', $_POST['username']);
-                $this->_template->_form->set_value('firstname', $_POST['firstname']);
-                $this->_template->_form->set_value('lastname', $_POST['lastname']);
-                $this->_template->_form->set_value('password', $_POST['password']);
-                $this->_template->_form->set_value('passwordConfirm', $_POST['passwordConfirm']);
-                $this->_template->_form->set_value('email', $_POST['email']);
+                $this->_template->_form->set_value('username', $this->_input->post('username'));
+                $this->_template->_form->set_value('firstname', $this->_input->post('firstname'));
+                $this->_template->_form->set_value('lastname', $this->_input->post('lastname'));
+                $this->_template->_form->set_value('password', $this->_input->post('password'));
+                $this->_template->_form->set_value('passwordConfirm', $this->_input->post('passwordConfirm'));
+                $this->_template->_form->set_value('email', $this->_input->post('email'));
 
                 if($this->_template->_form->isMinLength('username', 4) == FALSE)
                     set_error ('username', 'Het gebuikersnaam veld moet minstens 4 karakters lang zijn');
@@ -124,7 +124,7 @@ class ProfileController extends Controller{
                         
                         die;
                     }
-                    message('Deze gebruikersnaam bestaat al', 'danger');
+                    FormHelper::message('Deze gebruikersnaam bestaat al', 'danger');
                 }
             }
         }
@@ -162,8 +162,8 @@ class ProfileController extends Controller{
         if($user == FALSE)
             RouteHelper::redirect('');
         
-        $search = isset($_POST['search']) ? $_POST['search'] : '';
-        $appointments = strlen($search) 
+        $search = $this->_input->post('search');
+        $appointments = ($search) 
             ? $this->appointmentmodel->searchAppointments($search) 
             : $this->appointmentmodel->loadAllAppointments($user->userid);
         

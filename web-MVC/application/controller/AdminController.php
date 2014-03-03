@@ -15,7 +15,7 @@ class AdminController extends Controller{
     public function users(){
         if (!SessionHelper::loggedin() || SessionHelper::userdata('accesslevel') < LECTURER)
             RouteHelper::redirect('');
-        $this->_template->search = isset($_POST['search']) ? $_POST['search'] : '';
+        $this->_template->search = $this->_input->post('search') ? $this->_input->post('search') : '';
 
         $users = strlen($this->_template->search) ? $this->usermodel->searchUsers($this->_template->search) : $this->usermodel->loadAllUsers();
         for($i = 0 ; $i < count($users); $i++){
@@ -63,15 +63,15 @@ class AdminController extends Controller{
             RouteHelper::redirect('');
         
         if (SessionHelper::userdata('accesslevel') < ADMIN){
-            message("Enkel admins mogen gebruikers deleten!", "info");
+            FormHelper::message("Enkel admins mogen gebruikers deleten!", "info");
             RouteHelper::redirect('');
         }
         
         $user = $this->usermodel->deleteUser($userid);
         if($user == FALSE){
-            message("Onze excuses, er is *iets* mis gegaan met het deleten van user met id ".$userid."!", "danger");
+            FormHelper::message("Onze excuses, er is *iets* mis gegaan met het deleten van user met id ".$userid."!", "danger");
         } else {
-            message("De user werd succesvol gedelete!");
+            FormHelper::message("De user werd succesvol gedelete!");
         }
         $this->users();
     }
@@ -81,7 +81,7 @@ class AdminController extends Controller{
             RouteHelper::redirect('');
 
         if (SessionHelper::userdata('accesslevel') < ADMIN){
-            message("Enkel admins mogen gebruikers rechten toekennen!", "info");
+            FormHelper::message("Enkel admins mogen gebruikers rechten toekennen!", "info");
             RouteHelper::redirect('admin/users');
         }
 
@@ -92,14 +92,14 @@ class AdminController extends Controller{
         if($user == FALSE)
             RouteHelper::redirect('');
 
-        if(isset($_POST['submit'])) {
-            if(isset($_POST['username']) && isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['email'])) {
+        if($this->_input->post('submit') == '') {
+            if($this->_input->post('username') && $this->_input->post('firstname') && $this->_input->post('lastname') && $this->_input->post('email')) {
 
-                $this->_template->_form->set_value('username', $_POST['username']);
-                $this->_template->_form->set_value('firstname', $_POST['firstname']);
-                $this->_template->_form->set_value('lastname', $_POST['lastname']);
-                $this->_template->_form->set_value('email', $_POST['email']);
-                $this->_template->_form->set_value('accesslevel', $_POST['accesslevel']);
+                $this->_template->_form->set_value('username', $this->_input->post('username'));
+                $this->_template->_form->set_value('firstname', $this->_input->post('firstname'));
+                $this->_template->_form->set_value('lastname', $this->_input->post('lastname'));
+                $this->_template->_form->set_value('email', $this->_input->post('email'));
+                $this->_template->_form->set_value('accesslevel', $this->_input->post('accesslevel'));
 
                 if($this->_template->_form->isMinLength('username', 4) == FALSE)
                     set_error ('username', 'Het gebuikersnaam veld moet minstens 4 karakters lang zijn');

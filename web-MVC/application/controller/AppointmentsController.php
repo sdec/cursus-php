@@ -16,8 +16,8 @@ class AppointmentsController extends Controller {
         if(!SessionHelper::loggedin())
             RouteHelper::redirect('profile/login');
         
-        $search = isset($_POST['search']) ? $_POST['search'] : '';
-        $appointments = strlen($search) 
+        $search = $this->_input->post('search');
+        $appointments = ($search) 
             ? $this->appointmentmodel->searchAppointments($search) 
             : $this->appointmentmodel->loadAllAppointments();
 
@@ -33,7 +33,7 @@ class AppointmentsController extends Controller {
             RouteHelper::redirect('profile/login');
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment->appointmentid){
-            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            FormHelper::message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             RouteHelper::redirect('');
         }
 
@@ -93,7 +93,7 @@ class AppointmentsController extends Controller {
 
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment->appointmentid){
-            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            FormHelper::message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
         }
@@ -106,7 +106,7 @@ class AppointmentsController extends Controller {
             
             die();
         } else {
-            message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
+            FormHelper::message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
         }
         $this->detail($appointmentid);
     }
@@ -123,7 +123,7 @@ class AppointmentsController extends Controller {
 
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment->appointmentid){
-            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            FormHelper::message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
         }
@@ -136,7 +136,7 @@ class AppointmentsController extends Controller {
             
             die();
         } else {
-            message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
+            FormHelper::message("Onze excuses, er is iets misgegaan tijdens het inschrijven voor het inschrijfslot met id $appointmentslotid van de afspraak met id " . $appointment['appointmentid'] . ".", "danger");
         }
         $this->detail($appointmentid);
     }
@@ -145,15 +145,15 @@ class AppointmentsController extends Controller {
         if (!SessionHelper::loggedin() || SessionHelper::userdata('accesslevel') < LECTURER)
             RouteHelper::redirect('profile/login');
 
-        if(isset($_POST['submit'])) {
-            if(isset($_POST['date']) && isset($_POST['start']) && isset($_POST['end']) && isset($_POST['description']) && isset($_POST['location'])) {
+        if($this->_input->post('submit') == '') {
+            if($this->_input->post('date') && $this->_input->post('start') && $this->_input->post('end') && $this->_input->post('description') && $this->_input->post('location')) {
 
-                $this->_template->_form->set_value('date', $_POST['date']);
-                $this->_template->_form->set_value('start', $_POST['start']);
-                $this->_template->_form->set_value('end', $_POST['end']);
-                $this->_template->_form->set_value('description', $_POST['description']);
-                $this->_template->_form->set_value('location', $_POST['location']);
-                $this->_template->_form->set_value('chronological', isset($_POST['chronological']));
+                $this->_template->_form->set_value('date', $this->_input->post('date'));
+                $this->_template->_form->set_value('start', $this->_input->post('start'));
+                $this->_template->_form->set_value('end', $this->_input->post('end'));
+                $this->_template->_form->set_value('description', $this->_input->post('description'));
+                $this->_template->_form->set_value('location', $this->_input->post('location'));
+                $this->_template->_form->set_value('chronological', $this->_input->post('chronological'));
 
                 if($this->_template->_form->isMinLength('description', 4) == FALSE)
                     set_error ('description', 'Het omschrijvingsveld moet minstens 4 karakters lang zijn');
@@ -180,7 +180,7 @@ class AppointmentsController extends Controller {
                         
                         die;
                     } else {
-                        message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
+                        FormHelper::message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
                     }
                 }
             }
@@ -201,11 +201,11 @@ class AppointmentsController extends Controller {
 
         $appointment = $this->appointmentmodel->deleteAppointment($appointmentid);
         if($appointment == FALSE){
-            message("Onze excuses, er is *iets* mis gegaan met het deleten van afspraak met id $appointmentid!", "danger");
+            FormHelper::message("Onze excuses, er is *iets* mis gegaan met het deleten van afspraak met id $appointmentid!", "danger");
             $this->detail($appointment);
             die();
         } else {
-            message("Uw afspraak werd succesvol geannuleerd!");
+            FormHelper::message("Uw afspraak werd succesvol geannuleerd!");
         }
         RouteHelper::redirect('');
     }
@@ -216,22 +216,22 @@ class AppointmentsController extends Controller {
 
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment->appointmentid){
-            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            FormHelper::message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
         }
 
         $slots = $this->appointmentmodel->slots($appointment->appointmentid);
 
-        if(isset($_POST['submit'])) {
-            if(isset($_POST['date']) && isset($_POST['start']) && isset($_POST['end']) && isset($_POST['description']) && isset($_POST['location'])) {
+        if($this->_input->post('submit') == '') {
+            if($this->_input->post('date') && $this->_input->post('start') && $this->_input->post('end') && $this->_input->post('description') && $this->_input->post('location')) {
 
-                $this->_template->_form->set_value('date', $_POST['date']);
-                $this->_template->_form->set_value('start', $_POST['start']);
-                $this->_template->_form->set_value('end', $_POST['end']);
-                $this->_template->_form->set_value('description', $_POST['description']);
-                $this->_template->_form->set_value('location', $_POST['location']);
-                $this->_template->_form->set_value('chronological', isset($_POST['chronological']));
+                $this->_template->_form->set_value('date', $this->_input->post('date'));
+                $this->_template->_form->set_value('start', $this->_input->post('start'));
+                $this->_template->_form->set_value('end', $this->_input->post('end'));
+                $this->_template->_form->set_value('description', $this->_input->post('description'));
+                $this->_template->_form->set_value('location', $this->_input->post('location'));
+                $this->_template->_form->set_value('chronological', $this->_input->post('chronological'));
 
                 if($this->_template->_form->isMinLength('description', 4) == FALSE)
                     set_error ('description', 'Het omschrijvingsveld moet minstens 4 karakters lang zijn');
@@ -293,17 +293,17 @@ class AppointmentsController extends Controller {
         $lecturers = $this->usermodel->lecturers();
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment->appointmentid){
-            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            FormHelper::message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
         }
 
-        if(isset($_POST['submit'])) {
-            if(isset($_POST['start']) && isset($_POST['end']) && isset($_POST['interval'])) {
-                $lecturerid = $_POST['lecturerid'];
-                $this->_template->_form->set_value('start', $_POST['start']);
-                $this->_template->_form->set_value('end', $_POST['end']);
-                $this->_template->_form->set_value('interval', $_POST['interval']);
+        if($this->_input->post('submit') == '') {
+            if($this->_input->post('start') && $this->_input->post('end') && $this->_input->post('interval')) {
+                $lecturerid = $this->_input->post('lecturerid');
+                $this->_template->_form->set_value('start', $this->_input->post('start'));
+                $this->_template->_form->set_value('end', $this->_input->post('end'));
+                $this->_template->_form->set_value('interval', $this->_input->post('interval'));
 
                 $start_timestamp = date('Y-m-d', strtotime($appointment->start_timestamp)) . ' ' . $this->_template->_form->set_value('start');
                 $end_timestamp = date('Y-m-d', strtotime($appointment->start_timestamp)) . ' ' . $this->_template->_form->set_value('end');
@@ -327,18 +327,18 @@ class AppointmentsController extends Controller {
                                 
                                 die;
                             } else {
-                                message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
+                                FormHelper::message('Er ging iets fout tijdens het aanmaken van uw afspraak!', 'danger');
                             }
                         } else {
-                            message('Het einduur van de afspraken moet gelijk aan of vroeger zijn dan '
+                            FormHelper::message('Het einduur van de afspraken moet gelijk aan of vroeger zijn dan '
                                     . date('H:i', strtotime($appointment->end_timestamp)), 'danger');
                         }
                     } else {
-                        message('Het startuur van de afspraken moet gelijk aan of later zijn dan '
+                        FormHelper::message('Het startuur van de afspraken moet gelijk aan of later zijn dan '
                                 . date('H:i', strtotime($appointment->start_timestamp)), 'danger');
                     }
                 } else {
-                    message('Het einde van uw eerste slot mag het einduur niet overschrijden', 'danger');
+                    FormHelper::message('Het einde van uw eerste slot mag het einduur niet overschrijden', 'danger');
                 }
             }
         } else {
@@ -360,13 +360,13 @@ class AppointmentsController extends Controller {
             RouteHelper::redirect('profile/login');
         $appointment = $this->appointmentmodel->loadAppointment($appointmentid);
         if (!$appointment->appointmentid){
-            message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
+            FormHelper::message("Oops! We hebben een niet-bestaande appointmentid gedetecteerd!", "warning");
             $this->detail($appointmentid);
             die();
         }
 
         if($this->appointmentmodel->deleteTimeSlotAppointment($appointmentSlotid))
-            message("Het tijdsslot werd successvol gedelete!", "success");
+            FormHelper::message("Het tijdsslot werd successvol gedelete!", "success");
         $this->edit($appointmentid);
     }
 }

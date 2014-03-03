@@ -1,5 +1,5 @@
 <?php
-
+/**/
 class Controller
 {
     protected $_template;
