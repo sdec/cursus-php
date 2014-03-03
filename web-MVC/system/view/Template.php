@@ -9,7 +9,7 @@ class Template
     private $pagetitle;
     private $statusMessage;
     private $fieldMessages = array();
-    private $_form;
+    public $_form;
 
     // on instantiation: check the layoutfile
     public function __construct($layout = 'template')
