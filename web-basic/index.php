@@ -21,6 +21,9 @@ $appointments = strlen($search)
 $data['appointments'] = $appointments;
 $data['search'] = $search;
 
+echo '<pre>';
+print_r($_SESSION['user']);
+echo '</pre>';
 ?>
 <!DOCTYPE html>
 <html>
