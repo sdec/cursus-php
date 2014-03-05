@@ -7,27 +7,27 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<?= base_url() ?>">Afsprakenplanner</a>
+            <a class="navbar-brand" href="<?= RouteHelper::base_url() ?>">Afsprakenplanner</a>
         </div>
         <div class="collapse navbar-collapse">
-            <?php if (loggedin()) { ?>
-                <?php if (userdata('accesslevel') >= LECTURER) { ?>
+            <?php if (SessionHelper::loggedin()) { ?>
+                <?php if (SessionHelper::userdata('accesslevel') >= LECTURER) { ?>
                     <ul class="nav navbar-nav">
-                        <li><a href="<?= base_url() ?>admin/users">Gebruikers</a></li>
+                        <li><a href="<?= RouteHelper::base_url() ?>admin/users">Gebruikers</a></li>
                     </ul>
                 <?php } ?>
             <?php } ?>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <?php if (loggedin()) { ?>
+                    <?php if (SessionHelper::loggedin()) { ?>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
                             <span class="glyphicon glyphicon-user"></span> 
-                            <?= userdata('username') ?> <span class="caret"></span>
+                            <?= SessionHelper::userdata('username') ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/view">Mijn profiel</a></li>
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/appointments">Mijn afspraken</a></li>
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/logout">Log uit</a></li>
+                            <li><a tabindex="-1" href="<?= RouteHelper::base_url() ?>profile/view">Mijn profiel</a></li>
+                            <li><a tabindex="-1" href="<?= RouteHelper::base_url() ?>profile/appointments">Mijn afspraken</a></li>
+                            <li><a tabindex="-1" href="<?= RouteHelper::base_url() ?>profile/logout">Log uit</a></li>
                         </ul>
                     <?php } else { ?>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
@@ -35,8 +35,8 @@
                             Profiel <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="themes">
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/register">Registreren</a></li>
-                            <li><a tabindex="-1" href="<?= base_url() ?>profile/login">Log in</a></li>
+                            <li><a tabindex="-1" href="<?= RouteHelper::base_url() ?>profile/register">Registreren</a></li>
+                            <li><a tabindex="-1" href="<?= RouteHelper::base_url() ?>profile/login">Log in</a></li>
                         </ul>
                     <?php } ?>
                 </li>

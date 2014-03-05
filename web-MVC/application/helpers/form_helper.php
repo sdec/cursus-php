@@ -1,66 +1,61 @@
 <?php
+class FormHelper{
+    private $errors = array();
+    private $values = array();
 
-$errors = array();
-$values = array();
-
-function form_error($field, $before = '', $after = '') {
-    global $errors;
-    return $before . (isset($errors[$field]) ? $errors[$field] : '') . $after;
-}
-
-function set_error($field, $message) {
-    global $errors;
-    $errors[$field] = $message;
-}
-
-function hasErrors() {
-    global $errors;
-    return count($errors) > 0;
-}
-
-function set_value($field, $value = '') {
-    global $values;
-    if(!strlen($value))
-        return isset($values[$field]) ? $values[$field] : '';
-        
-    $values[$field] = $value;
-}
-
-function message($text, $class = 'success') {
-    if(!isset($_SESSION['message'])) {
-        $_SESSION['message'] = array();
+    public function form_error($field, $before = '', $after = '') {
+        return $before . (isset($this->errors[$field]) ? $this->errors[$field] : '') . $after;
     }
-    $message = array(
-        'text' => $text,
-        'class' => $class
-    );
-    array_push($_SESSION['message'], $message);
-}
 
-function isMinLength($field, $length) {
-    global $values;
-    if(!isset($values[$field]))
-        return FALSE;
-    
-    return strlen($values[$field]) >= $length;
-}
+    public function set_error($field, $message) {
+        $this->errors[$field] = $message;
+    }
 
-function isMaxLength($field, $length) {
-    global $values;
-    if(!isset($values[$field]))
-        return FALSE;
-    
-    return strlen($values[$field]) <= $length;
-}
+    public function hasErrors() {
+        return count($this->errors) > 0;
+    }
 
-function isAlphaNumeric($field) {
-    global $values;
-    if(!isset($values[$field]))
-        return FALSE;
-    
-    return !preg_match('/[^a-z0-9]/i', $values[$field]);
-}
+    public function set_value($field, $value = '') {
+        if(!strlen($value))
+            return isset($this->values[$field]) ? $this->values[$field] : '';
 
-function isValidEmail($email) {
-    return filter_var($email, FILTER_VALIDATE_EMAIL);
+        $this->values[$field] = $value;
+    }
+
+    public static function message($text, $class = 'success') {
+        if(!isset($_SESSION['message'])) {
+            $_SESSION['message'] = array();
+        }
+        $message = array(
+            'text' => $text,
+            'class' => $class
+        );
+        array_push($_SESSION['message'], $message);
+    }
+
+    public function isMinLength($field, $length) {
+        if(!isset($this->values[$field]))
+            return FALSE;
+
+        return strlen($this->values[$field]) >= $length;
+    }
+
+    public function isMaxLength($field, $length) {
+        if(!isset($this->values[$field]))
+            return FALSE;
+
+        return strlen($this->values[$field]) <= $length;
+    }
+
+    public function isAlphaNumeric($field) {
+        if(!isset($this->values[$field]))
+            return FALSE;
+
+        return !preg_match('/[^a-z0-9]/i', $this->values[$field]);
+    }
+
+    public function isValidEmail($email) {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
 }

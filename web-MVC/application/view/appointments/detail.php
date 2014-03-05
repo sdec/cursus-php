@@ -10,27 +10,27 @@
                 <table class="table table-hover table-striped table-vertical">
                     <tr>
                         <td>Startdatum</td>
-                        <td><?= $this->appointment['date'] ?></td>
+                        <td><?= $this->appointment->date ?></td>
                     </tr>
                     <tr>
                         <td>Startuur</td>
-                        <td><?= $this->appointment['start'] ?></td>
+                        <td><?= $this->appointment->start ?></td>
                     </tr>
                     <tr>
                         <td>Einduur</td>
-                        <td><?= $this->appointment['end'] ?></td>
+                        <td><?= $this->appointment->end ?></td>
                     </tr>
                     <tr>
                         <td>Beschrijving</td>
-                        <td><?= $this->appointment['description'] ?></td>
+                        <td><?= $this->appointment->description ?></td>
                     </tr>
                     <tr>
                         <td>Locatie</td>
-                        <td><?= $this->appointment['location'] ?></td>
+                        <td><?= $this->appointment->location ?></td>
                     </tr>
                     <tr>
                         <td>Organisatoren</td>
-                        <td><?= $this->appointment['lecturercount'] ?></td>
+                        <td><?= $this->appointment->lecturercount ?></td>
                     </tr>
                 </table>
             </div>
@@ -40,19 +40,19 @@
                 <div class="panel-title">Mijn inschrijving</div>
             </div>
             <div class="panel-body">
-                <?php if ($this->subscription['subscribed']) { ?>
-                    <?php if ($this->subscription['lecturerid'] == userdata('userid')) { ?>
+                <?php if ($this->subscription->subscribed) { ?>
+                    <?php if ($this->subscription->lecturerid == SessionHelper::userdata('userid')) { ?>
                         <p>
-                            U heeft aangegeven pauze te nemen van <strong><?= $this->subscription['subscribestart'] ?></strong> 
-                            tot ongeveer <strong><?= $this->subscription['subscribeend'] ?></strong>.
+                            U heeft aangegeven pauze te nemen van <strong><?= $this->subscription->subscribestart ?></strong> 
+                            tot ongeveer <strong><?= $this->subscription->subscribeend ?></strong>.
                         </p>
                     <?php } else { ?>
-                        <p>U bent ingeschreven voor een afspraak bij <strong><?= $this->subscription['lecturer'] ?></strong> om <strong><?= $data['subscription']['subscribestart'] ?></strong>.  
-                            Deze afspraak duurt ongeveer tot <strong><?= $this->subscription['subscribeend'] ?></strong>.</p>
+                        <p>U bent ingeschreven voor een afspraak bij <strong><?= $this->subscription->lecturer ?></strong> om <strong><?= $this->subscription->subscribestart ?></strong>.  
+                            Deze afspraak duurt ongeveer tot <strong><?= $this->subscription->subscribeend ?></strong>.</p>
                     <?php } ?>
-                    <?php if (!$this->appointment['started']) { ?>
+                    <?php if (!$this->appointment->started) { ?>
                         <p>
-                            <a href="<?= base_url() ?>appointments/unsubscribe/<?= $this->appointment['appointmentid'] ?>/<?= $data['subscription']['subscribeslotid'] ?>" class="btn btn-default btn-sm">
+                            <a href="<?= RouteHelper::base_url() ?>appointments/unsubscribe/<?= $this->appointment->appointmentid ?>/<?= $this->subscription->subscribeslotid ?>" class="btn btn-default btn-sm">
                                 <span class="glyphicon glyphicon-remove-sign"></span> Uitschrijven
                             </a>
                         </p>
@@ -60,9 +60,9 @@
                 <?php } else { ?>
                     <p>U bent niet ingeschreven voor deze afspraak. Kies een beschikbaar tijdslot bij de organisator van keuze om u in te schrijven.</p>
                 <?php } ?>
-                <?php if ($this->appointment['started']) { ?>
+                <?php if ($this->appointment->started) { ?>
                     <div class="alert alert-info">
-                        <?php if ($this->appointment['ended']) { ?>
+                        <?php if ($this->appointment->ended) { ?>
                             Deze afspraak is verlopen. 
                         <?php } else { ?>
                             Deze afspraak is al begonnen. 
@@ -72,17 +72,17 @@
                 <?php } ?>
             </div>
         </div>
-        <?php if (userdata('accesslevel') >= LECTURER) { ?>
+        <?php if (SessionHelper::userdata('accesslevel') >= LECTURER) { ?>
             <p>
-                <a href="<?= base_url() ?>appointments/addtimeslots/<?= $this->appointment['appointmentid'] ?>" class="btn btn-primary">
+                <a href="<?= RouteHelper::base_url() ?>appointments/addtimeslots/<?= $this->appointment->appointmentid ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-plus-sign"></span> 
                     Voeg tijdsloten toe
                 </a> 
-                <a href="<?= base_url() ?>appointments/edit/<?= $this->appointment['appointmentid'] ?>" class="btn btn-primary">
+                <a href="<?= RouteHelper::base_url() ?>appointments/edit/<?= $this->appointment->appointmentid ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-edit"></span> 
                     Wijzig afspraak
                 </a> 
-                <a href="<?= base_url() ?>appointments/delete/<?= $this->appointment['appointmentid'] ?>" class="btn btn-danger">
+                <a href="<?= RouteHelper::base_url() ?>appointments/delete/<?= $this->appointment->appointmentid ?>" class="btn btn-danger">
                     <span class="glyphicon glyphicon-remove-sign"></span> 
                     Verwijder afspraak
                 </a>
@@ -109,14 +109,14 @@
                             <?php $slotIndex = 0; ?>
                             <?php foreach ($this->slots as $slot) { ?>
                                 <tr>
-                                    <td><?= $slot['lecturer'] ?></td>
-                                    <td><?= $slot['start'] ?> - <?= $slot['end'] ?></td>
+                                    <td><?= $slot->lecturer ?></td>
+                                    <td><?= $slot->start ?> - <?= $slot->end ?></td>
                                     <td>
-                                        <?php if (!$slot['subscriberid']) { ?>
-                                            <?php if ($this->appointment['started'] == FALSE && $this->subscription['subscribed'] == FALSE) { ?>
-                                                <?php if (isset($slot['available']) && $slot['available'] == TRUE || $slot['lecturerid'] == userdata('userid')) { ?>
-                                                    <a class="text-success" href="<?= base_url() ?>appointments/subscribe/
-                                                       <?= $this->appointment['appointmentid'] ?>/<?= $slot['appointmentslotid'] ?>">
+                                        <?php if (!$slot->subscriberid) { ?>
+                                            <?php if ($this->appointment->started == FALSE && $this->subscription->subscribed == FALSE) { ?>
+                                                <?php if (isset($slot->available) && $slot->available == TRUE || $slot->lecturerid == SessionHelper::userdata('userid')) { ?>
+                                                    <a class="text-success" href="<?= RouteHelper::base_url() ?>appointments/subscribe/
+                                                       <?= $this->appointment->appointmentid ?>/<?= $slot->appointmentslotid ?>">
                                                         <span class="glyphicon glyphicon-ok-sign"></span> Beschikbaar
                                                     </a>
                                                 <?php } else { ?>
@@ -124,17 +124,17 @@
                                                 <?php } ?>
                                             <?php } ?>
                                         <?php } else { ?>
-                                            <?php if ($slot['subscriberid'] == $slot['lecturerid']) { ?>
+                                            <?php if ($slot->subscriberid == $slot->lecturerid) { ?>
                                                 <span class="text-info">
                                                     <span class="glyphicon glyphicon-pause"></span> Pauze
                                                 </span>
-                                            <?php } else if ($slot['subscriberid'] == userdata('userid')) { ?>
+                                            <?php } else if ($slot->subscriberid == SessionHelper::userdata('userid')) { ?>
                                                 <span class="text-success">
                                                     <span class="glyphicon glyphicon-ok-sign"></span> Ingeschreven
                                                 </span>
                                             <?php } else { ?>
                                                 <span class="glyphicon glyphicon-remove-sign text-danger"></span> 
-                                                <?= $slot['subscriber'] ?>
+                                                <?= $slot->subscriber ?>
                                             <?php } ?>
                                         <?php } ?>
                                     </td>
