@@ -1,5 +1,6 @@
 <?php
-
+/* Loader heeft bijna dezelfde functie als onze route_helper.php en
+ * zou evt. 1 file kunnen worden  */
 class Loader
 {
     private static $instance = null;

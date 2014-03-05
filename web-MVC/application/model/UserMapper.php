@@ -43,10 +43,6 @@ class User_Mapper {
         );
         $result = $this->_db->execute($sql, $arguments);
         return $result->rowCount() > 0;
-
-        /* $result = $this->_db->queryOne($sql, 'User', $arguments);
-          var_dump($result);
-          return ($result) ? true : false; */
     }
 
     function loadUser($username) {

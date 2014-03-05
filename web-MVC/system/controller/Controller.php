@@ -1,5 +1,5 @@
 <?php
-/**/
+/*Hier komt alleen de essentiële code van alle controllers in*/
 class Controller
 {
     protected $_template;
