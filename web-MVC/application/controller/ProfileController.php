@@ -164,7 +164,7 @@ class ProfileController extends Controller{
         
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $appointments = strlen($search) 
-            ? $this->appointmentmodel->searchAppointments($search) 
+            ? $this->appointmentmodel->searchAppointments($search)
             : $this->appointmentmodel->loadAllAppointments($user['userid']);
         
         $this->_template->appointments = $appointments;
