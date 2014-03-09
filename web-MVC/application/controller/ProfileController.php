@@ -133,6 +133,8 @@ class ProfileController extends Controller{
     }
     
     public function view($username = null){
+        if(!SessionHelper::loggedin())
+            RouteHelper::redirect('profile/login');
         $this->_template->user = (isset($username)) ? $this->usermodel->loadUser($username) : $this->usermodel->loadUser(SessionHelper::userdata('username'));
         $this->_template->user->accesslevelname = $this->usermodel->accessLevelName($this->_template->user->accesslevel);
         $this->_template->setPageTitle('Profiel');
@@ -141,7 +143,7 @@ class ProfileController extends Controller{
     
     public function logout(){
         if(!SessionHelper::loggedin()) //Can't logout if you're not logged in
-            RouteHelper::redirect('index.php');
+            RouteHelper::redirect('profile/login');
 
         SessionHelper::unset_userdata('user');
         $this->_template->setPageTitle('uitloggen');
