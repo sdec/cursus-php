@@ -27,3 +27,6 @@ Onderwerpen:
 Basis website:
 
 Deze website vormt de rode draad doorheen het project.
+
+URL naar cursus:
+[!https://drive.google.com/file/d/0B7MdZ8ZhsJHwM1UtdHZhZkZwMlk/view?usp=sharing](https://drive.google.com/file/d/0B7MdZ8ZhsJHwM1UtdHZhZkZwMlk/view?usp=sharing)
