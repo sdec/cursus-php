@@ -15,15 +15,15 @@ Project leden:
 
 Onderwerpen:
 
-- OO
-- MVC
-- CodeIgniter & CakePHP
-- Unit testing & test automation
-- Debugging
-- Toledo integratie
+- Object Oriented PHP
+- Model View Controller
+- Helpers, views, partials, models, templates
+- PDO & ActiveRecord
+- Front controllers
+- Codeigniter
+- PHPUnit unit testing
+- Selenium e2e testing
 
 Basis website:
 
-Deze website vormt de rode draad doorheen het project. Alle websites zijn te vinden op http://www.sandec.net/afsprakenplanner
-
-![alt tag](http://www.puu.sh/720xi.png)
+Deze website vormt de rode draad doorheen het project.
